@@ -1,6 +1,6 @@
 package com.example.shakki;
 
-import com.example.shakki.nappulat.Ratsu;
+import com.example.shakki.nappulat.*;
 
 import java.util.ArrayList;
 
@@ -32,9 +32,9 @@ public class Pelilauta {
 
             Valkoinen pelaaja on isoilla kirjaimilla.
 
-            Ruutu[i][j]:
-                i = Rivin indeksi (välillä 0-7, indeksi 0 tarkoittaa pelilaudalla riviä '8')
-                j = Sarakkeen indeksi (välillä 0-7, indeksi 0 tarkoittaa pelilaudalla saraketta 'a')
+            Ruutu[y][x]:
+                y = Rivin indeksi (välillä 0-7, indeksi 0 tarkoittaa pelilaudalla riviä '8')
+                x = Sarakkeen indeksi (välillä 0-7, indeksi 0 tarkoittaa pelilaudalla saraketta 'a')
      */
 
     public Pelilauta() {
@@ -44,39 +44,39 @@ public class Pelilauta {
 
         // Valkoisen pelinappuloiden asetus
 
-        ruudut[0][0] = new Ruutu(new Torni(true));                  // Torni h1
-        ruudut[1][0] = new Ruutu(new Ratsu(true));      // Ratsu g1
-        ruudut[2][0] = new Ruutu(new Lähetti(true));                // Lähetti f1
-        ruudut[3][0] = new Ruutu(new Kuningas(true));               // Kuningas e1
-        ruudut[4][0] = new Ruutu(new Kuningatar(true));             // Kuningatar d1
-        ruudut[5][0] = new Ruutu(new Lähetti(true));                // Lähetti c1
-        ruudut[6][0] = new Ruutu(new Ratsu(true));      // Ratsu b1
-        ruudut[7][0] = new Ruutu(new Torni(true));                  // Torni a1
+        ruudut[7][0] = new Ruutu(new Torni(true), 7, 0);        // Torni h1
+        ruudut[7][1] = new Ruutu(new Ratsu(true), 7, 1);        // Ratsu g1
+        ruudut[7][2] = new Ruutu(new Lähetti(true), 7, 2);      // Lähetti f1
+        ruudut[7][3] = new Ruutu(new Kuningas(true), 7, 3);     // Kuningas e1
+        ruudut[7][4] = new Ruutu(new Kuningatar(true), 7, 4);   // Kuningatar d1
+        ruudut[7][5] = new Ruutu(new Lähetti(true), 7, 5);      // Lähetti c1
+        ruudut[7][6] = new Ruutu(new Ratsu(true), 7, 6);        // Ratsu b1
+        ruudut[7][7] = new Ruutu(new Torni(true), 7, 7);        // Torni a1
 
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
-            ruudut[i][1] = new Ruutu(new Sotilas(true));            // Valkoisen sotilaat
+            ruudut[6][i] = new Ruutu(new Sotilas(true), 6, i);        // Valkoisen sotilaat
         }
 
         // Mustan pelinappuloiden asetus
 
-        ruudut[0][7] = new Ruutu(new Torni(false));                  // Torni h8
-        ruudut[1][7] = new Ruutu(new Ratsu(false));      // Ratsu g8
-        ruudut[2][7] = new Ruutu(new Lähetti(false));                // Lähetti f8
-        ruudut[3][7] = new Ruutu(new Kuningas(false));               // Kuningas e8
-        ruudut[4][7] = new Ruutu(new Kuningatar(false));             // Kuningatar d8
-        ruudut[5][7] = new Ruutu(new Lähetti(false));                // Lähetti c8
-        ruudut[6][7] = new Ruutu(new Ratsu(false));      // Ratsu b8
-        ruudut[7][7] = new Ruutu(new Torni(false));                  // Torni a8
+        ruudut[0][0] = new Ruutu(new Torni(false), 0, 0);             // Torni h8
+        ruudut[0][1] = new Ruutu(new Ratsu(false), 0, 1);             // Ratsu g8
+        ruudut[0][2] = new Ruutu(new Lähetti(false), 0, 2);           // Lähetti f8
+        ruudut[0][3] = new Ruutu(new Kuningas(false), 0, 3);          // Kuningas e8
+        ruudut[0][4] = new Ruutu(new Kuningatar(false), 0, 4);        // Kuningatar d8
+        ruudut[0][5] = new Ruutu(new Lähetti(false), 0, 5);           // Lähetti c8
+        ruudut[0][6] = new Ruutu(new Ratsu(false), 0, 6);             // Ratsu b8
+        ruudut[0][7] = new Ruutu(new Torni(false), 0, 7);             // Torni a8
 
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
-            ruudut[i][6] = new Ruutu(new Sotilas(false));            // Mustan sotilaat
+            ruudut[1][i] = new Ruutu(new Sotilas(false), 1, i);       // Mustan sotilaat
         }
 
         // Tyhjien ruutujen alustus
 
         for (int j = 2; j < (PELILAUDAN_KOKO - 2); j++) {
             for (int i = 0; i < PELILAUDAN_KOKO; i++) {
-                ruudut[i][j] = new Ruutu();
+                ruudut[j][i] = new Ruutu(j, i);
             }
         }
     }
@@ -95,6 +95,16 @@ public class Pelilauta {
             }
         }
         return pelaajanSiirrot;
+    }
+
+    public void teeSiirto(Siirto s) {
+        /* Tekee annetun siirron pelilaudalla */
+
+        Nappula siirrettäväNappula = ruudut[s.getY0()][s.getX0()].getNappula();
+
+        ruudut[s.getY1()][s.getX1()].setNappula(siirrettäväNappula);
+        ruudut[s.getY0()][s.getX0()].setNappula(null);
+
     }
 
 }

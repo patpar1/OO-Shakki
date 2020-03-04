@@ -1,10 +1,10 @@
 package com.example.shakki;
 
-import com.example.shakki.nappulat.Ylänappula;
+import com.example.shakki.nappulat.Nappula;
 
 public class Siirto {
 
-    private Ylänappula nappula;
+    private Nappula nappula;
     private Ruutu aloitusRuutu;
     private Ruutu lopetusRuutu;
 
@@ -13,7 +13,7 @@ public class Siirto {
     private boolean onMatti;
     private boolean linnoitus;
 
-    public Siirto(Ylänappula nappula, Ruutu aloitusRuutu, Ruutu lopetusRuutu) {
+    public Siirto(Nappula nappula, Ruutu aloitusRuutu, Ruutu lopetusRuutu) {
         this.nappula = nappula;
         this.aloitusRuutu = aloitusRuutu;
         this.lopetusRuutu = lopetusRuutu;

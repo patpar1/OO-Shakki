@@ -2,7 +2,7 @@ package com.example.shakki.nappulat;
 
 import java.util.ArrayList;
 
-public class Ratsu extends Ylänappula {
+public class Ratsu extends Nappula {
 
     private static final int[][] siirtoEhdokkaat = {
             {-2, -1},

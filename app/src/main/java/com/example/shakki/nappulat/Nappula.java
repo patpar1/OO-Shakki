@@ -2,10 +2,10 @@ package com.example.shakki.nappulat;
 
 import java.util.ArrayList;
 
-public abstract class Ylänappula {
+public abstract class Nappula {
     private boolean onValkoinen;
 
-    public Ylänappula (boolean onValkoinen) {
+    public Nappula(boolean onValkoinen) {
         self.onValkoinen = onValkoinen;
     }
 //Laskee lailliset siirrot. Palauttaa listan laillisista siirroista

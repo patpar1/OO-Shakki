@@ -1,12 +1,15 @@
 package com.example.shakki.nappulat;
 
+import com.example.shakki.Pelilauta;
+import com.example.shakki.Siirto;
+
 import java.util.ArrayList;
 
 public abstract class Nappula {
     private boolean onValkoinen;
 
     public Nappula(boolean onValkoinen) {
-        self.onValkoinen = onValkoinen;
+        this.onValkoinen = onValkoinen;
     }
 
     // Laskee lailliset siirrot. Palauttaa listan laillisista siirroista

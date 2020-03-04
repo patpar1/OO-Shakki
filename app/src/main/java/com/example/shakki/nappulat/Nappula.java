@@ -8,8 +8,13 @@ public abstract class Nappula {
     public Nappula(boolean onValkoinen) {
         self.onValkoinen = onValkoinen;
     }
-//Laskee lailliset siirrot. Palauttaa listan laillisista siirroista
+
+    // Laskee lailliset siirrot. Palauttaa listan laillisista siirroista
     public abstract ArrayList<Siirto> laillisetSiirrot(Pelilauta lauta, int x, int y);
+
+    public boolean onValkoinen() {
+        return onValkoinen;
+    }
 
     public static boolean onLaudalla(int x, int y) {
         if ((x > 7) || (y > 7)) {

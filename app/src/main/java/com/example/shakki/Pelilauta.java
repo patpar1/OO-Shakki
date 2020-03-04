@@ -2,6 +2,8 @@ package com.example.shakki;
 
 import com.example.shakki.nappulat.Ratsu;
 
+import java.util.ArrayList;
+
 public class Pelilauta {
 
     public static final int PELILAUDAN_KOKO = 8;
@@ -36,10 +38,6 @@ public class Pelilauta {
      */
 
     public Pelilauta() {
-        alustaPelilauta(ruudut);
-    }
-
-    private void alustaPelilauta(Ruutu[][] ruudut) {
         /* Alustaa pelilaudan eli asettaa nappulat pelilaudalle oikeaan järjestykseen */
 
         ruudut = new Ruutu[PELILAUDAN_KOKO][PELILAUDAN_KOKO];
@@ -79,6 +77,21 @@ public class Pelilauta {
         for (int j = 2; j < (PELILAUDAN_KOKO - 2); j++) {
             for (int i = 0; i < PELILAUDAN_KOKO; i++) {
                 ruudut[i][j] = new Ruutu();
+            }
+        }
+    }
+
+    public ArrayList<Siirto> haePelaajanSiirrot(boolean onValkoinen) {
+        /* Hakee pelaajan kaikkien nappuloiden mahdolliset siirrot.
+        *  Käytetään shakki-tilanteen tarkastamiseen vastapelaajalta.*/
+
+        ArrayList<Siirto> pelaajanSiirrot = new ArrayList<Siirto>();
+
+        for (int i = 0; i < PELILAUDAN_KOKO; i++) {
+            for (int j = 0; j < PELILAUDAN_KOKO; j++) {
+                if (ruudut[i][j].getNappula().onValkoinen() == onValkoinen) {
+                    pelaajanSiirrot.addAll(ruudut[i][j].getNappula().laillisetSiirrot(this, i, j));
+                }
             }
         }
 

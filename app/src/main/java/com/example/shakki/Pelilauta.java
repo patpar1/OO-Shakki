@@ -1,5 +1,7 @@
 package com.example.shakki;
 
+import com.example.shakki.nappulat.Ratsu;
+
 public class Pelilauta {
 
     public static final int PELILAUDAN_KOKO = 8;
@@ -44,7 +46,41 @@ public class Pelilauta {
 
         // Valkoisen pelinappuloiden asetus
 
+        ruudut[0][0] = new Ruutu(new Torni(true));                  // Torni h1
+        ruudut[1][0] = new Ruutu(new Ratsu(true));      // Ratsu g1
+        ruudut[2][0] = new Ruutu(new Lähetti(true));                // Lähetti f1
+        ruudut[3][0] = new Ruutu(new Kuningas(true));               // Kuningas e1
+        ruudut[4][0] = new Ruutu(new Kuningatar(true));             // Kuningatar d1
+        ruudut[5][0] = new Ruutu(new Lähetti(true));                // Lähetti c1
+        ruudut[6][0] = new Ruutu(new Ratsu(true));      // Ratsu b1
+        ruudut[7][0] = new Ruutu(new Torni(true));                  // Torni a1
+
+        for (int i = 0; i < PELILAUDAN_KOKO; i++) {
+            ruudut[i][1] = new Ruutu(new Sotilas(true));            // Valkoisen sotilaat
+        }
+
         // Mustan pelinappuloiden asetus
+
+        ruudut[0][7] = new Ruutu(new Torni(false));                  // Torni h8
+        ruudut[1][7] = new Ruutu(new Ratsu(false));      // Ratsu g8
+        ruudut[2][7] = new Ruutu(new Lähetti(false));                // Lähetti f8
+        ruudut[3][7] = new Ruutu(new Kuningas(false));               // Kuningas e8
+        ruudut[4][7] = new Ruutu(new Kuningatar(false));             // Kuningatar d8
+        ruudut[5][7] = new Ruutu(new Lähetti(false));                // Lähetti c8
+        ruudut[6][7] = new Ruutu(new Ratsu(false));      // Ratsu b8
+        ruudut[7][7] = new Ruutu(new Torni(false));                  // Torni a8
+
+        for (int i = 0; i < PELILAUDAN_KOKO; i++) {
+            ruudut[i][6] = new Ruutu(new Sotilas(false));            // Mustan sotilaat
+        }
+
+        // Tyhjien ruutujen alustus
+
+        for (int j = 2; j < (PELILAUDAN_KOKO - 2); j++) {
+            for (int i = 0; i < PELILAUDAN_KOKO; i++) {
+                ruudut[i][j] = new Ruutu();
+            }
+        }
 
     }
 

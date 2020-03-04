@@ -18,7 +18,7 @@ public class Ruutu {
         return nappula;
     }
 
-    public boolean onTyhja() {
+    public boolean onTyhjä() {
         return (nappula == null);
     }
 }

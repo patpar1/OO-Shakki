@@ -25,6 +25,8 @@ public class Ratsu extends Nappula {
 
         for (int[] siirto : siirtoEhdokkaat) {
             int[] siirtoEhdokas = {(x + siirto[0]), (y + siirto[1])};
+            //Siirtokohdassa oma nappula
+            //
 
             //TODO if, elseif, else lausekkeet tähän
 

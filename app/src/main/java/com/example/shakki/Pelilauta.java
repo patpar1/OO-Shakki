@@ -80,6 +80,9 @@ public class Pelilauta {
             }
         }
     }
+    public Ruutu getRuutu(int rivi, int sarake) {
+        return ruudut[rivi][sarake];
+    }
 
     public ArrayList<Siirto> haePelaajanSiirrot(boolean onValkoinen) {
         /* Hakee pelaajan kaikkien nappuloiden mahdolliset siirrot.
@@ -142,10 +145,16 @@ public class Pelilauta {
     public void teeSiirto(Siirto s) {
         /* Tekee annetun siirron pelilaudalla */
 
-        Nappula siirrettäväNappula = ruudut[s.getyAlku()][s.getxAlku()].getNappula();
-
-        ruudut[s.getyLoppu()][s.getxLoppu()].setNappula(siirrettäväNappula);
+        ruudut[s.getyLoppu()][s.getxLoppu()].setNappula(s.getSiirrettäväNappula());
         ruudut[s.getyAlku()][s.getxAlku()].setNappula(null);
+
+    }
+
+    public void kumoaSiirto(Siirto s) {
+        // Kumoaa annetun siirron pelilaudalla.
+
+        ruudut[s.getyAlku()][s.getxAlku()].setNappula(s.getSiirrettäväNappula());
+        ruudut[s.getyLoppu()][s.getxLoppu()].setNappula(s.getSyötäväNappula());
 
     }
 

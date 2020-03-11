@@ -125,6 +125,13 @@ public class Pelilauta {
         return false;
     }
 
+    public boolean onPatti(boolean onValkoinen) {
+        if (haePelaajanSiirrot(onValkoinen).isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
     public void teeSiirto(Siirto s) {
         /* Tekee annetun siirron pelilaudalla */
 

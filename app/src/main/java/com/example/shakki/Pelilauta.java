@@ -132,13 +132,20 @@ public class Pelilauta {
         return false;
     }
 
+    public boolean onShakkiMatti(boolean onValkoinen) {
+        if (onShakki(onValkoinen) && onPatti(onValkoinen)) {
+            return true;
+        }
+        return false;
+    }
+
     public void teeSiirto(Siirto s) {
         /* Tekee annetun siirron pelilaudalla */
 
-        Nappula siirrettäväNappula = ruudut[s.getY0()][s.getX0()].getNappula();
+        Nappula siirrettäväNappula = ruudut[s.getyAlku()][s.getxAlku()].getNappula();
 
-        ruudut[s.getY1()][s.getX1()].setNappula(siirrettäväNappula);
-        ruudut[s.getY0()][s.getX0()].setNappula(null);
+        ruudut[s.getyLoppu()][s.getxLoppu()].setNappula(siirrettäväNappula);
+        ruudut[s.getyAlku()][s.getxAlku()].setNappula(null);
 
     }
 

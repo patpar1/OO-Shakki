@@ -97,6 +97,34 @@ public class Pelilauta {
         return pelaajanSiirrot;
     }
 
+    public boolean onShakki(boolean onValkoinen) {
+        int kuningasX;
+        int kuningasY;
+
+        // Vastapelaajan siirrot
+        ArrayList<Siirto> vastustajanSiirrot = haePelaajanSiirrot(!onValkoinen);
+
+        // Hakee pelilaudalta kuninkaan sijainnin
+        for (int i = 0; i < PELILAUDAN_KOKO; i++) {
+            for (int j = 0; j < PELILAUDAN_KOKO; j++) {
+                if (ruudut[i][j].getNappula() instanceof Kuningas &&
+                        ruudut[i][j].getNappula().onValkoinen() == onValkoinen) {
+                    kuningasX = i;
+                    kuningasY = j;
+                }
+            }
+        }
+
+        // Tarkistaa, vastaako vastustajan mahdollisista siirroista mikään kuninkaan ruutua
+        for (int i = 0; i < vastustajanSiirrot.size(); i++) {
+            if (vastustajanSiirrot.get(i).getxLoppu() == kuningasX && vastustajanSiirrot.get(i).getyLoppu() == kuningasY) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void teeSiirto(Siirto s) {
         /* Tekee annetun siirron pelilaudalla */
 

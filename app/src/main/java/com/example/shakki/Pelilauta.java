@@ -84,6 +84,20 @@ public class Pelilauta {
         return ruudut[rivi][sarake];
     }
 
+    public ArrayList<Nappula> haeSiirrettävätNappulat(boolean onValkoinen) {
+        ArrayList<Nappula> nappulat = new ArrayList<>();
+
+        for (int i = 0; i < PELILAUDAN_KOKO; i++) {
+            for (int j = 0; j < PELILAUDAN_KOKO; j++) {
+                if (ruudut[i][j].getNappula().onValkoinen() == onValkoinen) {
+                    nappulat.add(ruudut[i][j].getNappula());
+                }
+            }
+        }
+
+        return nappulat;
+    }
+
     public ArrayList<Siirto> haePelaajanSiirrot(boolean onValkoinen) {
         /* Hakee pelaajan kaikkien nappuloiden mahdolliset siirrot.
         *  Käytetään shakki-tilanteen tarkastamiseen vastapelaajalta.*/

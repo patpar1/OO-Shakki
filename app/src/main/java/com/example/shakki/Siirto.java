@@ -16,26 +16,24 @@ public class Siirto {
     private boolean onMatti;
     private boolean linnoitus;
 
-    public Siirto(int xAlku, int yAlku, int xLoppu, int yLoppu, Nappula siirrettäväNappula) {
-        this.xAlku = xAlku;
-        this.yAlku = yAlku;
-        this.xLoppu = xLoppu;
-        this.yLoppu = yLoppu;
-        this.siirrettäväNappula = siirrettäväNappula;
+    public Siirto(Ruutu aloitusRuutu, Ruutu lopetusRuutu) {
+        xAlku = aloitusRuutu.getX();
+        yAlku = aloitusRuutu.getY();
+        siirrettäväNappula = aloitusRuutu.getNappula();
+        xLoppu = lopetusRuutu.getX();
+        yLoppu = lopetusRuutu.getY();
+        syötäväNappula = lopetusRuutu.getNappula();
     }
 
     public int getxAlku() {
         return xAlku;
     }
-
     public int getyAlku() {
         return yAlku;
     }
-
     public int getxLoppu() {
         return xLoppu;
     }
-
     public int getyLoppu() {
         return yLoppu;
     }
@@ -43,7 +41,6 @@ public class Siirto {
     public Nappula getSiirrettäväNappula() {
         return siirrettäväNappula;
     }
-
     public Nappula getSyötäväNappula() {
         return syötäväNappula;
     }
@@ -55,7 +52,6 @@ public class Siirto {
     public boolean isOnShakki() {
         return onShakki;
     }
-
     public void setOnShakki(boolean onShakki) {
         this.onShakki = onShakki;
     }
@@ -63,7 +59,6 @@ public class Siirto {
     public boolean isOnMatti() {
         return onMatti;
     }
-
     public void setOnMatti(boolean onMatti) {
         this.onMatti = onMatti;
     }
@@ -71,7 +66,6 @@ public class Siirto {
     public boolean isLinnoitus() {
         return linnoitus;
     }
-
     public void setLinnoitus(boolean linnoitus) {
         this.linnoitus = linnoitus;
     }

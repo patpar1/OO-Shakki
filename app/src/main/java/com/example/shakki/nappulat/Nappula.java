@@ -1,6 +1,7 @@
 package com.example.shakki.nappulat;
 
 import com.example.shakki.Pelilauta;
+import com.example.shakki.Ruutu;
 import com.example.shakki.Siirto;
 
 import java.util.ArrayList;
@@ -14,6 +15,10 @@ public abstract class Nappula {
 
     // Laskee lailliset siirrot. Palauttaa listan laillisista siirroista
     public abstract ArrayList<Siirto> laillisetSiirrot(Pelilauta lauta, int x, int y);
+
+    public ArrayList<Siirto> laillisetSiirrot(Pelilauta lauta, Ruutu ruutu) {
+        return laillisetSiirrot(lauta, ruutu.getX(), ruutu.getY());
+    }
 
     public boolean onValkoinen() {
         return onValkoinen;

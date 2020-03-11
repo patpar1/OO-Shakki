@@ -4,45 +4,75 @@ import com.example.shakki.nappulat.Nappula;
 
 public class Siirto {
 
-    private int x0;
-    private int y0;
-    private int x1;
-    private int y1;
+    private int xAlku;
+    private int yAlku;
+    private int xLoppu;
+    private int yLoppu;
 
-    /* private boolean onLyönti;
+    private Nappula siirrettäväNappula;
+    private Nappula syötäväNappula;
+
     private boolean onShakki;
     private boolean onMatti;
-    private boolean linnoitus; */
+    private boolean linnoitus;
 
-    public int getX0() {
-        return x0;
+    public Siirto(int xAlku, int yAlku, int xLoppu, int yLoppu, Nappula siirrettäväNappula) {
+        this.xAlku = xAlku;
+        this.yAlku = yAlku;
+        this.xLoppu = xLoppu;
+        this.yLoppu = yLoppu;
+        this.siirrettäväNappula = siirrettäväNappula;
     }
 
-    public int getX1() {
-        return x1;
+    public int getxAlku() {
+        return xAlku;
     }
 
-    public int getY0() {
-        return y0;
+    public int getyAlku() {
+        return yAlku;
     }
 
-    public int getY1() {
-        return y1;
+    public int getxLoppu() {
+        return xLoppu;
     }
 
-    public void setX0(int x0) {
-        this.x0 = x0;
+    public int getyLoppu() {
+        return yLoppu;
     }
 
-    public void setX1(int x1) {
-        this.x1 = x1;
+    public Nappula getSiirrettäväNappula() {
+        return siirrettäväNappula;
     }
 
-    public void setY0(int y0) {
-        this.y0 = y0;
+    public Nappula getSyötäväNappula() {
+        return syötäväNappula;
     }
 
-    public void setY1(int y1) {
-        this.y1 = y1;
+    public void setSyötäväNappula(Nappula syötäväNappula) {
+        this.syötäväNappula = syötäväNappula;
+    }
+
+    public boolean isOnShakki() {
+        return onShakki;
+    }
+
+    public void setOnShakki(boolean onShakki) {
+        this.onShakki = onShakki;
+    }
+
+    public boolean isOnMatti() {
+        return onMatti;
+    }
+
+    public void setOnMatti(boolean onMatti) {
+        this.onMatti = onMatti;
+    }
+
+    public boolean isLinnoitus() {
+        return linnoitus;
+    }
+
+    public void setLinnoitus(boolean linnoitus) {
+        this.linnoitus = linnoitus;
     }
 }

@@ -44,14 +44,14 @@ public class Pelilauta {
 
         // Valkoisen pelinappuloiden asetus
 
-        ruudut[7][0] = new Ruutu(new Torni(true), 7, 0);        // Torni h1
-        ruudut[7][1] = new Ruutu(new Ratsu(true), 7, 1);        // Ratsu g1
-        ruudut[7][2] = new Ruutu(new Lähetti(true), 7, 2);      // Lähetti f1
-        ruudut[7][3] = new Ruutu(new Kuningas(true), 7, 3);     // Kuningas e1
-        ruudut[7][4] = new Ruutu(new Kuningatar(true), 7, 4);   // Kuningatar d1
-        ruudut[7][5] = new Ruutu(new Lähetti(true), 7, 5);      // Lähetti c1
-        ruudut[7][6] = new Ruutu(new Ratsu(true), 7, 6);        // Ratsu b1
-        ruudut[7][7] = new Ruutu(new Torni(true), 7, 7);        // Torni a1
+        ruudut[7][0] = new Ruutu(new Torni(true), 7, 0);        // Torni a1
+        ruudut[7][1] = new Ruutu(new Ratsu(true), 7, 1);        // Ratsu b1
+        ruudut[7][2] = new Ruutu(new Lähetti(true), 7, 2);      // Lähetti c1
+        ruudut[7][3] = new Ruutu(new Kuningatar(true), 7, 3);   // Kuningatar d1
+        ruudut[7][4] = new Ruutu(new Kuningas(true), 7, 4);     // Kuningas e1
+        ruudut[7][5] = new Ruutu(new Lähetti(true), 7, 5);      // Lähetti f1
+        ruudut[7][6] = new Ruutu(new Ratsu(true), 7, 6);        // Ratsu g1
+        ruudut[7][7] = new Ruutu(new Torni(true), 7, 7);        // Torni h1
 
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
             ruudut[6][i] = new Ruutu(new Sotilas(true), 6, i);        // Valkoisen sotilaat
@@ -59,14 +59,14 @@ public class Pelilauta {
 
         // Mustan pelinappuloiden asetus
 
-        ruudut[0][0] = new Ruutu(new Torni(false), 0, 0);             // Torni h8
-        ruudut[0][1] = new Ruutu(new Ratsu(false), 0, 1);             // Ratsu g8
-        ruudut[0][2] = new Ruutu(new Lähetti(false), 0, 2);           // Lähetti f8
-        ruudut[0][3] = new Ruutu(new Kuningas(false), 0, 3);          // Kuningas e8
-        ruudut[0][4] = new Ruutu(new Kuningatar(false), 0, 4);        // Kuningatar d8
-        ruudut[0][5] = new Ruutu(new Lähetti(false), 0, 5);           // Lähetti c8
-        ruudut[0][6] = new Ruutu(new Ratsu(false), 0, 6);             // Ratsu b8
-        ruudut[0][7] = new Ruutu(new Torni(false), 0, 7);             // Torni a8
+        ruudut[0][0] = new Ruutu(new Torni(false), 0, 0);             // Torni a8
+        ruudut[0][1] = new Ruutu(new Ratsu(false), 0, 1);             // Ratsu b8
+        ruudut[0][2] = new Ruutu(new Lähetti(false), 0, 2);           // Lähetti c8
+        ruudut[0][3] = new Ruutu(new Kuningatar(false), 0, 3);        // Kuningatar d8
+        ruudut[0][4] = new Ruutu(new Kuningas(false), 0, 4);          // Kuningas e8
+        ruudut[0][5] = new Ruutu(new Lähetti(false), 0, 5);           // Lähetti f8
+        ruudut[0][6] = new Ruutu(new Ratsu(false), 0, 6);             // Ratsu g8
+        ruudut[0][7] = new Ruutu(new Torni(false), 0, 7);             // Torni h8
 
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
             ruudut[1][i] = new Ruutu(new Sotilas(false), 1, i);       // Mustan sotilaat

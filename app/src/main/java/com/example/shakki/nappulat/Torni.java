@@ -44,4 +44,13 @@ public class Torni extends Nappula {
 
         return siirtoLista;
     }
+
+    @Override
+    public String toString() {
+       if (this.onValkoinen()) {
+           return "T";
+       } else {
+           return "t";
+       }
+    }
 }

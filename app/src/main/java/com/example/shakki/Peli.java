@@ -14,7 +14,7 @@ public class Peli {
     private Ruutu kohdeRuutu;
 
     private ArrayList<Nappula> siirrettävätNappulat;
-    private ArrayList<Siirto> laillisetSiirrot;
+    private ArrayList<Ruutu> laillisetSiirrot;
 
     private Pelaaja valkoinenPelaaja;
     private Pelaaja mustaPelaaja;

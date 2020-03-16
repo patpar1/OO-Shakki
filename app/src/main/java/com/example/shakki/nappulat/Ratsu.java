@@ -34,12 +34,17 @@ public class Ratsu extends Nappula {
             if (!onLaudalla(siirtoEhdokas[0], siirtoEhdokas[1])) {
                 continue;
             }
-            // 1. if lause: haetaan ruutu luokasta ruutu, josta selviää onko
+            /* 1. if lause: haetaan ruutu luokasta ruutu, josta selviää onko
+            ruutuun siirrettävä siirtoehdokas mahdollinen siten, että
+            ruudussa ei ole pelinappulaa.
+            */
             if (!lauta.getRuutu(siirtoEhdokas[0] , siirtoEhdokas[1]).onTyhjä()){
-                if (this.onValkoinen()==lauta.getRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).getNappula().onValkoinen()) {
+                /*2. if lause: vertaa Ratsun ja pelilaudan ruudussa olevan nappulan väriä.
+                Jos väri on sama (esim. valkoinen, for looppi lähtee alusta,
+                        koska siirto ei ole mahdollinen).
+             */
+                if (this.onValkoinen() == lauta.getRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).getNappula().onValkoinen()) {
                     continue;
-
-
                 }
 
             }

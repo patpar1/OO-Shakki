@@ -1,6 +1,7 @@
 package com.example.shakki.nappulat;
 
 import com.example.shakki.Pelilauta;
+import com.example.shakki.Ruutu;
 import com.example.shakki.Siirto;
 
 import java.util.ArrayList;
@@ -19,9 +20,13 @@ public class Sotilas extends Nappula {
 
     };
 
+    public Sotilas(boolean onValkoinen) {
+        super(onValkoinen);
+    }
+
 
     @Override
-    public ArrayList<Siirto> laillisetSiirrot(Pelilauta lauta, int x, int y) {
+    public ArrayList<Ruutu> laillisetSiirrot(Pelilauta lauta, int x, int y) {
         return null;
     }
 }

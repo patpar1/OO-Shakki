@@ -48,9 +48,6 @@ public class Ratsu extends Nappula {
                 }
 
             }
-
-
-
             //palauttaa "lauta" objektiin for lauseen läpi menneet siirtoehdokkaat, jotka ovat laillisia
             siirtoLista.add(lauta.getRuutu(siirtoEhdokas[0] , siirtoEhdokas[1]));
 

@@ -26,7 +26,18 @@ public class Torni extends Nappula {
             while (true) {
                 siirtoEhdokas[0] += suunta[0];
                 siirtoEhdokas[1] += suunta[1];
-
+                if (!onLaudalla(siirtoEhdokas[0], siirtoEhdokas[1])) {
+                    break;
+                }
+                if (!lauta.getRuutu(siirtoEhdokas[0] , siirtoEhdokas[1]).onTyhjä()){
+                    if (this.onValkoinen() == lauta.getRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).getNappula().onValkoinen()) {
+                        break;
+                    } else {
+                        siirtoLista.add(lauta.getRuutu(siirtoEhdokas[0] , siirtoEhdokas[1]));
+                        break;
+                    }
+                }
+                siirtoLista.add(lauta.getRuutu(siirtoEhdokas[0] , siirtoEhdokas[1]));
             }
 
         }

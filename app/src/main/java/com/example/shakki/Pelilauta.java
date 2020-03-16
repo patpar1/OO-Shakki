@@ -98,20 +98,20 @@ public class Pelilauta {
         return nappulat;
     }
 
-    public ArrayList<Siirto> haePelaajanSiirrot(boolean onValkoinen) {
+    public ArrayList<Ruutu> haePelaajanSiirrot(boolean onValkoinen) {
         /* Hakee pelaajan kaikkien nappuloiden mahdolliset siirrot.
         *  Käytetään shakki-tilanteen tarkastamiseen vastapelaajalta.*/
 
-        ArrayList<Siirto> pelaajanSiirrot = new ArrayList<Siirto>();
+        ArrayList<Ruutu> pelaajanRuudut = new ArrayList<Ruutu>();
 
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
             for (int j = 0; j < PELILAUDAN_KOKO; j++) {
                 if (ruudut[i][j].getNappula().onValkoinen() == onValkoinen) {
-                    pelaajanSiirrot.addAll(ruudut[i][j].getNappula().laillisetSiirrot(this, i, j));
+                    pelaajanRuudut.addAll(ruudut[i][j].getNappula().laillisetSiirrot(this, i, j));
                 }
             }
         }
-        return pelaajanSiirrot;
+        return pelaajanRuudut;
     }
 
     public boolean onShakki(boolean onValkoinen) {
@@ -119,7 +119,7 @@ public class Pelilauta {
         int kuningasY;
 
         // Vastapelaajan siirrot
-        ArrayList<Siirto> vastustajanSiirrot = haePelaajanSiirrot(!onValkoinen);
+        ArrayList<Ruutu> vastustajanRuudut = haePelaajanSiirrot(!onValkoinen);
 
         // Hakee pelilaudalta kuninkaan sijainnin
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
@@ -133,8 +133,8 @@ public class Pelilauta {
         }
 
         // Tarkistaa, vastaako vastustajan mahdollisista siirroista mikään kuninkaan ruutua
-        for (int i = 0; i < vastustajanSiirrot.size(); i++) {
-            if (vastustajanSiirrot.get(i).getxLoppu() == kuningasX && vastustajanSiirrot.get(i).getyLoppu() == kuningasY) {
+        for (int i = 0; i < vastustajanRuudut.size(); i++) {
+            if (vastustajanRuudut.get(i) == kuningasX && vastustajanRuudut.get(i) == kuningasY) {
                 return true;
             }
         }

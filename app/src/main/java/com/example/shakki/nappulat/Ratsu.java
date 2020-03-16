@@ -1,5 +1,8 @@
 package com.example.shakki.nappulat;
 
+import com.example.shakki.Pelilauta;
+import com.example.shakki.Ruutu;
+
 import java.util.ArrayList;
 
 public class Ratsu extends Nappula {
@@ -20,17 +23,32 @@ public class Ratsu extends Nappula {
     }
 
     @Override
-    public ArrayList<Siirto> laillisetSiirrot(Pelilauta lauta, int x, int y) {
-        ArrayList<Siirto> siirtoLista = new ArrayList<Siirto>();
-
+    public ArrayList<Ruutu> laillisetSiirrot(Pelilauta lauta, int y, int x) {
+        //Pelilauta luokasta saadaan kaikkien nappuloiden nykyiset sijainnit
+        ArrayList<Ruutu> siirtoLista = new ArrayList<Ruutu>();
+        //siirto on muuttuja joka for loopin alussa on siirtoehdokkaat listan ensimmäinen kohta
         for (int[] siirto : siirtoEhdokkaat) {
-            int[] siirtoEhdokas = {(x + siirto[0]), (y + siirto[1])};
-            //Siirtokohdassa oma nappula
-            //
+            //siirtoEhdokkaassa y koordinaatti on 0 ja x koordinaatti on 1
+            int[] siirtoEhdokas = {(y + siirto[0]), (x + siirto[1])};
+            //tarkastaa onko siirto laudalla
+            if (!onLaudalla(siirtoEhdokas[0], siirtoEhdokas[1])) {
+                continue;
+            }
+            // 1. if lause: haetaan ruutu luokasta ruutu, josta selviää onko
+            if (!lauta.getRuutu(siirtoEhdokas[0] , siirtoEhdokas[1]).onTyhjä()){
+                if (this.onValkoinen()==lauta.getRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).getNappula().onValkoinen()) {
+                    continue;
 
-            //TODO if, elseif, else lausekkeet tähän
 
-            siirtoLista.add(new Siirto());
+                }
+
+            }
+
+
+
+            //palauttaa "lauta" objektiin for lauseen läpi menneet siirtoehdokkaat, jotka ovat laillisia
+            siirtoLista.add(lauta.getRuutu(siirtoEhdokas[0] , siirtoEhdokas[1]));
+
         }
 
 

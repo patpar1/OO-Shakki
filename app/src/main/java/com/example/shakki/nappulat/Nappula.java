@@ -14,17 +14,17 @@ public abstract class Nappula {
     }
 
     // Laskee lailliset siirrot. Palauttaa listan laillisista siirroista
-    public abstract ArrayList<Siirto> laillisetSiirrot(Pelilauta lauta, int x, int y);
+    public abstract ArrayList<Ruutu> laillisetSiirrot(Pelilauta lauta, int y, int x);
 
-    public ArrayList<Siirto> laillisetSiirrot(Pelilauta lauta, Ruutu ruutu) {
-        return laillisetSiirrot(lauta, ruutu.getX(), ruutu.getY());
+    public ArrayList<Ruutu> laillisetSiirrot(Pelilauta lauta, Ruutu ruutu) {
+        return laillisetSiirrot(lauta, ruutu.getY(), ruutu.getX());
     }
 
     public boolean onValkoinen() {
         return onValkoinen;
     }
 
-    public static boolean onLaudalla(int x, int y) {
+    public static boolean onLaudalla(int y, int x) {
         if ((x > 7) || (y > 7)) {
             return false;
         }

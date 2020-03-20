@@ -53,9 +53,14 @@ public class Ratsu extends Nappula {
 
         }
 
-
-
         return siirtoLista;
-
+    }
+    @Override
+    public String toString() {
+        if (this.onValkoinen()) {
+            return "R";
+        } else {
+            return "r";
+        }
     }
 }

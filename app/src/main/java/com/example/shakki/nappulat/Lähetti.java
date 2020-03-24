@@ -5,16 +5,16 @@ import com.example.shakki.Ruutu;
 
 import java.util.ArrayList;
 
-public class Torni extends Nappula {
+public class Lähetti extends Nappula {
 
     private static final int[][] siirtoVektorit = {
-            {-1, 0},
-            {1, 0},
-            {0, -1},
-            {0, 1}
+            {-1, 1}, // oikeelle ylös
+            {1, 1}, // oikeelle alas
+            {-1, -1}, // vasemmalle ylös
+            {1, -1} // vasemmalle alas
     };
 
-    public Torni(boolean onValkoinen) {
+    public Lähetti(boolean onValkoinen) {
         super(onValkoinen);
     }
 
@@ -22,14 +22,14 @@ public class Torni extends Nappula {
     public ArrayList<Ruutu> laillisetSiirrot(Pelilauta lauta, int y, int x) {
         ArrayList<Ruutu> siirtoLista = new ArrayList<Ruutu>();
         for (int[] suunta : siirtoVektorit) {
-            int[] siirtoEhdokas = {y, x};
             while (true) {
-                siirtoEhdokas[0] += suunta[0];
-                siirtoEhdokas[1] += suunta[1];
+                int[] siirtoEhdokas = {(y + suunta[0]), (x + suunta[1])};
+                // siirtää kerralla x ja y koordinaatteja siirtovektorien mukaiseen suuntaan
+                //siirtoEhdokas[0][1] += suunta[0][1]; pitäis toimia myös tällä (ehkä)
                 if (!onLaudalla(siirtoEhdokas[0], siirtoEhdokas[1])) {
                     break;
                 }
-                if (!lauta.getRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).onTyhjä()){ //eioo tyhjä
+                if (!lauta.getRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).onTyhjä()){
                     if (this.onValkoinen() == lauta.getRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).getNappula().onValkoinen()) {
                         break;
                     } else {
@@ -42,13 +42,12 @@ public class Torni extends Nappula {
         }
         return siirtoLista;
     }
-
     @Override
     public String toString() {
-       if (this.onValkoinen()) {
-           return "T";
-       } else {
-           return "t";
-       }
+        if (this.onValkoinen()) {
+            return "L";
+        } else {
+            return "l";
+        }
     }
 }

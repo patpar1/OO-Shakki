@@ -39,7 +39,7 @@ public class Pelaaja {
             koordinaatit = muunnaTekstiKoordinaatiksi(sRuutu);
         }
 
-        System.out.println("Valittu ruutu: " + koordinaatit[0] + koordinaatit[1]);
+        // System.out.println("Valittu ruutu: " + koordinaatit[0] + koordinaatit[1]);
 
         return lauta.getRuutu(koordinaatit[0], koordinaatit[1]);
     }

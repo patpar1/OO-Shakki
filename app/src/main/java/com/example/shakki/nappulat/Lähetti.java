@@ -23,9 +23,8 @@ public class Lähetti extends Nappula {
         ArrayList<Ruutu> siirtoLista = new ArrayList<Ruutu>();
         for (int[] suunta : siirtoVektorit) {
             while (true) {
-                int[] siirtoEhdokas = {(y + suunta[0]), (x + suunta[1])};
+                int[] siirtoEhdokas = {(y += suunta[0]), (x += suunta[1])};
                 // siirtää kerralla x ja y koordinaatteja siirtovektorien mukaiseen suuntaan
-                //siirtoEhdokas[0][1] += suunta[0][1]; pitäis toimia myös tällä (ehkä)
                 if (!onLaudalla(siirtoEhdokas[0], siirtoEhdokas[1])) {
                     break;
                 }

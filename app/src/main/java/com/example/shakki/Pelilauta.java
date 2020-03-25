@@ -89,8 +89,10 @@ public class Pelilauta {
 
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
             for (int j = 0; j < PELILAUDAN_KOKO; j++) {
-                if (ruudut[i][j].getNappula().onValkoinen() == onValkoinen) {
-                    nappulat.add(ruudut[i][j].getNappula());
+                if (ruudut[i][j].getNappula() != null) {
+                    if (ruudut[i][j].getNappula().onValkoinen() == onValkoinen) {
+                        nappulat.add(ruudut[i][j].getNappula());
+                    }
                 }
             }
         }
@@ -175,6 +177,8 @@ public class Pelilauta {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+
+        sb.append('\n');
 
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
             // Rivin numero

@@ -28,24 +28,61 @@ public class Peli {
         mustaPelaaja = new Pelaaja(false); // Musta pelaaja
     }
 
+    public Pelilauta getPelilauta() {
+        return lauta;
+    }
+
+    private Pelaaja getNykyinenPelaaja() {
+        if (valkoisenVuoro) {
+            return valkoinenPelaaja;
+        } else {
+            return mustaPelaaja;
+        }
+    }
+
     public int peliSilmukka() {
         while (true) {
+
+            System.out.println(valkoisenVuoro ? "Valkoisen vuoro" : "Mustan vuoro");
+
+            System.out.println(getPelilauta().toString());
 
             // Lasketaan siirrettävät nappulat
             siirrettävätNappulat = lauta.haeSiirrettävätNappulat(valkoisenVuoro);
 
             // Käyttäjä valitsee ruudun
-            valittuRuutu = null; //TODO Käyttäjän valitsema ruutu asetetaan tähän
+            System.out.print("Valitse nappula: ");
+            valittuRuutu = getNykyinenPelaaja().valitseRuutu(lauta);
+
+            // Siirron tarkistus
+            if (valittuRuutu.getNappula() == null) {
+                System.out.println("Ruudussa ei ole nappulaa!");
+                continue;
+            }
+
+            if (!siirrettävätNappulat.contains(valittuRuutu.getNappula())) {
+                System.out.println("Et voi siirtää tätä nappulaa!");
+                continue;
+            }
 
             // Lasketaan ruudun nappulan mahdolliset siirrot
             laillisetSiirrot = valittuRuutu.getNappula().laillisetSiirrot(lauta, valittuRuutu);
 
             // Käyttäjä valitsee siirron kohderuudun
-            kohdeRuutu = null; //TODO Käyttäjän valitsema kohderuutu asetetaan tähän
+            System.out.print("Valitse kohderuutu: ");
+            kohdeRuutu = getNykyinenPelaaja().valitseRuutu(lauta);
 
+            // Virheentarkistusta
+            if (!laillisetSiirrot.contains(kohdeRuutu)) {
+                System.out.println("Siirto ei ole laillinen!");
+                continue;
+            }
 
             // Lasketaan seuraavan pelaajan pelitilanne
             siirrot.add(new Siirto(valittuRuutu, kohdeRuutu));
+
+            /*
+            Näiden toiminnallisuus lisätään myöhemmässä vaiheessa.
 
             if (lauta.onShakkiMatti(!valkoisenVuoro)) {
                 siirrot.get(-1).setOnMatti(true);
@@ -65,7 +102,9 @@ public class Peli {
                 lopetaPeli(0);
             }
 
-            lauta.teeSiirto(siirrot.get(-1));
+             */
+
+            lauta.teeSiirto(siirrot.get(siirrot.size() - 1));
 
             this.valkoisenVuoro = !valkoisenVuoro; // Anna vuoro toiselle pelaajalle
         }

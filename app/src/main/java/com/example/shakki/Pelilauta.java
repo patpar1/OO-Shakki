@@ -178,11 +178,11 @@ public class Pelilauta {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append('\n');
+        sb.append("\n");
 
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
             // Rivin numero
-            sb.append(8 - i).append('\t');
+            sb.append(8 - i).append("\t");
 
             // Nappulat
             for (int j = 0; j < PELILAUDAN_KOKO; j++) {
@@ -191,8 +191,9 @@ public class Pelilauta {
                 } else {
                     sb.append(this.getRuutu(i, j).getNappula().toString());
                 }
+                sb.append(" ");
             }
-            sb.append(" ");
+            sb.append("\n");
         }
         // Alin rivi
         sb.append("\n \ta b c d e f g h");

@@ -45,7 +45,7 @@ public class Peli {
 
             System.out.println(valkoisenVuoro ? "Valkoisen vuoro" : "Mustan vuoro");
 
-            System.out.println(getPelilauta().toString());
+            System.out.println(lauta.toString());
 
             // Lasketaan siirrettävät nappulat
             siirrettävätNappulat = lauta.haeSiirrettävätNappulat(valkoisenVuoro);

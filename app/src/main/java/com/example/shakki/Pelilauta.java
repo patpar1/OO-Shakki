@@ -115,8 +115,8 @@ public class Pelilauta {
     }
 
     public boolean onShakki(boolean onValkoinen) {
-        int kuningasX;
-        int kuningasY;
+        int kuningasX = -1;
+        int kuningasY = -1;
 
         // Vastapelaajan siirrot
         ArrayList<Ruutu> vastustajanRuudut = haePelaajanSiirrot(!onValkoinen);
@@ -134,7 +134,7 @@ public class Pelilauta {
 
         // Tarkistaa, vastaako vastustajan mahdollisista siirroista mikään kuninkaan ruutua
         for (int i = 0; i < vastustajanRuudut.size(); i++) {
-            if (vastustajanRuudut.get(i) == kuningasX && vastustajanRuudut.get(i) == kuningasY) {
+            if (vastustajanRuudut.get(i).getX() == kuningasX && vastustajanRuudut.get(i).getY() == kuningasY) {
                 return true;
             }
         }

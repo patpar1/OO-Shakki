@@ -49,9 +49,9 @@ public class Kuningas extends Nappula {
     @Override
     public String toString() {
         if (this.onValkoinen()) {
-            return "R";
+            return "K";
         } else {
-            return "r";
+            return "k";
         }
     }
 }

@@ -29,4 +29,14 @@ public class Sotilas extends Nappula {
     public ArrayList<Ruutu> laillisetSiirrot(Pelilauta lauta, int x, int y) {
         return null;
     }
+
+    @Override
+    public String toString() {
+        if (this.onValkoinen()) {
+            return "S";
+        } else {
+            return "s";
+        }
+    }
+
 }

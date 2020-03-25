@@ -16,4 +16,13 @@ public class Kuningatar extends Nappula {
         return null;
     }
 
+    @Override
+    public String toString() {
+        if (this.onValkoinen()) {
+            return "D";
+        } else {
+            return "d";
+        }
+    }
+
 }

@@ -182,9 +182,13 @@ public class Pelilauta {
 
             // Nappulat
             for (int j = 0; j < PELILAUDAN_KOKO; j++) {
-                sb.append(this.getRuutu(i, j).getNappula().toString()).append(" ");
+                if (this.getRuutu(i, j).getNappula() == null) {
+                    sb.append('-');
+                } else {
+                    sb.append(this.getRuutu(i, j).getNappula().toString());
+                }
             }
-            sb.append('\n');
+            sb.append(" ");
         }
         // Alin rivi
         sb.append("\n \ta b c d e f g h");

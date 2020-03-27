@@ -32,8 +32,9 @@ public class Peli {
         }
     }
 
-    public int peliSilmukka() {
-        while (true) {
+    public void peliSilmukka(int maksimiSiirrot) {
+        int iteraatio = 0;
+        while (iteraatio++ < maksimiSiirrot) {
 
             // Tarkista shakkimatti
             if (lauta.onShakkiMatti(!valkoisenVuoro)) {

@@ -33,18 +33,18 @@ public class Peli {
         while (iteraatio++ < maksimiSiirrot) {
 
             // Tarkista shakkimatti
-            if (lauta.onShakkiMatti(!valkoisenVuoro)) {
+            if (lauta.onShakkiMatti(valkoisenVuoro)) {
                 siirrot.get(-1).asetaMatti(true);
                 lopetaPeli(valkoisenVuoro ? 1 : -1);
             }
 
             // Tarkista pattitilanne
-            if (lauta.onPatti(!valkoisenVuoro)) {
+            if (lauta.onPatti(valkoisenVuoro)) {
                 lopetaPeli(0);
             }
 
             // Tarkista shakkitilanne
-            if (lauta.onShakki(!valkoisenVuoro)) {
+            if (lauta.onShakki(valkoisenVuoro)) {
                 haeNykyinenPelaaja().asetaShakki(true);
                 //siirrot.get(siirrot.size() - 1).asetaShakki(true);
             }

@@ -53,8 +53,10 @@ public class Pelilauta {
         ruudut[7][6] = new Ruutu(new Ratsu(true), 7, 6);        // Ratsu g1
         ruudut[7][7] = new Ruutu(new Torni(true), 7, 7);        // Torni h1
 
+
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
-            ruudut[6][i] = new Ruutu(new Sotilas(true), 6, i);        // Valkoisen sotilaat
+            // ruudut[6][i] = new Ruutu(new Sotilas(true), 6, i);        // Valkoisen sotilaat
+            ruudut[6][i] = new Ruutu(6, i);
         }
 
         // Mustan pelinappuloiden asetus
@@ -174,8 +176,7 @@ public class Pelilauta {
 
     }
 
-    @Override
-    public String toString() {
+    public String tulostaPelilauta(ArrayList<Ruutu> laillisetRuudut) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("\n");
@@ -186,6 +187,12 @@ public class Pelilauta {
 
             // Nappulat
             for (int j = 0; j < PELILAUDAN_KOKO; j++) {
+                if (laillisetRuudut != null) {
+                    if (laillisetRuudut.contains(this.getRuutu(i, j))) {
+                        sb.append('*').append(" ");
+                        continue;
+                    }
+                }
                 if (this.getRuutu(i, j).getNappula() == null) {
                     sb.append('-');
                 } else {
@@ -199,6 +206,10 @@ public class Pelilauta {
         sb.append("\n \ta b c d e f g h");
 
         return sb.toString();
+    }
+
+    public String tulostaPelilauta() {
+        return tulostaPelilauta(null);
     }
 
 }

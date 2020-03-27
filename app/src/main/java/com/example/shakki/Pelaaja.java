@@ -12,15 +12,16 @@ public class Pelaaja {
 
     private Ruutu valittuRuutu;
 
-    public Pelaaja(boolean onValkoinen) {
+    Pelaaja(boolean onValkoinen) {
         this.onValkoinen = onValkoinen;
+        this.onShakissa = false;
     }
 
     public boolean onShakissa() {
         return onShakissa;
     }
 
-    public void asetaShakki(boolean onShakissa) {
+    void asetaShakki(boolean onShakissa) {
         this.onShakissa = onShakissa;
     }
 
@@ -28,7 +29,7 @@ public class Pelaaja {
         return onValkoinen;
     }
 
-    public Ruutu haeRuutu(Pelilauta lauta) {
+    private Ruutu haeRuutu(Pelilauta lauta) {
         String sRuutu = null;
         int[] koordinaatit = new int[0];
 
@@ -48,7 +49,14 @@ public class Pelaaja {
 
     }
 
-    public Ruutu haeValittuRuutu(Pelilauta lauta) {
+    private int[] muunnaTekstiKoordinaatiksi(String s) {
+        String sarakkeet = "abcdefgh";
+        int i0 = sarakkeet.indexOf(s.toLowerCase().charAt(0));
+        int i1 = 8 - Character.getNumericValue(s.charAt(1));
+        return new int[] {i1, i0};
+    }
+
+    private Ruutu haeValittuRuutu(Pelilauta lauta) {
 
         ArrayList<Nappula> nappulat;
 
@@ -69,7 +77,7 @@ public class Pelaaja {
         return valittuRuutu;
     }
 
-    public Ruutu haeKohdeRuutu(Pelilauta lauta) {
+    private Ruutu haeKohdeRuutu(Pelilauta lauta) {
 
         ArrayList<Ruutu> laillisetSiirrot;
         Ruutu kohdeRuutu;
@@ -93,11 +101,24 @@ public class Pelaaja {
         return kohdeRuutu;
     }
 
-    private int[] muunnaTekstiKoordinaatiksi(String s) {
-        String ats = "abcdefgh";
-        int i0 = ats.indexOf(s.toLowerCase().charAt(0));
-        int i1 = 8 - Character.getNumericValue(s.charAt(1));
-        return new int[] {i1, i0};
-    }
+    Siirto muodostaSiirto(Pelilauta lauta) {
 
+        // Tulosta pelilauta
+        System.out.println(onValkoinen ? "Valkoisen vuoro" : "Mustan vuoro");
+        System.out.println(lauta.tulostaPelilauta());
+
+        // Valitse siirrettävä nappula
+        Ruutu valittuRuutu = haeValittuRuutu(lauta);
+        if (valittuRuutu == null) {
+            return null;
+        }
+
+        // Valitse kohderuutu
+        Ruutu kohdeRuutu = haeKohdeRuutu(lauta);
+        if (kohdeRuutu == null) {
+            return null;
+        }
+
+        return new Siirto(valittuRuutu, kohdeRuutu);
+    }
 }

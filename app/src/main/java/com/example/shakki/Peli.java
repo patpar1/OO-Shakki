@@ -49,25 +49,15 @@ public class Peli {
                 //siirrot.get(siirrot.size() - 1).asetaShakki(true);
             }
 
-            // Tulosta pelilauta
-            System.out.println(valkoisenVuoro ? "Valkoisen vuoro" : "Mustan vuoro");
-            System.out.println(lauta.tulostaPelilauta());
-
-            // Valitse siirrettävä nappula
-            Ruutu valittuRuutu = haeNykyinenPelaaja().haeValittuRuutu(lauta);
-            if (valittuRuutu == null) {
+            Siirto pelaajanSiirto = haeNykyinenPelaaja().muodostaSiirto(lauta);
+            if (pelaajanSiirto == null) {
                 continue;
             }
 
-            // Valitse kohderuutu
-            Ruutu kohdeRuutu = haeNykyinenPelaaja().haeKohdeRuutu(lauta);
-            if (kohdeRuutu == null) {
-                continue;
-            }
+            siirrot.add(pelaajanSiirto);
+            lauta.teeSiirto(pelaajanSiirto);
 
-            siirrot.add(new Siirto(valittuRuutu, kohdeRuutu));
-
-            lauta.teeSiirto(siirrot.get(siirrot.size() - 1));
+            haeNykyinenPelaaja().asetaShakki(false);
 
             this.valkoisenVuoro = !valkoisenVuoro; // Anna vuoro toiselle pelaajalle
         }

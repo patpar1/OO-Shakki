@@ -122,28 +122,20 @@ public class Pelilauta {
         int kuningasX = -1;
         int kuningasY = -1;
 
-        // Vastapelaajan siirrot
-        ArrayList<Ruutu> vastustajanRuudut = haePelaajanSiirrot(!onValkoinen);
-
         // Hakee pelilaudalta kuninkaan sijainnin
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
             for (int j = 0; j < PELILAUDAN_KOKO; j++) {
                 if (ruudut[i][j].getNappula() instanceof Kuningas &&
                         ruudut[i][j].getNappula().onValkoinen() == onValkoinen) {
-                    kuningasX = i;
-                    kuningasY = j;
+                    kuningasY = i;
+                    kuningasX = j;
+                    break;
                 }
             }
         }
 
         // Tarkistaa, vastaako vastustajan mahdollisista siirroista mikään kuninkaan ruutua
-        for (int i = 0; i < vastustajanRuudut.size(); i++) {
-            if (vastustajanRuudut.get(i).getX() == kuningasX && vastustajanRuudut.get(i).getY() == kuningasY) {
-                return true;
-            }
-        }
-
-        return false;
+        return haePelaajanSiirrot(!onValkoinen).contains(getRuutu(kuningasY, kuningasX));
     }
 
     public boolean onPatti(boolean onValkoinen) {

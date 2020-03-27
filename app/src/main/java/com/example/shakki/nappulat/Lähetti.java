@@ -28,15 +28,15 @@ public class Lähetti extends Nappula {
                 if (!onLaudalla(siirtoEhdokas[0], siirtoEhdokas[1])) {
                     break;
                 }
-                if (!lauta.getRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).onTyhjä()){
-                    if (this.onValkoinen() == lauta.getRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).getNappula().onValkoinen()) {
+                if (!lauta.haeRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).onTyhjä()){
+                    if (this.onValkoinen() == lauta.haeRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).haeNappula().onValkoinen()) {
                         break;
                     } else {
-                        siirtoLista.add(lauta.getRuutu(siirtoEhdokas[0] , siirtoEhdokas[1]));
+                        siirtoLista.add(lauta.haeRuutu(siirtoEhdokas[0] , siirtoEhdokas[1]));
                         break;
                     }
                 }
-                siirtoLista.add(lauta.getRuutu(siirtoEhdokas[0] , siirtoEhdokas[1]));
+                siirtoLista.add(lauta.haeRuutu(siirtoEhdokas[0] , siirtoEhdokas[1]));
             }
         }
         return siirtoLista;

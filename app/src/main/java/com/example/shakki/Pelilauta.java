@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Pelilauta {
 
-    private static final int PELILAUDAN_KOKO = 8;
+    static final int PELILAUDAN_KOKO = 8;
 
     private Ruutu[][] ruudut;
 
@@ -98,8 +98,23 @@ public class Pelilauta {
         return pl;
     }
 
-    public Ruutu getRuutu(int rivi, int sarake) {
+    public Ruutu haeRuutu(int rivi, int sarake) {
         return ruudut[rivi][sarake];
+    }
+
+    ArrayList<Ruutu> haePelaajanRuudut(boolean onValkoinen) {
+        ArrayList<Ruutu> r = new ArrayList<>();
+
+        for (int i = 0; i < PELILAUDAN_KOKO; i++) {
+            for (int j = 0; j < PELILAUDAN_KOKO; j++) {
+                if (ruudut[i][j].haeNappula() != null) {
+                    if (ruudut[i][j].haeNappula().onValkoinen() == onValkoinen) {
+                        r.add(ruudut[i][j]);
+                    }
+                }
+            }
+        }
+        return r;
     }
 
     ArrayList<Nappula> haeNappulat(boolean onValkoinen) {
@@ -107,9 +122,9 @@ public class Pelilauta {
 
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
             for (int j = 0; j < PELILAUDAN_KOKO; j++) {
-                if (ruudut[i][j].getNappula() != null) {
-                    if (ruudut[i][j].getNappula().onValkoinen() == onValkoinen) {
-                        nappulat.add(ruudut[i][j].getNappula());
+                if (ruudut[i][j].haeNappula() != null) {
+                    if (ruudut[i][j].haeNappula().onValkoinen() == onValkoinen) {
+                        nappulat.add(ruudut[i][j].haeNappula());
                     }
                 }
             }
@@ -126,10 +141,10 @@ public class Pelilauta {
 
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
             for (int j = 0; j < PELILAUDAN_KOKO; j++) {
-                if (ruudut[i][j].getNappula() != null
-                        && ruudut[i][j].getNappula().onValkoinen() == onValkoinen
-                        && ruudut[i][j].getNappula().laillisetSiirrot(this, i, j) != null) {
-                    pelaajanRuudut.addAll(ruudut[i][j].getNappula().laillisetSiirrot(this, i, j));
+                if (ruudut[i][j].haeNappula() != null
+                        && ruudut[i][j].haeNappula().onValkoinen() == onValkoinen
+                        && ruudut[i][j].haeNappula().laillisetSiirrot(this, i, j) != null) {
+                    pelaajanRuudut.addAll(ruudut[i][j].haeNappula().laillisetSiirrot(this, i, j));
                 }
             }
         }
@@ -143,8 +158,8 @@ public class Pelilauta {
         // Hakee pelilaudalta kuninkaan sijainnin
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
             for (int j = 0; j < PELILAUDAN_KOKO; j++) {
-                if (ruudut[i][j].getNappula() instanceof Kuningas &&
-                        ruudut[i][j].getNappula().onValkoinen() == onValkoinen) {
+                if (ruudut[i][j].haeNappula() instanceof Kuningas &&
+                        ruudut[i][j].haeNappula().onValkoinen() == onValkoinen) {
                     kuningasY = i;
                     kuningasX = j;
                     break;
@@ -153,30 +168,22 @@ public class Pelilauta {
         }
 
         // Tarkistaa, vastaako vastustajan mahdollisista siirroista mikään kuninkaan ruutua
-        return haePelaajanSiirrot(!onValkoinen).contains(getRuutu(kuningasY, kuningasX));
-    }
-
-    boolean onPatti(boolean onValkoinen) {
-        return haePelaajanSiirrot(onValkoinen).isEmpty();
-    }
-
-    boolean onShakkiMatti(boolean onValkoinen) {
-        return onShakki(onValkoinen) && onPatti(onValkoinen);
+        return haePelaajanSiirrot(!onValkoinen).contains(haeRuutu(kuningasY, kuningasX));
     }
 
     void teeSiirto(Siirto s) {
         /* Tekee annetun siirron pelilaudalla */
 
-        ruudut[s.getyLoppu()][s.getxLoppu()].setNappula(s.haeNappula());
-        ruudut[s.getyAlku()][s.getxAlku()].setNappula(null);
+        ruudut[s.getyLoppu()][s.getxLoppu()].asetaNappula(s.haeNappula());
+        ruudut[s.getyAlku()][s.getxAlku()].asetaNappula(null);
 
     }
 
     void kumoaSiirto(Siirto s) {
         // Kumoaa annetun siirron pelilaudalla.
 
-        ruudut[s.getyAlku()][s.getxAlku()].setNappula(s.haeNappula());
-        ruudut[s.getyLoppu()][s.getxLoppu()].setNappula(s.haeTuhottuNappula());
+        ruudut[s.getyAlku()][s.getxAlku()].asetaNappula(s.haeNappula());
+        ruudut[s.getyLoppu()][s.getxLoppu()].asetaNappula(s.haeTuhottuNappula());
 
     }
 
@@ -192,15 +199,15 @@ public class Pelilauta {
             // Nappulat
             for (int j = 0; j < PELILAUDAN_KOKO; j++) {
                 if (laillisetRuudut != null) {
-                    if (laillisetRuudut.contains(this.getRuutu(i, j))) {
+                    if (laillisetRuudut.contains(this.haeRuutu(i, j))) {
                         sb.append('*').append(" ");
                         continue;
                     }
                 }
-                if (this.getRuutu(i, j).getNappula() == null) {
+                if (this.haeRuutu(i, j).haeNappula() == null) {
                     sb.append('-');
                 } else {
-                    sb.append(this.getRuutu(i, j).getNappula().toString());
+                    sb.append(this.haeRuutu(i, j).haeNappula().toString());
                 }
                 sb.append(" ");
             }

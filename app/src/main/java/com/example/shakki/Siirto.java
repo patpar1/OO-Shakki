@@ -12,17 +12,19 @@ public class Siirto {
     private Nappula nappula;
     private Nappula tuhottuNappula;
 
+    /*
     private boolean onShakki;
     private boolean onMatti;
     private boolean linnoitus;
+     */
 
     public Siirto(Ruutu aloitusRuutu, Ruutu lopetusRuutu) {
-        xAlku = aloitusRuutu.getX();
-        yAlku = aloitusRuutu.getY();
-        nappula = aloitusRuutu.getNappula();
-        xLoppu = lopetusRuutu.getX();
-        yLoppu = lopetusRuutu.getY();
-        tuhottuNappula = lopetusRuutu.getNappula();
+        xAlku = aloitusRuutu.haeX();
+        yAlku = aloitusRuutu.haeY();
+        nappula = aloitusRuutu.haeNappula();
+        xLoppu = lopetusRuutu.haeX();
+        yLoppu = lopetusRuutu.haeY();
+        tuhottuNappula = lopetusRuutu.haeNappula();
     }
 
     public int getxAlku() {
@@ -44,6 +46,8 @@ public class Siirto {
     public Nappula haeTuhottuNappula() {
         return tuhottuNappula;
     }
+
+    /* Tarvitaan muissa toiminnallisuuksissa
 
     public void asetaTuhottuNappula(Nappula tuhottuNappula) {
         this.tuhottuNappula = tuhottuNappula;
@@ -69,4 +73,6 @@ public class Siirto {
     public void asetaLinnoitus(boolean linnoitus) {
         this.linnoitus = linnoitus;
     }
+     */
+
 }

@@ -10,8 +10,6 @@ public class Pelaaja {
     private boolean onValkoinen;
     private boolean onShakissa;
 
-    private Ruutu valittuRuutu;
-
     Pelaaja(boolean onValkoinen) {
         this.onValkoinen = onValkoinen;
         this.onShakissa = false;
@@ -42,7 +40,7 @@ public class Pelaaja {
             koordinaatit = muunnaTekstiKoordinaatiksi(sRuutu);
         }
 
-        return lauta.getRuutu(koordinaatit[0], koordinaatit[1]);
+        return lauta.haeRuutu(koordinaatit[0], koordinaatit[1]);
 
     }
 
@@ -64,13 +62,13 @@ public class Pelaaja {
         // Käyttäjä valitsee ruudun
         System.out.print("Valitse nappula: ");
 
-        valittuRuutu = haeRuutu(lauta);
+        Ruutu valittuRuutu = haeRuutu(lauta);
 
         // Siirron tarkistus
-        if (valittuRuutu.getNappula() == null) {
+        if (valittuRuutu.haeNappula() == null) {
             System.out.println("Ruudussa ei ole nappulaa!");
             return null;
-        } else if (!nappulat.contains(valittuRuutu.getNappula())) {
+        } else if (!nappulat.contains(valittuRuutu.haeNappula())) {
             System.out.println("Et voi siirtää tätä nappulaa!");
             return null;
         }
@@ -78,27 +76,34 @@ public class Pelaaja {
         return valittuRuutu;
     }
 
-    private Ruutu haeKohdeRuutu(Pelilauta lauta) {
+    ArrayList<Ruutu> haeLaillisetSiirrot(Pelilauta lauta, Ruutu valittuRuutu) {
 
-        Ruutu kohdeRuutu;
         ArrayList<Ruutu> laillisetRuudut = new ArrayList<>();
 
         if (onShakissa) {
             // Lisää siirrot ainoastaan jos siirron seurauksena pelilaudalla ei ole shakkia
-            for (Ruutu kohdeRuutuEhdokas : valittuRuutu.getNappula().laillisetSiirrot(lauta, valittuRuutu)) {
+            for (Ruutu kohdeRuutuEhdokas : valittuRuutu.haeNappula().laillisetSiirrot(lauta, valittuRuutu)) {
                 Pelilauta kopioLauta = lauta.kopioi();
-                Ruutu valittuRuutuKopio = kopioLauta.getRuutu(valittuRuutu.getY(), valittuRuutu.getX());
-                Ruutu kohdeRuutuEhdokasKopio = kopioLauta.getRuutu(kohdeRuutuEhdokas.getY(), kohdeRuutuEhdokas.getX());
+                Ruutu valittuRuutuKopio = kopioLauta.haeRuutu(valittuRuutu.haeY(), valittuRuutu.haeX());
+                Ruutu kohdeRuutuEhdokasKopio = kopioLauta.haeRuutu(kohdeRuutuEhdokas.haeY(), kohdeRuutuEhdokas.haeX());
                 kopioLauta.teeSiirto(new Siirto(valittuRuutuKopio, kohdeRuutuEhdokasKopio));
                 if (!kopioLauta.onShakki(onValkoinen)) {
                     laillisetRuudut.add(kohdeRuutuEhdokas);
                 }
             }
         } else {
-            laillisetRuudut.addAll(valittuRuutu.getNappula().laillisetSiirrot(lauta, valittuRuutu));
+            laillisetRuudut.addAll(valittuRuutu.haeNappula().laillisetSiirrot(lauta, valittuRuutu));
         }
 
         // System.out.println("Lailliset ruudut: " + laillisetRuudut.size());
+
+        return laillisetRuudut;
+    }
+
+    private Ruutu haeKohdeRuutu(Pelilauta lauta, Ruutu valittuRuutu) {
+
+        Ruutu kohdeRuutu;
+        ArrayList<Ruutu> laillisetRuudut = haeLaillisetSiirrot(lauta, valittuRuutu);
 
         if (laillisetRuudut.size() == 0) {
             System.out.println("Tällä nappulalla ei ole laillisia siirtoja!");
@@ -134,7 +139,7 @@ public class Pelaaja {
         }
 
         // Valitse kohderuutu
-        Ruutu kohdeRuutu = haeKohdeRuutu(lauta);
+        Ruutu kohdeRuutu = haeKohdeRuutu(lauta, valittuRuutu);
         if (kohdeRuutu == null) {
             return null;
         }

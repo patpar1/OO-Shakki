@@ -34,14 +34,14 @@ public class Kuningas extends Nappula {
             ruutuun siirrettävä siirtoehdokas mahdollinen siten, että
             ruudussa ei ole pelinappulaa.
             */
-            if (!lauta.getRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).onTyhjä()) {
-                if (this.onValkoinen() == lauta.getRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).getNappula().onValkoinen()) {
+            if (!lauta.haeRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).onTyhjä()) {
+                if (this.onValkoinen() == lauta.haeRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).haeNappula().onValkoinen()) {
                     continue;
                 }
 
             }
             //palauttaa "lauta" objektiin for lauseen läpi menneet siirtoehdokkaat, jotka ovat laillisia
-            siirtoLista.add(lauta.getRuutu(siirtoEhdokas[0], siirtoEhdokas[1]));
+            siirtoLista.add(lauta.haeRuutu(siirtoEhdokas[0], siirtoEhdokas[1]));
 
         }
             return siirtoLista;

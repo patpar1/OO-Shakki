@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
         int maksimiKierrokset = 100;
 
         Peli peli = new Peli();
-        peli.peliSilmukka(maksimiKierrokset);
+        int tulos = peli.peliSilmukka(maksimiKierrokset);
+        System.out.println(tulos);
     }
 }

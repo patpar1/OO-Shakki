@@ -24,19 +24,19 @@ public class Ruutu {
         return new Ruutu(nappula, y, x);
     }
 
-    public Nappula getNappula() {
+    public Nappula haeNappula() {
         return nappula;
     }
 
-    public void setNappula(Nappula nappula) {
+    public void asetaNappula(Nappula nappula) {
         this.nappula = nappula;
     }
 
-    public int getX() {
+    public int haeX() {
         return x;
     }
 
-    public int getY() {
+    public int haeY() {
         return y;
     }
 

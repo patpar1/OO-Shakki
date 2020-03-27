@@ -87,7 +87,14 @@ public class Pelaaja {
         laillisetRuudut = valittuRuutu.getNappula().laillisetSiirrot(lauta, valittuRuutu);
 
         if (onShakissa) {
-            poistaLaittomatSiirrot(lauta);
+            // Poista laittomat siirrot listasta, jos pelilaudalla on shakki
+            for (Ruutu kohdeRuutuEhdokas : laillisetRuudut) {
+                Pelilauta kopioLauta = new Pelilauta(lauta);
+                kopioLauta.teeSiirto(new Siirto(valittuRuutu, kohdeRuutuEhdokas));
+                if (kopioLauta.onShakki(onValkoinen)) {
+                    laillisetRuudut.remove(kohdeRuutuEhdokas);
+                }
+            }
         }
 
         if (laillisetRuudut == null) {
@@ -109,14 +116,6 @@ public class Pelaaja {
         }
 
         return kohdeRuutu;
-    }
-
-    private void poistaLaittomatSiirrot(Pelilauta lauta) {
-        for (Ruutu kohdeRuutuEhdokas : laillisetRuudut) {
-            Pelilauta kopioLauta = new Pelilauta(lauta);
-            kopioLauta.teeSiirto(new Siirto(valittuRuutu, kohdeRuutuEhdokas));
-            //TODO Toiminnallisuuden jatkaminen
-        }
     }
 
     Siirto muodostaSiirto(Pelilauta lauta) {

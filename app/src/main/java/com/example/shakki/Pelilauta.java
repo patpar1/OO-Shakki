@@ -56,6 +56,8 @@ public class Pelilauta {
 
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
             // ruudut[6][i] = new Ruutu(new Sotilas(true), 6, i);        // Valkoisen sotilaat
+
+            // Väliaikaisesti poistettu sotilaat
             ruudut[6][i] = new Ruutu(6, i);
         }
 
@@ -71,7 +73,10 @@ public class Pelilauta {
         ruudut[0][7] = new Ruutu(new Torni(false), 0, 7);             // Torni h8
 
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
-            ruudut[1][i] = new Ruutu(new Sotilas(false), 1, i);       // Mustan sotilaat
+            //ruudut[1][i] = new Ruutu(new Sotilas(false), 1, i);       // Mustan sotilaat
+
+            // Väliaikaisesti poistettu sotilaat
+            ruudut[1][i] = new Ruutu(6, i);
         }
 
         // Tyhjien ruutujen alustus
@@ -83,7 +88,7 @@ public class Pelilauta {
         }
     }
 
-    // Kopiorakentaja
+    // Rakentaa kopion olemassa olevasta pelilaudasta
     public Pelilauta(Pelilauta pLauta) {
         this.ruudut = pLauta.ruudut;
     }

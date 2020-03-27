@@ -49,24 +49,24 @@ public class Siirto {
         this.syötäväNappula = syötäväNappula;
     }
 
-    public boolean isOnShakki() {
+    public boolean onShakki() {
         return onShakki;
     }
-    public void setOnShakki(boolean onShakki) {
+    public void asetaShakki(boolean onShakki) {
         this.onShakki = onShakki;
     }
 
-    public boolean isOnMatti() {
+    public boolean onMatti() {
         return onMatti;
     }
-    public void setOnMatti(boolean onMatti) {
+    public void asetaMatti(boolean onMatti) {
         this.onMatti = onMatti;
     }
 
     public boolean isLinnoitus() {
         return linnoitus;
     }
-    public void setLinnoitus(boolean linnoitus) {
+    public void asetaLinnoitus(boolean linnoitus) {
         this.linnoitus = linnoitus;
     }
 }

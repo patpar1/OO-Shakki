@@ -14,8 +14,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static void main(String[] args) {
         Peli peli = new Peli();
-        //System.out.println(peli.getPelilauta().getRuutu(0, 0).getNappula().toString());
-        //System.out.println(peli.getPelilauta().toString());
         peli.peliSilmukka();
     }
 }

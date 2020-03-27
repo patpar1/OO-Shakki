@@ -1,7 +1,5 @@
 package com.example.shakki;
 
-import com.example.shakki.nappulat.Nappula;
-
 import java.util.ArrayList;
 
 public class Peli {
@@ -13,8 +11,6 @@ public class Peli {
     private Ruutu valittuRuutu;
     private Ruutu kohdeRuutu;
 
-    private ArrayList<Nappula> siirrettävätNappulat;
-    private ArrayList<Ruutu> laillisetSiirrot;
 
     private Pelaaja valkoinenPelaaja;
     private Pelaaja mustaPelaaja;
@@ -28,11 +24,7 @@ public class Peli {
         mustaPelaaja = new Pelaaja(false); // Musta pelaaja
     }
 
-    public Pelilauta getPelilauta() {
-        return lauta;
-    }
-
-    private Pelaaja getNykyinenPelaaja() {
+    private Pelaaja haeNykyinenPelaaja() {
         if (valkoisenVuoro) {
             return valkoinenPelaaja;
         } else {
@@ -43,68 +35,40 @@ public class Peli {
     public int peliSilmukka() {
         while (true) {
 
-            System.out.println(valkoisenVuoro ? "Valkoisen vuoro" : "Mustan vuoro");
-
-            System.out.println(lauta.tulostaPelilauta());
-
-            // Lasketaan siirrettävät nappulat
-            siirrettävätNappulat = lauta.haeSiirrettävätNappulat(valkoisenVuoro);
-
-            // Käyttäjä valitsee ruudun
-            System.out.print("Valitse nappula: ");
-            valittuRuutu = getNykyinenPelaaja().valitseRuutu(lauta);
-
-            // Siirron tarkistus
-            if (valittuRuutu.getNappula() == null) {
-                System.out.println("Ruudussa ei ole nappulaa!");
-                continue;
-            }
-
-            if (!siirrettävätNappulat.contains(valittuRuutu.getNappula())) {
-                System.out.println("Et voi siirtää tätä nappulaa!");
-                continue;
-            }
-
-            // Lasketaan ruudun nappulan mahdolliset siirrot
-            laillisetSiirrot = valittuRuutu.getNappula().laillisetSiirrot(lauta, valittuRuutu);
-
-            System.out.println(lauta.tulostaPelilauta(laillisetSiirrot));
-
-            // Käyttäjä valitsee siirron kohderuudun
-            System.out.print("Valitse kohderuutu: ");
-            kohdeRuutu = getNykyinenPelaaja().valitseRuutu(lauta);
-
-            // Virheentarkistusta
-            if (!laillisetSiirrot.contains(kohdeRuutu)) {
-                System.out.println("Siirto ei ole laillinen!");
-                continue;
-            }
-
-            // Lasketaan seuraavan pelaajan pelitilanne
-            siirrot.add(new Siirto(valittuRuutu, kohdeRuutu));
-
-            /*
-            Näiden toiminnallisuus lisätään myöhemmässä vaiheessa.
-
+            // Tarkista shakkimatti
             if (lauta.onShakkiMatti(!valkoisenVuoro)) {
-                siirrot.get(-1).setOnMatti(true);
+                siirrot.get(-1).asetaMatti(true);
                 lopetaPeli(valkoisenVuoro ? 1 : -1);
             }
 
-            if (lauta.onShakki(!valkoisenVuoro)) {
-                if (valkoisenVuoro) {
-                    mustaPelaaja.setOnShakissa(true);
-                } else {
-                    valkoinenPelaaja.setOnShakissa(true);
-                }
-                siirrot.get(-1).setOnShakki(true);
-            }
-
+            // Tarkista pattitilanne
             if (lauta.onPatti(!valkoisenVuoro)) {
                 lopetaPeli(0);
             }
 
-             */
+            // Tarkista shakkitilanne
+            if (lauta.onShakki(!valkoisenVuoro)) {
+                haeNykyinenPelaaja().asetaShakki(true);
+                //siirrot.get(siirrot.size() - 1).asetaShakki(true);
+            }
+
+            // Tulosta pelilauta
+            System.out.println(valkoisenVuoro ? "Valkoisen vuoro" : "Mustan vuoro");
+            System.out.println(lauta.tulostaPelilauta());
+
+            // Valitse siirrettävä nappula
+            valittuRuutu = haeNykyinenPelaaja().haeValittuRuutu(lauta);
+            if (valittuRuutu == null) {
+                continue;
+            }
+
+            // Valitse kohderuutu
+            kohdeRuutu = haeNykyinenPelaaja().haeKohdeRuutu(lauta);
+            if (kohdeRuutu == null) {
+                continue;
+            }
+
+            siirrot.add(new Siirto(valittuRuutu, kohdeRuutu));
 
             lauta.teeSiirto(siirrot.get(siirrot.size() - 1));
 

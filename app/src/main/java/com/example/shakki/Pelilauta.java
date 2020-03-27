@@ -142,8 +142,11 @@ public class Pelilauta {
         }
 
         ArrayList<Ruutu> pRuutu = new ArrayList<>();
+        ArrayList<Ruutu> nappulanRuutuEhdokkaat;
         for (Ruutu r : haePelaajanRuudut(!pelaaja.onValkoinen())) {
-            pRuutu.addAll(r.haeNappula().laillisetSiirrot(this, r));
+            if ((nappulanRuutuEhdokkaat = r.haeNappula().laillisetSiirrot(this, r)) != null) {
+                pRuutu.addAll(nappulanRuutuEhdokkaat);
+            }
         }
 
         return pRuutu.contains(haeRuutu(kuningasY, kuningasX));

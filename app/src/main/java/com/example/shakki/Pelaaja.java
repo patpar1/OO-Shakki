@@ -50,7 +50,7 @@ public class Pelaaja {
         String sarakkeet = "abcdefgh";
         int i0 = sarakkeet.indexOf(s.toLowerCase().charAt(0));
         int i1 = 8 - Character.getNumericValue(s.charAt(1));
-        System.out.println("TEKSTI KOORDINAATEIKSI: " + i1 + i0);
+        // System.out.println("TEKSTI KOORDINAATEIKSI: " + i1 + i0);
         return new int[] {i1, i0};
     }
 
@@ -98,7 +98,7 @@ public class Pelaaja {
             laillisetRuudut.addAll(valittuRuutu.getNappula().laillisetSiirrot(lauta, valittuRuutu));
         }
 
-        System.out.println("Lailliset ruudut: " + laillisetRuudut.size());
+        // System.out.println("Lailliset ruudut: " + laillisetRuudut.size());
 
         if (laillisetRuudut.size() == 0) {
             System.out.println("Tällä nappulalla ei ole laillisia siirtoja!");

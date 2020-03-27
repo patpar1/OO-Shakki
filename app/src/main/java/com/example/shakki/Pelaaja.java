@@ -53,7 +53,7 @@ public class Pelaaja {
         ArrayList<Nappula> nappulat;
 
         // Lasketaan siirrettävät nappulat
-        nappulat = lauta.haeSiirrettävätNappulat(onValkoinen);
+        nappulat = lauta.haeNappulat(onValkoinen);
 
         valittuRuutu = haeRuutu(lauta);
 

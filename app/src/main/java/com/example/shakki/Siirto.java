@@ -9,8 +9,8 @@ public class Siirto {
     private int xLoppu;
     private int yLoppu;
 
-    private Nappula siirrettäväNappula;
-    private Nappula syötäväNappula;
+    private Nappula nappula;
+    private Nappula tuhottuNappula;
 
     private boolean onShakki;
     private boolean onMatti;
@@ -19,10 +19,10 @@ public class Siirto {
     public Siirto(Ruutu aloitusRuutu, Ruutu lopetusRuutu) {
         xAlku = aloitusRuutu.getX();
         yAlku = aloitusRuutu.getY();
-        siirrettäväNappula = aloitusRuutu.getNappula();
+        nappula = aloitusRuutu.getNappula();
         xLoppu = lopetusRuutu.getX();
         yLoppu = lopetusRuutu.getY();
-        syötäväNappula = lopetusRuutu.getNappula();
+        tuhottuNappula = lopetusRuutu.getNappula();
     }
 
     public int getxAlku() {
@@ -38,15 +38,15 @@ public class Siirto {
         return yLoppu;
     }
 
-    public Nappula getSiirrettäväNappula() {
-        return siirrettäväNappula;
+    public Nappula haeNappula() {
+        return nappula;
     }
-    public Nappula getSyötäväNappula() {
-        return syötäväNappula;
+    public Nappula haeTuhottuNappula() {
+        return tuhottuNappula;
     }
 
-    public void setSyötäväNappula(Nappula syötäväNappula) {
-        this.syötäväNappula = syötäväNappula;
+    public void asetaTuhottuNappula(Nappula tuhottuNappula) {
+        this.tuhottuNappula = tuhottuNappula;
     }
 
     public boolean onShakki() {

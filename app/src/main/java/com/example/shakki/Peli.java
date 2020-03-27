@@ -8,10 +8,6 @@ public class Peli {
     private ArrayList<Siirto> siirrot;
     private boolean valkoisenVuoro;
 
-    private Ruutu valittuRuutu;
-    private Ruutu kohdeRuutu;
-
-
     private Pelaaja valkoinenPelaaja;
     private Pelaaja mustaPelaaja;
 
@@ -58,13 +54,13 @@ public class Peli {
             System.out.println(lauta.tulostaPelilauta());
 
             // Valitse siirrettävä nappula
-            valittuRuutu = haeNykyinenPelaaja().haeValittuRuutu(lauta);
+            Ruutu valittuRuutu = haeNykyinenPelaaja().haeValittuRuutu(lauta);
             if (valittuRuutu == null) {
                 continue;
             }
 
             // Valitse kohderuutu
-            kohdeRuutu = haeNykyinenPelaaja().haeKohdeRuutu(lauta);
+            Ruutu kohdeRuutu = haeNykyinenPelaaja().haeKohdeRuutu(lauta);
             if (kohdeRuutu == null) {
                 continue;
             }

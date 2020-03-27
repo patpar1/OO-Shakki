@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Pelilauta {
 
-    public static final int PELILAUDAN_KOKO = 8;
+    private static final int PELILAUDAN_KOKO = 8;
 
     private Ruutu[][] ruudut;
 
@@ -86,7 +86,7 @@ public class Pelilauta {
         return ruudut[rivi][sarake];
     }
 
-    public ArrayList<Nappula> haeSiirrettävätNappulat(boolean onValkoinen) {
+    public ArrayList<Nappula> haeNappulat(boolean onValkoinen) {
         ArrayList<Nappula> nappulat = new ArrayList<>();
 
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
@@ -147,23 +147,17 @@ public class Pelilauta {
     }
 
     public boolean onPatti(boolean onValkoinen) {
-        if (haePelaajanSiirrot(onValkoinen).isEmpty()) {
-            return true;
-        }
-        return false;
+        return haePelaajanSiirrot(onValkoinen).isEmpty();
     }
 
     public boolean onShakkiMatti(boolean onValkoinen) {
-        if (onShakki(onValkoinen) && onPatti(onValkoinen)) {
-            return true;
-        }
-        return false;
+        return onShakki(onValkoinen) && onPatti(onValkoinen);
     }
 
     public void teeSiirto(Siirto s) {
         /* Tekee annetun siirron pelilaudalla */
 
-        ruudut[s.getyLoppu()][s.getxLoppu()].setNappula(s.getSiirrettäväNappula());
+        ruudut[s.getyLoppu()][s.getxLoppu()].setNappula(s.haeNappula());
         ruudut[s.getyAlku()][s.getxAlku()].setNappula(null);
 
     }
@@ -171,8 +165,8 @@ public class Pelilauta {
     public void kumoaSiirto(Siirto s) {
         // Kumoaa annetun siirron pelilaudalla.
 
-        ruudut[s.getyAlku()][s.getxAlku()].setNappula(s.getSiirrettäväNappula());
-        ruudut[s.getyLoppu()][s.getxLoppu()].setNappula(s.getSyötäväNappula());
+        ruudut[s.getyAlku()][s.getxAlku()].setNappula(s.haeNappula());
+        ruudut[s.getyLoppu()][s.getxLoppu()].setNappula(s.haeTuhottuNappula());
 
     }
 

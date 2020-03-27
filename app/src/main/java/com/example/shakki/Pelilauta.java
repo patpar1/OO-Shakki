@@ -76,7 +76,7 @@ public class Pelilauta {
             //ruudut[1][i] = new Ruutu(new Sotilas(false), 1, i);       // Mustan sotilaat
 
             // Väliaikaisesti poistettu sotilaat
-            ruudut[1][i] = new Ruutu(6, i);
+            ruudut[1][i] = new Ruutu(1, i);
         }
 
         // Tyhjien ruutujen alustus
@@ -88,16 +88,21 @@ public class Pelilauta {
         }
     }
 
-    // Rakentaa kopion olemassa olevasta pelilaudasta
-    public Pelilauta(Pelilauta pLauta) {
-        this.ruudut = pLauta.ruudut;
+    Pelilauta kopioi() {
+        Pelilauta pl = new Pelilauta();
+        for (int i = 0; i < PELILAUDAN_KOKO; i++) {
+            for (int j = 0; j < PELILAUDAN_KOKO; j++) {
+                pl.ruudut[j][i] = ruudut[j][i].kopioi();
+            }
+        }
+        return pl;
     }
 
     public Ruutu getRuutu(int rivi, int sarake) {
         return ruudut[rivi][sarake];
     }
 
-    public ArrayList<Nappula> haeNappulat(boolean onValkoinen) {
+    ArrayList<Nappula> haeNappulat(boolean onValkoinen) {
         ArrayList<Nappula> nappulat = new ArrayList<>();
 
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
@@ -113,7 +118,7 @@ public class Pelilauta {
         return nappulat;
     }
 
-    public ArrayList<Ruutu> haePelaajanSiirrot(boolean onValkoinen) {
+    private ArrayList<Ruutu> haePelaajanSiirrot(boolean onValkoinen) {
         /* Hakee pelaajan kaikkien nappuloiden mahdolliset siirrot.
         *  Käytetään shakki-tilanteen tarkastamiseen vastapelaajalta.*/
 
@@ -121,7 +126,9 @@ public class Pelilauta {
 
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
             for (int j = 0; j < PELILAUDAN_KOKO; j++) {
-                if (ruudut[i][j].getNappula().onValkoinen() == onValkoinen) {
+                if (ruudut[i][j].getNappula() != null
+                        && ruudut[i][j].getNappula().onValkoinen() == onValkoinen
+                        && ruudut[i][j].getNappula().laillisetSiirrot(this, i, j) != null) {
                     pelaajanRuudut.addAll(ruudut[i][j].getNappula().laillisetSiirrot(this, i, j));
                 }
             }
@@ -129,7 +136,7 @@ public class Pelilauta {
         return pelaajanRuudut;
     }
 
-    public boolean onShakki(boolean onValkoinen) {
+    boolean onShakki(boolean onValkoinen) {
         int kuningasX = -1;
         int kuningasY = -1;
 
@@ -149,15 +156,15 @@ public class Pelilauta {
         return haePelaajanSiirrot(!onValkoinen).contains(getRuutu(kuningasY, kuningasX));
     }
 
-    public boolean onPatti(boolean onValkoinen) {
+    boolean onPatti(boolean onValkoinen) {
         return haePelaajanSiirrot(onValkoinen).isEmpty();
     }
 
-    public boolean onShakkiMatti(boolean onValkoinen) {
+    boolean onShakkiMatti(boolean onValkoinen) {
         return onShakki(onValkoinen) && onPatti(onValkoinen);
     }
 
-    public void teeSiirto(Siirto s) {
+    void teeSiirto(Siirto s) {
         /* Tekee annetun siirron pelilaudalla */
 
         ruudut[s.getyLoppu()][s.getxLoppu()].setNappula(s.haeNappula());
@@ -165,7 +172,7 @@ public class Pelilauta {
 
     }
 
-    public void kumoaSiirto(Siirto s) {
+    void kumoaSiirto(Siirto s) {
         // Kumoaa annetun siirron pelilaudalla.
 
         ruudut[s.getyAlku()][s.getxAlku()].setNappula(s.haeNappula());
@@ -173,7 +180,7 @@ public class Pelilauta {
 
     }
 
-    public String tulostaPelilauta(ArrayList<Ruutu> laillisetRuudut) {
+    String tulostaPelilauta(ArrayList<Ruutu> laillisetRuudut) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("\n");
@@ -205,7 +212,7 @@ public class Pelilauta {
         return sb.toString();
     }
 
-    public String tulostaPelilauta() {
+    String tulostaPelilauta() {
         return tulostaPelilauta(null);
     }
 

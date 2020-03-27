@@ -20,6 +20,10 @@ public class Ruutu {
         this.y = y;
     }
 
+    Ruutu kopioi() {
+        return new Ruutu(nappula, y, x);
+    }
+
     public Nappula getNappula() {
         return nappula;
     }

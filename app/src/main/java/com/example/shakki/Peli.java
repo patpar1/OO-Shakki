@@ -72,26 +72,6 @@ public class Peli {
     }
 
     private int tarkistaPelitilanne() {
-        int kuningasX = -1;
-        int kuningasY = -1;
-
-        // Hakee pelilaudalta pelaajan kuninkaan sijainnin
-        for (int i = 0; i < Pelilauta.PELILAUDAN_KOKO; i++) {
-            for (int j = 0; j < Pelilauta.PELILAUDAN_KOKO; j++) {
-                if (lauta.haeRuutu(j, i).haeNappula() instanceof Kuningas
-                && lauta.haeRuutu(j, i).haeNappula().onValkoinen() == valkoisenVuoro) {
-                    kuningasY = j;
-                    kuningasX = i;
-                }
-            }
-        }
-
-        // Hakee vastapelaajan kaikki mahdolliset siirrot
-        ArrayList<Ruutu> vRuudut = new ArrayList<>();
-        for (Ruutu r : lauta.haePelaajanRuudut(!valkoisenVuoro)) {
-            vRuudut.addAll(haePelaaja(!valkoisenVuoro).haeLaillisetSiirrot(lauta, r));
-        }
-
         // Hakee vuorossa olevan pelaajan kaikki mahdolliset siirrot
         ArrayList<Ruutu> pRuudut = new ArrayList<>();
         for (Ruutu r : lauta.haePelaajanRuudut(valkoisenVuoro)) {
@@ -99,7 +79,7 @@ public class Peli {
         }
 
         // Pelin lopun ehdot
-        boolean shakki = vRuudut.contains(lauta.haeRuutu(kuningasY, kuningasX));
+        boolean shakki = lauta.onShakki(haeNykyinenPelaaja());
         boolean patti = pRuudut.size() == 0;
 
         // Shakkimatti

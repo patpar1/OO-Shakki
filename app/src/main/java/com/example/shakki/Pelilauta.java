@@ -119,39 +119,13 @@ public class Pelilauta {
 
     ArrayList<Nappula> haeNappulat(boolean onValkoinen) {
         ArrayList<Nappula> nappulat = new ArrayList<>();
-
-        for (int i = 0; i < PELILAUDAN_KOKO; i++) {
-            for (int j = 0; j < PELILAUDAN_KOKO; j++) {
-                if (ruudut[i][j].haeNappula() != null) {
-                    if (ruudut[i][j].haeNappula().onValkoinen() == onValkoinen) {
-                        nappulat.add(ruudut[i][j].haeNappula());
-                    }
-                }
-            }
+        for (Ruutu r : haePelaajanRuudut(onValkoinen)) {
+            nappulat.add(r.haeNappula());
         }
-
         return nappulat;
     }
 
-    private ArrayList<Ruutu> haePelaajanSiirrot(boolean onValkoinen) {
-        /* Hakee pelaajan kaikkien nappuloiden mahdolliset siirrot.
-        *  Käytetään shakki-tilanteen tarkastamiseen vastapelaajalta.*/
-
-        ArrayList<Ruutu> pelaajanRuudut = new ArrayList<Ruutu>();
-
-        for (int i = 0; i < PELILAUDAN_KOKO; i++) {
-            for (int j = 0; j < PELILAUDAN_KOKO; j++) {
-                if (ruudut[i][j].haeNappula() != null
-                        && ruudut[i][j].haeNappula().onValkoinen() == onValkoinen
-                        && ruudut[i][j].haeNappula().laillisetSiirrot(this, i, j) != null) {
-                    pelaajanRuudut.addAll(ruudut[i][j].haeNappula().laillisetSiirrot(this, i, j));
-                }
-            }
-        }
-        return pelaajanRuudut;
-    }
-
-    boolean onShakki(boolean onValkoinen) {
+    boolean onShakki(Pelaaja pelaaja) {
         int kuningasX = -1;
         int kuningasY = -1;
 
@@ -159,7 +133,7 @@ public class Pelilauta {
         for (int i = 0; i < PELILAUDAN_KOKO; i++) {
             for (int j = 0; j < PELILAUDAN_KOKO; j++) {
                 if (ruudut[i][j].haeNappula() instanceof Kuningas &&
-                        ruudut[i][j].haeNappula().onValkoinen() == onValkoinen) {
+                        ruudut[i][j].haeNappula().onValkoinen() == pelaaja.onValkoinen()) {
                     kuningasY = i;
                     kuningasX = j;
                     break;
@@ -167,8 +141,12 @@ public class Pelilauta {
             }
         }
 
-        // Tarkistaa, vastaako vastustajan mahdollisista siirroista mikään kuninkaan ruutua
-        return haePelaajanSiirrot(!onValkoinen).contains(haeRuutu(kuningasY, kuningasX));
+        ArrayList<Ruutu> pRuutu = new ArrayList<>();
+        for (Ruutu r : haePelaajanRuudut(!pelaaja.onValkoinen())) {
+            pRuutu.addAll(r.haeNappula().laillisetSiirrot(this, r));
+        }
+
+        return pRuutu.contains(haeRuutu(kuningasY, kuningasX));
     }
 
     void teeSiirto(Siirto s) {

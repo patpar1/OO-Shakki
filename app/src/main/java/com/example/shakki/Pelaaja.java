@@ -87,7 +87,7 @@ public class Pelaaja {
                 Ruutu valittuRuutuKopio = kopioLauta.haeRuutu(valittuRuutu.haeY(), valittuRuutu.haeX());
                 Ruutu kohdeRuutuEhdokasKopio = kopioLauta.haeRuutu(kohdeRuutuEhdokas.haeY(), kohdeRuutuEhdokas.haeX());
                 kopioLauta.teeSiirto(new Siirto(valittuRuutuKopio, kohdeRuutuEhdokasKopio));
-                if (!kopioLauta.onShakki(onValkoinen)) {
+                if (!kopioLauta.onShakki(this)) {
                     laillisetRuudut.add(kohdeRuutuEhdokas);
                 }
             }

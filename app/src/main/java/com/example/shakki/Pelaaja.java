@@ -12,6 +12,8 @@ public class Pelaaja {
 
     private Ruutu valittuRuutu;
 
+    private ArrayList<Ruutu> laillisetRuudut;
+
     Pelaaja(boolean onValkoinen) {
         this.onValkoinen = onValkoinen;
         this.onShakissa = false;
@@ -79,26 +81,42 @@ public class Pelaaja {
 
     private Ruutu haeKohdeRuutu(Pelilauta lauta) {
 
-        ArrayList<Ruutu> laillisetSiirrot;
         Ruutu kohdeRuutu;
 
         // Lasketaan ruudun nappulan mahdolliset siirrot
-        laillisetSiirrot = valittuRuutu.getNappula().laillisetSiirrot(lauta, valittuRuutu);
+        laillisetRuudut = valittuRuutu.getNappula().laillisetSiirrot(lauta, valittuRuutu);
+
+        if (onShakissa) {
+            poistaLaittomatSiirrot(lauta);
+        }
+
+        if (laillisetRuudut == null) {
+            System.out.println("Tällä nappulalla ei ole laillisia siirtoja!");
+            return null;
+        }
 
         // Tulosta mahdolliset siirrot
-        System.out.println(lauta.tulostaPelilauta(laillisetSiirrot));
+        System.out.println(lauta.tulostaPelilauta(laillisetRuudut));
 
         // Käyttäjä valitsee siirron kohderuudun
         System.out.print("Valitse kohderuutu: ");
         kohdeRuutu = haeRuutu(lauta);
 
         // Virheentarkistusta
-        if (!laillisetSiirrot.contains(kohdeRuutu)) {
+        if (!laillisetRuudut.contains(kohdeRuutu)) {
             System.out.println("Siirto ei ole laillinen!");
             return null;
         }
 
         return kohdeRuutu;
+    }
+
+    private void poistaLaittomatSiirrot(Pelilauta lauta) {
+        for (Ruutu kohdeRuutuEhdokas : laillisetRuudut) {
+            Pelilauta kopioLauta = new Pelilauta(lauta);
+            kopioLauta.teeSiirto(new Siirto(valittuRuutu, kohdeRuutuEhdokas));
+            //TODO Toiminnallisuuden jatkaminen
+        }
     }
 
     Siirto muodostaSiirto(Pelilauta lauta) {

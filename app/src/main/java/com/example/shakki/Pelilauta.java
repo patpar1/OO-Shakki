@@ -82,6 +82,12 @@ public class Pelilauta {
             }
         }
     }
+
+    // Kopiorakentaja
+    public Pelilauta(Pelilauta pLauta) {
+        this.ruudut = pLauta.ruudut;
+    }
+
     public Ruutu getRuutu(int rivi, int sarake) {
         return ruudut[rivi][sarake];
     }

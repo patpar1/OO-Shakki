@@ -1,5 +1,6 @@
 package com.example.chess.game;
 
+import com.example.chess.game.pieces.Pawn;
 import com.example.chess.game.pieces.Piece;
 
 import java.util.ArrayList;
@@ -171,6 +172,8 @@ class Player {
         if (destinationSquare == null) {
             return null;
         }
+
+        chosenSquare.getPiece().hasMoved();
 
         return new Move(chosenSquare, destinationSquare);
     }

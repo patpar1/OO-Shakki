@@ -20,11 +20,11 @@ public class Pawn extends Piece {
     }
 
     private int[][] getMoveCandidates() {
-        int[][] playerCandidates = moveCandidates.clone();
+        int[][] playerCandidates = new int[4][2];
         if (!isWhite()) {
             for (int i = 0; i < moveCandidates.length; i++) {
-                playerCandidates[i][0] *= -1;
-                playerCandidates[i][1] *= -1;
+                playerCandidates[i][0] = moveCandidates[i][0] * -1;
+                playerCandidates[i][1] = moveCandidates[i][0] * -1;
             }
         }
 
@@ -44,12 +44,11 @@ public class Pawn extends Piece {
 
                 // Double move
                 if (!this.isMoved()) {
-                    int[] doubleMoveCandidate = {(row += moveCandidates[1][0]),
-                            (col += moveCandidates[1][1])};
+                    int[] doubleMoveCandidate = {(row + moveCandidates[1][0]),
+                            (col + moveCandidates[1][1])};
                     if (isOnBoard(doubleMoveCandidate[0], doubleMoveCandidate[1])) {
                         if (!board.getSquare(doubleMoveCandidate[0], doubleMoveCandidate[1]).hasPiece()) {
                             moveArray.add(board.getSquare(doubleMoveCandidate[0] , doubleMoveCandidate[1]));
-                            Game.setEnPassantTarget(board.getSquare(moveCandidate[0] , moveCandidate[1]));
                         }
                     }
                 }

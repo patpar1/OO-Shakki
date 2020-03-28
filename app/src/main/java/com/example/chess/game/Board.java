@@ -54,8 +54,8 @@ public class Board {
 
 
         for (int i = 0; i < BOARD_SIZE; i++) {
-            // squares[6][i] = new Square(new Pawn(true), 6, i);
-            squares[6][i] = new Square(6, i);
+            squares[6][i] = new Square(new Pawn(true), 6, i);
+            //squares[6][i] = new Square(6, i);
         }
 
         // Black pieces
@@ -70,8 +70,8 @@ public class Board {
         squares[0][7] = new Square(new Rook(false), 0, 7);
 
         for (int i = 0; i < BOARD_SIZE; i++) {
-            // squares[1][i] = new Square(new Pawn(false), 1, i);
-            squares[1][i] = new Square(1, i);
+            squares[1][i] = new Square(new Pawn(false), 1, i);
+            //squares[1][i] = new Square(1, i);
         }
 
         // Empty squares
@@ -152,7 +152,6 @@ public class Board {
 
     void makeMove(Move m) {
         squares[m.getRowEnd()][m.getColEnd()].setPiece(m.getPiece());
-        m.getPiece().hasMoved();
         squares[m.getRowStart()][m.getColStart()].setPiece(null);
 
     }

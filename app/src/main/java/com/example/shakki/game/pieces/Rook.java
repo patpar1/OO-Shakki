@@ -1,11 +1,11 @@
-package com.example.shakki.peli.nappulat;
+package com.example.shakki.game.pieces;
 
-import com.example.shakki.peli.Pelilauta;
-import com.example.shakki.peli.Ruutu;
+import com.example.shakki.game.Board;
+import com.example.shakki.game.Square;
 
 import java.util.ArrayList;
 
-public class Torni extends Nappula {
+public class Rook extends Piece {
 
     private static final int[][] siirtoVektorit = {
             {-1, 0},
@@ -14,13 +14,13 @@ public class Torni extends Nappula {
             {0, 1}
     };
 
-    public Torni(boolean onValkoinen) {
+    public Rook(boolean onValkoinen) {
         super(onValkoinen);
     }
 
     @Override
-    public ArrayList<Ruutu> laillisetSiirrot(Pelilauta lauta, int y, int x) {
-        ArrayList<Ruutu> siirtoLista = new ArrayList<Ruutu>();
+    public ArrayList<Square> laillisetSiirrot(Board lauta, int y, int x) {
+        ArrayList<Square> siirtoLista = new ArrayList<Square>();
         for (int[] suunta : siirtoVektorit) {
             int[] siirtoEhdokas = {y, x};
             while (true) {

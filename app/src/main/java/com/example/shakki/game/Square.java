@@ -1,34 +1,34 @@
-package com.example.shakki.peli;
+package com.example.shakki.game;
 
-import com.example.shakki.peli.nappulat.Nappula;
+import com.example.shakki.game.pieces.Piece;
 
-public class Ruutu {
+public class Square {
 
-    private Nappula nappula;
+    private Piece nappula;
     private int x;
     private int y;
 
-    public Ruutu(int y, int x) {
+    public Square(int y, int x) {
         nappula = null;
         this.x = x;
         this.y = y;
     }
 
-    public Ruutu(Nappula nappula, int y, int x) {
+    public Square(Piece nappula, int y, int x) {
         this.nappula = nappula;
         this.x = x;
         this.y = y;
     }
 
-    Ruutu kopioi() {
-        return new Ruutu(nappula, y, x);
+    Square kopioi() {
+        return new Square(nappula, y, x);
     }
 
-    public Nappula haeNappula() {
+    public Piece haeNappula() {
         return nappula;
     }
 
-    public void asetaNappula(Nappula nappula) {
+    public void asetaNappula(Piece nappula) {
         this.nappula = nappula;
     }
 

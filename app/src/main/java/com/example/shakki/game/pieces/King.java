@@ -1,11 +1,11 @@
-package com.example.shakki.peli.nappulat;
+package com.example.shakki.game.pieces;
 
-import com.example.shakki.peli.Pelilauta;
-import com.example.shakki.peli.Ruutu;
+import com.example.shakki.game.Board;
+import com.example.shakki.game.Square;
 
 import java.util.ArrayList;
 
-public class Kuningas extends Nappula {
+public class King extends Piece {
 
     private static final int[][] siirtoEhdokkaat = {
             {1, 0}, // Alas
@@ -17,13 +17,13 @@ public class Kuningas extends Nappula {
             {0, 1}, // Oikealle
             {0, -1} // Vasemmalle
     };
-    public Kuningas(boolean onValkoinen) {
+    public King(boolean onValkoinen) {
         super(onValkoinen);
     }
 
     @Override
-    public ArrayList<Ruutu> laillisetSiirrot(Pelilauta lauta, int y, int x) {
-        ArrayList<Ruutu> siirtoLista = new ArrayList<Ruutu>();
+    public ArrayList<Square> laillisetSiirrot(Board lauta, int y, int x) {
+        ArrayList<Square> siirtoLista = new ArrayList<Square>();
         for (int[] siirto : siirtoEhdokkaat) {
             int[] siirtoEhdokas = {(y + siirto[0]), (x + siirto[1])};
             //tarkastaa onko siirto laudalla

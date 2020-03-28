@@ -1,11 +1,11 @@
-package com.example.shakki.peli.nappulat;
+package com.example.shakki.game.pieces;
 
-import com.example.shakki.peli.Pelilauta;
-import com.example.shakki.peli.Ruutu;
+import com.example.shakki.game.Board;
+import com.example.shakki.game.Square;
 
 import java.util.ArrayList;
 
-public class Ratsu extends Nappula {
+public class Knight extends Piece {
 
     private static final int[][] siirtoEhdokkaat = {
             {-2, -1},
@@ -18,14 +18,14 @@ public class Ratsu extends Nappula {
             {-2, 1}
     };
 
-    public Ratsu(boolean onValkoinen) {
+    public Knight(boolean onValkoinen) {
         super(onValkoinen);
     }
 
     @Override
-    public ArrayList<Ruutu> laillisetSiirrot(Pelilauta lauta, int y, int x) {
+    public ArrayList<Square> laillisetSiirrot(Board lauta, int y, int x) {
         //Pelilauta luokasta saadaan kaikkien nappuloiden nykyiset sijainnit
-        ArrayList<Ruutu> siirtoLista = new ArrayList<Ruutu>();
+        ArrayList<Square> siirtoLista = new ArrayList<Square>();
         //siirto on muuttuja joka for loopin alussa on siirtoehdokkaat listan ensimmäinen kohta
         for (int[] siirto : siirtoEhdokkaat) {
             //siirtoEhdokkaassa y koordinaatti on 0 ja x koordinaatti on 1

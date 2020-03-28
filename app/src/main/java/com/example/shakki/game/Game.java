@@ -1,30 +1,30 @@
-package com.example.shakki.peli;
+package com.example.shakki.game;
 
 import java.util.ArrayList;
 
-public class Peli {
+public class Game {
 
-    private Pelilauta lauta;
+    private Board lauta;
     // private ArrayList<Siirto> siirrot;
     private boolean valkoisenVuoro;
 
-    private Pelaaja valkoinenPelaaja;
-    private Pelaaja mustaPelaaja;
+    private Player valkoinenPelaaja;
+    private Player mustaPelaaja;
 
-    public Peli() {
-        lauta = new Pelilauta();
+    public Game() {
+        lauta = new Board();
         // siirrot = new ArrayList<Siirto>();
         valkoisenVuoro = true;
 
-        valkoinenPelaaja = new Pelaaja(true); // Valkoinen pelaaja
-        mustaPelaaja = new Pelaaja(false); // Musta pelaaja
+        valkoinenPelaaja = new Player(true); // Valkoinen pelaaja
+        mustaPelaaja = new Player(false); // Musta pelaaja
     }
 
-    private Pelaaja haeNykyinenPelaaja() {
+    private Player haeNykyinenPelaaja() {
         return haePelaaja(valkoisenVuoro);
     }
 
-    private Pelaaja haePelaaja(boolean vuoro) {
+    private Player haePelaaja(boolean vuoro) {
         if (vuoro) {
             return valkoinenPelaaja;
         } else {
@@ -49,7 +49,7 @@ public class Peli {
             }
 
             // Muodostetaan pelaajalle uusi siirto;
-            Siirto pelaajanSiirto = haeNykyinenPelaaja().muodostaSiirto(lauta);
+            Move pelaajanSiirto = haeNykyinenPelaaja().muodostaSiirto(lauta);
             if (pelaajanSiirto == null) {
                 continue;
             }
@@ -71,8 +71,8 @@ public class Peli {
 
     private int tarkistaPelitilanne() {
         // Hakee vuorossa olevan pelaajan kaikki mahdolliset siirrot
-        ArrayList<Ruutu> pRuudut = new ArrayList<>();
-        for (Ruutu r : lauta.haePelaajanRuudut(valkoisenVuoro)) {
+        ArrayList<Square> pRuudut = new ArrayList<>();
+        for (Square r : lauta.haePelaajanRuudut(valkoisenVuoro)) {
             pRuudut.addAll(haeNykyinenPelaaja().haeLaillisetSiirrot(lauta, r));
         }
 

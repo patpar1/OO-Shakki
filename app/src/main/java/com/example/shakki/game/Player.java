@@ -1,16 +1,16 @@
-package com.example.shakki.peli;
+package com.example.shakki.game;
 
-import com.example.shakki.peli.nappulat.Nappula;
+import com.example.shakki.game.pieces.Piece;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Pelaaja {
+public class Player {
 
     private boolean onValkoinen;
     private boolean onShakissa;
 
-    Pelaaja(boolean onValkoinen) {
+    Player(boolean onValkoinen) {
         this.onValkoinen = onValkoinen;
         this.onShakissa = false;
     }
@@ -23,7 +23,7 @@ public class Pelaaja {
         return onValkoinen;
     }
 
-    private Ruutu haeRuutu(Pelilauta lauta) {
+    private Square haeRuutu(Board lauta) {
         String sRuutu = null;
         int[] koordinaatit = new int[0];
 
@@ -68,9 +68,9 @@ public class Pelaaja {
         return new int[] {i1, i0};
     }
 
-    private Ruutu haeValittuRuutu(Pelilauta lauta) {
+    private Square haeValittuRuutu(Board lauta) {
 
-        ArrayList<Nappula> nappulat;
+        ArrayList<Piece> nappulat;
 
         // Lasketaan siirrettävät nappulat
         nappulat = lauta.haeNappulat(onValkoinen);
@@ -78,7 +78,7 @@ public class Pelaaja {
         // Käyttäjä valitsee ruudun
         System.out.print("Valitse nappula: ");
 
-        Ruutu valittuRuutu = haeRuutu(lauta);
+        Square valittuRuutu = haeRuutu(lauta);
         if (valittuRuutu == null) {
             return null;
         }
@@ -95,20 +95,20 @@ public class Pelaaja {
         return valittuRuutu;
     }
 
-    ArrayList<Ruutu> haeLaillisetSiirrot(Pelilauta lauta, Ruutu valittuRuutu) {
+    ArrayList<Square> haeLaillisetSiirrot(Board lauta, Square valittuRuutu) {
 
-        ArrayList<Ruutu> laillisetRuudut = new ArrayList<>();
-        ArrayList<Ruutu> nappulanRuutuEhdokkaat = valittuRuutu.haeNappula().laillisetSiirrot(lauta, valittuRuutu);
+        ArrayList<Square> laillisetRuudut = new ArrayList<>();
+        ArrayList<Square> nappulanRuutuEhdokkaat = valittuRuutu.haeNappula().laillisetSiirrot(lauta, valittuRuutu);
 
         if (nappulanRuutuEhdokkaat == null) {
             return laillisetRuudut;
         }
 
-        for (Ruutu kohdeRuutuEhdokas : nappulanRuutuEhdokkaat) {
-            Pelilauta kopioLauta = lauta.kopioi();
-            Ruutu valittuRuutuKopio = kopioLauta.haeRuutu(valittuRuutu.haeY(), valittuRuutu.haeX());
-            Ruutu kohdeRuutuEhdokasKopio = kopioLauta.haeRuutu(kohdeRuutuEhdokas.haeY(), kohdeRuutuEhdokas.haeX());
-            kopioLauta.teeSiirto(new Siirto(valittuRuutuKopio, kohdeRuutuEhdokasKopio));
+        for (Square kohdeRuutuEhdokas : nappulanRuutuEhdokkaat) {
+            Board kopioLauta = lauta.kopioi();
+            Square valittuRuutuKopio = kopioLauta.haeRuutu(valittuRuutu.haeY(), valittuRuutu.haeX());
+            Square kohdeRuutuEhdokasKopio = kopioLauta.haeRuutu(kohdeRuutuEhdokas.haeY(), kohdeRuutuEhdokas.haeX());
+            kopioLauta.teeSiirto(new Move(valittuRuutuKopio, kohdeRuutuEhdokasKopio));
             if (!kopioLauta.onShakki(this)) {
                 laillisetRuudut.add(kohdeRuutuEhdokas);
             }
@@ -119,10 +119,10 @@ public class Pelaaja {
         return laillisetRuudut;
     }
 
-    private Ruutu haeKohdeRuutu(Pelilauta lauta, Ruutu valittuRuutu) {
+    private Square haeKohdeRuutu(Board lauta, Square valittuRuutu) {
 
-        Ruutu kohdeRuutu;
-        ArrayList<Ruutu> laillisetRuudut = haeLaillisetSiirrot(lauta, valittuRuutu);
+        Square kohdeRuutu;
+        ArrayList<Square> laillisetRuudut = haeLaillisetSiirrot(lauta, valittuRuutu);
 
         if (laillisetRuudut.size() == 0) {
             System.out.println("Tällä nappulalla ei ole laillisia siirtoja!");
@@ -145,24 +145,24 @@ public class Pelaaja {
         return kohdeRuutu;
     }
 
-    Siirto muodostaSiirto(Pelilauta lauta) {
+    Move muodostaSiirto(Board lauta) {
 
         // Tulosta pelilauta
         System.out.println(onValkoinen ? "Valkoisen vuoro" : "Mustan vuoro");
         System.out.println(lauta.tulostaPelilauta());
 
         // Valitse siirrettävä nappula
-        Ruutu valittuRuutu = haeValittuRuutu(lauta);
+        Square valittuRuutu = haeValittuRuutu(lauta);
         if (valittuRuutu == null) {
             return null;
         }
 
         // Valitse kohderuutu
-        Ruutu kohdeRuutu = haeKohdeRuutu(lauta, valittuRuutu);
+        Square kohdeRuutu = haeKohdeRuutu(lauta, valittuRuutu);
         if (kohdeRuutu == null) {
             return null;
         }
 
-        return new Siirto(valittuRuutu, kohdeRuutu);
+        return new Move(valittuRuutu, kohdeRuutu);
     }
 }

@@ -1,21 +1,21 @@
-package com.example.shakki.peli.nappulat;
+package com.example.shakki.game.pieces;
 
-import com.example.shakki.peli.Pelilauta;
-import com.example.shakki.peli.Ruutu;
+import com.example.shakki.game.Board;
+import com.example.shakki.game.Square;
 
 import java.util.ArrayList;
 
-public abstract class Nappula {
+public abstract class Piece {
     private boolean onValkoinen;
 
-    public Nappula(boolean onValkoinen) {
+    public Piece(boolean onValkoinen) {
         this.onValkoinen = onValkoinen;
     }
 
     // Laskee lailliset siirrot. Palauttaa listan laillisista siirroista
-    public abstract ArrayList<Ruutu> laillisetSiirrot(Pelilauta lauta, int y, int x);
+    public abstract ArrayList<Square> laillisetSiirrot(Board lauta, int y, int x);
 
-    public ArrayList<Ruutu> laillisetSiirrot(Pelilauta lauta, Ruutu ruutu) {
+    public ArrayList<Square> laillisetSiirrot(Board lauta, Square ruutu) {
         return laillisetSiirrot(lauta, ruutu.haeY(), ruutu.haeX());
     }
 

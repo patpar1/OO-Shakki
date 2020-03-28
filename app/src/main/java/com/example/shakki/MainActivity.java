@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.example.shakki.peli.Peli;
+import com.example.shakki.game.Game;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     public static void main(String[] args) {
         int maksimiKierrokset = 100;
 
-        Peli peli = new Peli();
+        Game peli = new Game();
         int tulos = peli.peliSilmukka(maksimiKierrokset);
         System.out.println(tulos);
     }

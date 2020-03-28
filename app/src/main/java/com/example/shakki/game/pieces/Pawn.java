@@ -1,11 +1,11 @@
-package com.example.shakki.peli.nappulat;
+package com.example.shakki.game.pieces;
 
-import com.example.shakki.peli.Pelilauta;
-import com.example.shakki.peli.Ruutu;
+import com.example.shakki.game.Board;
+import com.example.shakki.game.Square;
 
 import java.util.ArrayList;
 
-public class Sotilas extends Nappula {
+public class Pawn extends Piece {
 
     private static final int[][] siirtoEhdokkaat = {
             {2, 0}, // jos y,x koordinaatisto
@@ -19,13 +19,13 @@ public class Sotilas extends Nappula {
 
     };
 
-    public Sotilas(boolean onValkoinen) {
+    public Pawn(boolean onValkoinen) {
         super(onValkoinen);
     }
 
 
     @Override
-    public ArrayList<Ruutu> laillisetSiirrot(Pelilauta lauta, int x, int y) {
+    public ArrayList<Square> laillisetSiirrot(Board lauta, int x, int y) {
         return null;
     }
 

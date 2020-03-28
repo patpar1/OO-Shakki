@@ -1,16 +1,16 @@
-package com.example.shakki.peli;
+package com.example.shakki.game;
 
-import com.example.shakki.peli.nappulat.Nappula;
+import com.example.shakki.game.pieces.Piece;
 
-public class Siirto {
+public class Move {
 
     private int xAlku;
     private int yAlku;
     private int xLoppu;
     private int yLoppu;
 
-    private Nappula nappula;
-    private Nappula tuhottuNappula;
+    private Piece nappula;
+    private Piece tuhottuNappula;
 
     /*
     private boolean onShakki;
@@ -18,7 +18,7 @@ public class Siirto {
     private boolean linnoitus;
      */
 
-    public Siirto(Ruutu aloitusRuutu, Ruutu lopetusRuutu) {
+    public Move(Square aloitusRuutu, Square lopetusRuutu) {
         xAlku = aloitusRuutu.haeX();
         yAlku = aloitusRuutu.haeY();
         nappula = aloitusRuutu.haeNappula();
@@ -40,10 +40,10 @@ public class Siirto {
         return yLoppu;
     }
 
-    public Nappula haeNappula() {
+    public Piece haeNappula() {
         return nappula;
     }
-    public Nappula haeTuhottuNappula() {
+    public Piece haeTuhottuNappula() {
         return tuhottuNappula;
     }
 

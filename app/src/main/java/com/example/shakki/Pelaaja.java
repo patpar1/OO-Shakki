@@ -15,15 +15,11 @@ public class Pelaaja {
         this.onShakissa = false;
     }
 
-    public boolean onShakissa() {
-        return onShakissa;
-    }
-
     void asetaShakki(boolean onShakissa) {
         this.onShakissa = onShakissa;
     }
 
-    public boolean onValkoinen() {
+    boolean onValkoinen() {
         return onValkoinen;
     }
 
@@ -61,11 +57,13 @@ public class Pelaaja {
             System.out.println("Sarakkeen on oltava kirjain välillä a-h (esim. a5).");
             return null;
         }
+
         int i1 = 8 - Character.getNumericValue(s.charAt(1));
         if (i1 < 0) {
             System.out.println("Rivin on oltava numero välillä 1-8 (esim. a5).");
             return null;
         }
+
         // System.out.println("TEKSTI KOORDINAATEIKSI: " + i1 + i0);
         return new int[] {i1, i0};
     }

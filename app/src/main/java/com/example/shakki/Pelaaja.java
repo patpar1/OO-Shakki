@@ -79,25 +79,20 @@ public class Pelaaja {
     ArrayList<Ruutu> haeLaillisetSiirrot(Pelilauta lauta, Ruutu valittuRuutu) {
 
         ArrayList<Ruutu> laillisetRuudut = new ArrayList<>();
-        ArrayList<Ruutu> nappulanRuutuEhdokkaat;
+        ArrayList<Ruutu> nappulanRuutuEhdokkaat = valittuRuutu.haeNappula().laillisetSiirrot(lauta, valittuRuutu);
 
-        if ((nappulanRuutuEhdokkaat = valittuRuutu.haeNappula().laillisetSiirrot(lauta, valittuRuutu)) == null) {
+        if (nappulanRuutuEhdokkaat == null) {
             return laillisetRuudut;
         }
 
-        if (onShakissa) {
-            // Lisää siirrot ainoastaan jos siirron seurauksena pelilaudalla ei ole shakkia
-            for (Ruutu kohdeRuutuEhdokas : nappulanRuutuEhdokkaat) {
-                Pelilauta kopioLauta = lauta.kopioi();
-                Ruutu valittuRuutuKopio = kopioLauta.haeRuutu(valittuRuutu.haeY(), valittuRuutu.haeX());
-                Ruutu kohdeRuutuEhdokasKopio = kopioLauta.haeRuutu(kohdeRuutuEhdokas.haeY(), kohdeRuutuEhdokas.haeX());
-                kopioLauta.teeSiirto(new Siirto(valittuRuutuKopio, kohdeRuutuEhdokasKopio));
-                if (!kopioLauta.onShakki(this)) {
-                    laillisetRuudut.add(kohdeRuutuEhdokas);
-                }
+        for (Ruutu kohdeRuutuEhdokas : nappulanRuutuEhdokkaat) {
+            Pelilauta kopioLauta = lauta.kopioi();
+            Ruutu valittuRuutuKopio = kopioLauta.haeRuutu(valittuRuutu.haeY(), valittuRuutu.haeX());
+            Ruutu kohdeRuutuEhdokasKopio = kopioLauta.haeRuutu(kohdeRuutuEhdokas.haeY(), kohdeRuutuEhdokas.haeX());
+            kopioLauta.teeSiirto(new Siirto(valittuRuutuKopio, kohdeRuutuEhdokasKopio));
+            if (!kopioLauta.onShakki(this)) {
+                laillisetRuudut.add(kohdeRuutuEhdokas);
             }
-        } else {
-            laillisetRuudut.addAll(nappulanRuutuEhdokkaat);
         }
 
         // System.out.println("Lailliset ruudut: " + laillisetRuudut.size());

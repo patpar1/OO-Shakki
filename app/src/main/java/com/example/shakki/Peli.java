@@ -84,7 +84,7 @@ public class Peli {
 
         // Shakkimatti
         if (shakki && patti) {
-            return valkoisenVuoro ? 1 : 2;
+            return !valkoisenVuoro ? 1 : 2;
         }
 
         // Pattitilanne

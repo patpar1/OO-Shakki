@@ -60,8 +60,9 @@ public class Pawn extends Piece {
         for (int i = 2; i < 4; i++) {
             int[] attackMoveCandidate = {(row + moveCandidates[i][0]), col + moveCandidates[i][1]};
             if (isOnBoard(attackMoveCandidate[0], attackMoveCandidate[1])) {
-                if (board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]).hasPiece()
-                && this.isWhite() != board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]).getPiece().isWhite()) {
+                if ((board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]).hasPiece()
+                && this.isWhite() != board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]).getPiece().isWhite())
+                || board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]).equals(Game.getEnPassantTarget())) {
                     moveArray.add(board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]));
                 }
             }

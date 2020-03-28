@@ -1,4 +1,4 @@
-package com.example.shakki;
+package com.example.chess;
 
 import android.content.Context;
 

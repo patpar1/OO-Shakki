@@ -1,7 +1,7 @@
-package com.example.shakki.game.pieces;
+package com.example.chess.game.pieces;
 
-import com.example.shakki.game.Board;
-import com.example.shakki.game.Square;
+import com.example.chess.game.Board;
+import com.example.chess.game.Square;
 
 import java.util.ArrayList;
 

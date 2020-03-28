@@ -1,10 +1,10 @@
-package com.example.shakki;
+package com.example.chess;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.example.shakki.game.Game;
+import com.example.chess.game.Game;
 
 public class MainActivity extends AppCompatActivity {
 

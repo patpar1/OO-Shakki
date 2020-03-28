@@ -1,4 +1,4 @@
-package com.example.shakki.game;
+package com.example.chess.game;
 
 import java.util.ArrayList;
 

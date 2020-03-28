@@ -1,6 +1,6 @@
-package com.example.shakki.game;
+package com.example.chess.game;
 
-import com.example.shakki.game.pieces.*;
+import com.example.chess.game.pieces.*;
 
 import java.util.ArrayList;
 

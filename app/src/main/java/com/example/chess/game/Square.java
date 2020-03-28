@@ -1,6 +1,6 @@
-package com.example.shakki.game;
+package com.example.chess.game;
 
-import com.example.shakki.game.pieces.Piece;
+import com.example.chess.game.pieces.Piece;
 
 public class Square {
 

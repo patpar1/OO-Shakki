@@ -40,14 +40,32 @@ public class Pelaaja {
             koordinaatit = muunnaTekstiKoordinaatiksi(sRuutu);
         }
 
+        if (koordinaatit == null) {
+            return null;
+        }
+
         return lauta.haeRuutu(koordinaatit[0], koordinaatit[1]);
 
     }
 
     private int[] muunnaTekstiKoordinaatiksi(String s) {
         String sarakkeet = "abcdefgh";
+
+        if (s.length() != 2) {
+            System.out.println("Koordinaatti on väärä! Sen on oltava muotoa 'a5'.");
+            return null;
+        }
+
         int i0 = sarakkeet.indexOf(s.toLowerCase().charAt(0));
+        if (i0 == -1) {
+            System.out.println("Sarakkeen on oltava kirjain välillä a-h (esim. a5).");
+            return null;
+        }
         int i1 = 8 - Character.getNumericValue(s.charAt(1));
+        if (i1 < 0) {
+            System.out.println("Rivin on oltava numero välillä 1-8 (esim. a5).");
+            return null;
+        }
         // System.out.println("TEKSTI KOORDINAATEIKSI: " + i1 + i0);
         return new int[] {i1, i0};
     }
@@ -63,6 +81,9 @@ public class Pelaaja {
         System.out.print("Valitse nappula: ");
 
         Ruutu valittuRuutu = haeRuutu(lauta);
+        if (valittuRuutu == null) {
+            return null;
+        }
 
         // Siirron tarkistus
         if (valittuRuutu.haeNappula() == null) {

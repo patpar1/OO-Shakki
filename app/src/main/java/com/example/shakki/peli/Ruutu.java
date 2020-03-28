@@ -1,6 +1,6 @@
-package com.example.shakki;
+package com.example.shakki.peli;
 
-import com.example.shakki.nappulat.Nappula;
+import com.example.shakki.peli.nappulat.Nappula;
 
 public class Ruutu {
 

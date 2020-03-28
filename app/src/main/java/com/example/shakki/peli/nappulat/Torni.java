@@ -1,20 +1,20 @@
-package com.example.shakki.nappulat;
+package com.example.shakki.peli.nappulat;
 
-import com.example.shakki.Pelilauta;
-import com.example.shakki.Ruutu;
+import com.example.shakki.peli.Pelilauta;
+import com.example.shakki.peli.Ruutu;
 
 import java.util.ArrayList;
 
-public class Lähetti extends Nappula {
+public class Torni extends Nappula {
 
     private static final int[][] siirtoVektorit = {
-            {-1, 1}, // oikeelle ylös
-            {1, 1}, // oikeelle alas
-            {-1, -1}, // vasemmalle ylös
-            {1, -1} // vasemmalle alas
+            {-1, 0},
+            {1, 0},
+            {0, -1},
+            {0, 1}
     };
 
-    public Lähetti(boolean onValkoinen) {
+    public Torni(boolean onValkoinen) {
         super(onValkoinen);
     }
 
@@ -22,13 +22,14 @@ public class Lähetti extends Nappula {
     public ArrayList<Ruutu> laillisetSiirrot(Pelilauta lauta, int y, int x) {
         ArrayList<Ruutu> siirtoLista = new ArrayList<Ruutu>();
         for (int[] suunta : siirtoVektorit) {
+            int[] siirtoEhdokas = {y, x};
             while (true) {
-                int[] siirtoEhdokas = {(y += suunta[0]), (x += suunta[1])};
-                // siirtää kerralla x ja y koordinaatteja siirtovektorien mukaiseen suuntaan
+                siirtoEhdokas[0] += suunta[0];
+                siirtoEhdokas[1] += suunta[1];
                 if (!onLaudalla(siirtoEhdokas[0], siirtoEhdokas[1])) {
                     break;
                 }
-                if (!lauta.haeRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).onTyhjä()){
+                if (!lauta.haeRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).onTyhjä()){ //eioo tyhjä
                     if (this.onValkoinen() == lauta.haeRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).haeNappula().onValkoinen()) {
                         break;
                     } else {
@@ -41,12 +42,13 @@ public class Lähetti extends Nappula {
         }
         return siirtoLista;
     }
+
     @Override
     public String toString() {
-        if (this.onValkoinen()) {
-            return "L";
-        } else {
-            return "l";
-        }
+       if (this.onValkoinen()) {
+           return "T";
+       } else {
+           return "t";
+       }
     }
 }

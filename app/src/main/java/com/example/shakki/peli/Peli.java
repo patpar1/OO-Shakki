@@ -1,6 +1,4 @@
-package com.example.shakki;
-
-import com.example.shakki.nappulat.Kuningas;
+package com.example.shakki.peli;
 
 import java.util.ArrayList;
 
@@ -34,7 +32,7 @@ public class Peli {
         }
     }
 
-    int peliSilmukka(int maksimiSiirrot) {
+    public int peliSilmukka(int maksimiSiirrot) {
 
         // 1 = Valkoinen pelaaja voittaa
         // 2 = Tasapeli

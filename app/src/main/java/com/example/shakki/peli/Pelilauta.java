@@ -1,6 +1,6 @@
-package com.example.shakki;
+package com.example.shakki.peli;
 
-import com.example.shakki.nappulat.*;
+import com.example.shakki.peli.nappulat.*;
 
 import java.util.ArrayList;
 

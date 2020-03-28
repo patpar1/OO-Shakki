@@ -6,110 +6,105 @@ import java.util.ArrayList;
 
 public class Board {
 
-    private static final int PELILAUDAN_KOKO = 8;
+    private static final int BOARD_SIZE = 8;
 
-    private Square[][] ruudut;
+    private Square[][] squares;
 
-    /*  Pelilaudan rakenne pelin aloituksessa:
+    /*  Board structure at the start:
 
-            8       t r l d k l r t
-            7       s s s s s s s s
+            8       r n b q k b n r
+            7       p p p p p p p p
             6       - - - - - - - -
             5       - - - - - - - -
             4       - - - - - - - -
             3       - - - - - - - -
-            2       S S S S S S S S
-            1       T R L D K L R T
+            2       P P P P P P P P
+            1       R N B Q K B N R
 
                     a b c d e f g h
 
-            S = Sotilas
-            R = Ratsu
-            L = Lähetti
-            T = Torni
-            D = Kuningatar (Daami)
-            K = Kuningas
+            P = Pawn
+            K = Knight
+            B = Bishop
+            R = Rook
+            Q = Queen
+            K = King
 
-            Valkoinen pelaaja on isoilla kirjaimilla.
+            White player's pieces are in uppercase.
 
-            Ruutu[y][x]:
-                y = Rivin indeksi (välillä 0-7, indeksi 0 tarkoittaa pelilaudalla riviä '8')
-                x = Sarakkeen indeksi (välillä 0-7, indeksi 0 tarkoittaa pelilaudalla saraketta 'a')
+            Square[y][x]:
+                y = Row index (between 0-7, index 0 means row '8' on board)
+                x = Column index (between 0-7, index 0 means column 'a' on board)
      */
 
     public Board() {
-        /* Alustaa pelilaudan eli asettaa nappulat pelilaudalle oikeaan järjestykseen */
 
-        ruudut = new Square[PELILAUDAN_KOKO][PELILAUDAN_KOKO];
+        squares = new Square[BOARD_SIZE][BOARD_SIZE];
 
-        // Valkoisen pelinappuloiden asetus
+        // White pieces
 
-        ruudut[7][0] = new Square(new Rook(true), 7, 0);        // Torni a1
-        ruudut[7][1] = new Square(new Knight(true), 7, 1);        // Ratsu b1
-        ruudut[7][2] = new Square(new Bishop(true), 7, 2);      // Lähetti c1
-        ruudut[7][3] = new Square(new Queen(true), 7, 3);   // Kuningatar d1
-        ruudut[7][4] = new Square(new King(true), 7, 4);     // Kuningas e1
-        ruudut[7][5] = new Square(new Bishop(true), 7, 5);      // Lähetti f1
-        ruudut[7][6] = new Square(new Knight(true), 7, 6);        // Ratsu g1
-        ruudut[7][7] = new Square(new Rook(true), 7, 7);        // Torni h1
+        squares[7][0] = new Square(new Rook(true), 7, 0);
+        squares[7][1] = new Square(new Knight(true), 7, 1);
+        squares[7][2] = new Square(new Bishop(true), 7, 2);
+        squares[7][3] = new Square(new Queen(true), 7, 3);
+        squares[7][4] = new Square(new King(true), 7, 4);
+        squares[7][5] = new Square(new Bishop(true), 7, 5);
+        squares[7][6] = new Square(new Knight(true), 7, 6);
+        squares[7][7] = new Square(new Rook(true), 7, 7);
 
 
-        for (int i = 0; i < PELILAUDAN_KOKO; i++) {
-            // ruudut[6][i] = new Ruutu(new Sotilas(true), 6, i);        // Valkoisen sotilaat
-
-            // Väliaikaisesti poistettu sotilaat
-            ruudut[6][i] = new Square(6, i);
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            // squares[6][i] = new Square(new Pawn(true), 6, i);
+            squares[6][i] = new Square(6, i);
         }
 
-        // Mustan pelinappuloiden asetus
+        // Black pieces
 
-        ruudut[0][0] = new Square(new Rook(false), 0, 0);             // Torni a8
-        ruudut[0][1] = new Square(new Knight(false), 0, 1);             // Ratsu b8
-        ruudut[0][2] = new Square(new Bishop(false), 0, 2);           // Lähetti c8
-        ruudut[0][3] = new Square(new Queen(false), 0, 3);        // Kuningatar d8
-        ruudut[0][4] = new Square(new King(false), 0, 4);          // Kuningas e8
-        ruudut[0][5] = new Square(new Bishop(false), 0, 5);           // Lähetti f8
-        ruudut[0][6] = new Square(new Knight(false), 0, 6);             // Ratsu g8
-        ruudut[0][7] = new Square(new Rook(false), 0, 7);             // Torni h8
+        squares[0][0] = new Square(new Rook(false), 0, 0);
+        squares[0][1] = new Square(new Knight(false), 0, 1);
+        squares[0][2] = new Square(new Bishop(false), 0, 2);
+        squares[0][3] = new Square(new Queen(false), 0, 3);
+        squares[0][4] = new Square(new King(false), 0, 4);
+        squares[0][5] = new Square(new Bishop(false), 0, 5);
+        squares[0][6] = new Square(new Knight(false), 0, 6);
+        squares[0][7] = new Square(new Rook(false), 0, 7);
 
-        for (int i = 0; i < PELILAUDAN_KOKO; i++) {
-            //ruudut[1][i] = new Ruutu(new Sotilas(false), 1, i);       // Mustan sotilaat
-
-            // Väliaikaisesti poistettu sotilaat
-            ruudut[1][i] = new Square(1, i);
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            // squares[1][i] = new Square(new Pawn(false), 1, i);
+            squares[1][i] = new Square(1, i);
         }
 
-        // Tyhjien ruutujen alustus
+        // Empty squares
 
-        for (int j = 2; j < (PELILAUDAN_KOKO - 2); j++) {
-            for (int i = 0; i < PELILAUDAN_KOKO; i++) {
-                ruudut[j][i] = new Square(j, i);
+        for (int j = 2; j < (BOARD_SIZE - 2); j++) {
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                squares[j][i] = new Square(j, i);
             }
         }
     }
 
-    Board kopioi() {
-        Board pl = new Board();
-        for (int i = 0; i < PELILAUDAN_KOKO; i++) {
-            for (int j = 0; j < PELILAUDAN_KOKO; j++) {
-                pl.ruudut[j][i] = ruudut[j][i].kopioi();
+    Board copy() {
+        Board b = new Board();
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                b.squares[j][i] = squares[j][i].copy();
             }
         }
-        return pl;
+        return b;
     }
 
-    public Square haeRuutu(int rivi, int sarake) {
-        return ruudut[rivi][sarake];
+    public Square getSquare(int row, int col) {
+        return squares[row][col];
     }
 
-    ArrayList<Square> haePelaajanRuudut(boolean onValkoinen) {
+    ArrayList<Square> getPlayerSquares(boolean isWhite) {
         ArrayList<Square> r = new ArrayList<>();
 
-        for (int i = 0; i < PELILAUDAN_KOKO; i++) {
-            for (int j = 0; j < PELILAUDAN_KOKO; j++) {
-                if (ruudut[i][j].haeNappula() != null) {
-                    if (ruudut[i][j].haeNappula().onValkoinen() == onValkoinen) {
-                        r.add(ruudut[i][j]);
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (squares[i][j].getPiece() != null) {
+                    if (squares[i][j].getPiece().isWhite() == isWhite) {
+                        r.add(squares[i][j]);
                     }
                 }
             }
@@ -117,91 +112,87 @@ public class Board {
         return r;
     }
 
-    ArrayList<Piece> haeNappulat(boolean onValkoinen) {
-        ArrayList<Piece> nappulat = new ArrayList<>();
-        for (Square r : haePelaajanRuudut(onValkoinen)) {
-            nappulat.add(r.haeNappula());
+    ArrayList<Piece> getPlayerPieces(boolean isWhite) {
+        ArrayList<Piece> pieces = new ArrayList<>();
+        for (Square s : getPlayerSquares(isWhite)) {
+            pieces.add(s.getPiece());
         }
-        return nappulat;
+        return pieces;
     }
 
-    boolean onShakki(Player pelaaja) {
-        int kuningasX = -1;
-        int kuningasY = -1;
+    boolean isCheck(Player player) {
+        int kingX = -1;
+        int kingY = -1;
 
-        // Hakee pelilaudalta kuninkaan sijainnin
-        for (int i = 0; i < PELILAUDAN_KOKO; i++) {
-            for (int j = 0; j < PELILAUDAN_KOKO; j++) {
-                if (ruudut[i][j].haeNappula() instanceof King &&
-                        ruudut[i][j].haeNappula().onValkoinen() == pelaaja.onValkoinen()) {
-                    kuningasY = i;
-                    kuningasX = j;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (squares[i][j].getPiece() instanceof King &&
+                        squares[i][j].getPiece().isWhite() == player.isWhite()) {
+                    kingY = i;
+                    kingX = j;
                     break;
                 }
             }
         }
 
-        ArrayList<Square> pRuutu = new ArrayList<>();
-        ArrayList<Square> nappulanRuutuEhdokkaat;
-        for (Square r : haePelaajanRuudut(!pelaaja.onValkoinen())) {
-            if ((nappulanRuutuEhdokkaat = r.haeNappula().laillisetSiirrot(this, r)) != null) {
-                pRuutu.addAll(nappulanRuutuEhdokkaat);
+        if (kingX == -1) {
+            throw new IllegalStateException();
+        }
+
+        ArrayList<Square> enemySquares = new ArrayList<>();
+        ArrayList<Square> pieceMoveCandidates;
+        for (Square r : getPlayerSquares(!player.isWhite())) {
+            if ((pieceMoveCandidates = r.getPiece().legalMoves(this, r)) != null) {
+                enemySquares.addAll(pieceMoveCandidates);
             }
         }
 
-        return pRuutu.contains(haeRuutu(kuningasY, kuningasX));
+        return enemySquares.contains(getSquare(kingY, kingX));
     }
 
-    void teeSiirto(Move s) {
-        // Tekee annetun siirron pelilaudalla
-
-        ruudut[s.getyLoppu()][s.getxLoppu()].asetaNappula(s.haeNappula());
-        ruudut[s.getyAlku()][s.getxAlku()].asetaNappula(null);
-
-    }
-
-    void kumoaSiirto(Move s) {
-        // Kumoaa annetun siirron pelilaudalla.
-
-        ruudut[s.getyAlku()][s.getxAlku()].asetaNappula(s.haeNappula());
-        ruudut[s.getyLoppu()][s.getxLoppu()].asetaNappula(s.haeTuhottuNappula());
+    void makeMove(Move m) {
+        squares[m.getRowEnd()][m.getColEnd()].setPiece(m.getPiece());
+        squares[m.getRowStart()][m.getColStart()].setPiece(null);
 
     }
 
-    String tulostaPelilauta(ArrayList<Square> laillisetRuudut) {
+    void undoMove(Move m) {
+        squares[m.getRowStart()][m.getColStart()].setPiece(m.getPiece());
+        squares[m.getRowEnd()][m.getColEnd()].setPiece(m.getRemovedPiece());
+
+    }
+
+    String printBoard(ArrayList<Square> legalSquares) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("\n");
 
-        for (int i = 0; i < PELILAUDAN_KOKO; i++) {
-            // Rivin numero
+        for (int i = 0; i < BOARD_SIZE; i++) {
             sb.append(8 - i).append("\t");
 
-            // Nappulat
-            for (int j = 0; j < PELILAUDAN_KOKO; j++) {
-                if (laillisetRuudut != null) {
-                    if (laillisetRuudut.contains(this.haeRuutu(i, j))) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (legalSquares != null) {
+                    if (legalSquares.contains(this.getSquare(i, j))) {
                         sb.append('*').append(" ");
                         continue;
                     }
                 }
-                if (this.haeRuutu(i, j).haeNappula() == null) {
+                if (this.getSquare(i, j).getPiece() == null) {
                     sb.append('-');
                 } else {
-                    sb.append(this.haeRuutu(i, j).haeNappula().toString());
+                    sb.append(this.getSquare(i, j).getPiece().toString());
                 }
                 sb.append(" ");
             }
             sb.append("\n");
         }
-        // Alin rivi
         sb.append("\n \ta b c d e f g h");
 
         return sb.toString();
     }
 
-    String tulostaPelilauta() {
-        return tulostaPelilauta(null);
+    String printBoard() {
+        return printBoard(null);
     }
 
 }

@@ -7,34 +7,34 @@ import java.util.ArrayList;
 
 public class Pawn extends Piece {
 
-    private static final int[][] siirtoEhdokkaat = {
-            {2, 0}, // jos y,x koordinaatisto
-            {-2, 0},
-            {1, 0},
-            {-1, 0},
-            {1, 1}, // Ohestalyönti ja syönti
-            {1, -1}, // Ohestalyönti ja syönti
-            {-1, 1}, // Ohestalyönti ja syönti
-            {-1, -1} // Ohestalyönti ja syönti
+    private static final int[][] moveCandidates = {
+            {-1, 0}, // White pawn move
+            {-2, 0}, // White pawn double-step
+            {-1, 1}, // White pawn capture right
+            {-1, -1}, // White pawn capture left
 
+            {1, 0}, // Black pawn move
+            {2, 0}, // Black pawn double-step
+            {1, 1}, // Black pawn capture right
+            {1, -1} // Black pawn capture left
     };
 
-    public Pawn(boolean onValkoinen) {
-        super(onValkoinen);
+    public Pawn(boolean isWhite) {
+        super(isWhite);
     }
 
 
     @Override
-    public ArrayList<Square> laillisetSiirrot(Board lauta, int x, int y) {
+    public ArrayList<Square> legalMoves(Board board, int row, int col) {
         return null;
     }
 
     @Override
     public String toString() {
-        if (this.onValkoinen()) {
-            return "S";
+        if (this.isWhite()) {
+            return "P";
         } else {
-            return "s";
+            return "p";
         }
     }
 

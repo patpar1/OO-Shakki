@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Knight extends Piece {
 
-    private static final int[][] siirtoEhdokkaat = {
+    private static final int[][] moveCandidates = {
             {-2, -1},
             {-1, -2},
             {1, -2},
@@ -18,49 +18,38 @@ public class Knight extends Piece {
             {-2, 1}
     };
 
-    public Knight(boolean onValkoinen) {
-        super(onValkoinen);
+    public Knight(boolean isWhite) {
+        super(isWhite);
     }
 
     @Override
-    public ArrayList<Square> laillisetSiirrot(Board lauta, int y, int x) {
-        //Pelilauta luokasta saadaan kaikkien nappuloiden nykyiset sijainnit
-        ArrayList<Square> siirtoLista = new ArrayList<Square>();
-        //siirto on muuttuja joka for loopin alussa on siirtoehdokkaat listan ensimmäinen kohta
-        for (int[] siirto : siirtoEhdokkaat) {
-            //siirtoEhdokkaassa y koordinaatti on 0 ja x koordinaatti on 1
-            int[] siirtoEhdokas = {(y + siirto[0]), (x + siirto[1])};
-            //tarkastaa onko siirto laudalla
-            if (!onLaudalla(siirtoEhdokas[0], siirtoEhdokas[1])) {
+    public ArrayList<Square> legalMoves(Board board, int row, int col) {
+        ArrayList<Square> moveArray = new ArrayList<Square>();
+        for (int[] move : moveCandidates) {
+            int[] moveCandidate = {(row + move[0]), (col + move[1])};
+
+            if (!isOnBoard(moveCandidate[0], moveCandidate[1])) {
                 continue;
             }
-            /* 1. if lause: haetaan ruutu luokasta ruutu, josta selviää onko
-            ruutuun siirrettävä siirtoehdokas mahdollinen siten, että
-            ruudussa ei ole pelinappulaa.
-            */
-            if (!lauta.haeRuutu(siirtoEhdokas[0] , siirtoEhdokas[1]).onTyhjä()){
-                /*2. if lause: vertaa Ratsun ja pelilaudan ruudussa olevan nappulan väriä.
-                Jos väri on sama (esim. valkoinen, for looppi lähtee alusta,
-                        koska siirto ei ole mahdollinen).
-             */
-                if (this.onValkoinen() == lauta.haeRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).haeNappula().onValkoinen()) {
+
+            if (board.getSquare(moveCandidate[0], moveCandidate[1]).hasPiece()){
+                if (this.isWhite() == board.getSquare(moveCandidate[0], moveCandidate[1]).getPiece().isWhite()) {
                     continue;
                 }
-
             }
-            //palauttaa "lauta" objektiin for lauseen läpi menneet siirtoehdokkaat, jotka ovat laillisia
-            siirtoLista.add(lauta.haeRuutu(siirtoEhdokas[0] , siirtoEhdokas[1]));
 
+            moveArray.add(board.getSquare(moveCandidate[0] , moveCandidate[1]));
         }
 
-        return siirtoLista;
+        return moveArray;
     }
+
     @Override
     public String toString() {
-        if (this.onValkoinen()) {
-            return "R";
+        if (this.isWhite()) {
+            return "K";
         } else {
-            return "r";
+            return "k";
         }
     }
 }

@@ -7,21 +7,21 @@ import java.util.ArrayList;
 
 public class Queen extends Piece {
 
-    public Queen(boolean onValkoinen) {
-        super(onValkoinen);
+    public Queen(boolean isWhite) {
+        super(isWhite);
     }
 
     @Override
-    public ArrayList<Square> laillisetSiirrot(Board lauta, int y, int x) {
+    public ArrayList<Square> legalMoves(Board board, int row, int col) {
         return null;
     }
 
     @Override
     public String toString() {
-        if (this.onValkoinen()) {
-            return "D";
+        if (this.isWhite()) {
+            return "Q";
         } else {
-            return "d";
+            return "q";
         }
     }
 

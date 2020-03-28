@@ -5,164 +5,152 @@ import com.example.shakki.game.pieces.Piece;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Player {
+class Player {
 
-    private boolean onValkoinen;
-    private boolean onShakissa;
+    private boolean isWhite;
+    private boolean isCheck;
 
-    Player(boolean onValkoinen) {
-        this.onValkoinen = onValkoinen;
-        this.onShakissa = false;
+    Player(boolean isWhite) {
+        this.isWhite = isWhite;
+        this.isCheck = false;
     }
 
-    void asetaShakki(boolean onShakissa) {
-        this.onShakissa = onShakissa;
+    void setCheck(boolean isCheck) {
+        this.isCheck = isCheck;
     }
 
-    boolean onValkoinen() {
-        return onValkoinen;
+    boolean isWhite() {
+        return isWhite;
     }
 
-    private Square haeRuutu(Board lauta) {
-        String sRuutu = null;
-        int[] koordinaatit = new int[0];
+    private Square getSquare(Board board) {
+        String squareInput = null;
+        int[] coordinates = new int[0];
 
         Scanner sc = new Scanner(System.in);
         if (sc.hasNextLine()) {
-            sRuutu = sc.nextLine();
+            squareInput = sc.nextLine();
         }
 
-        if (sRuutu != null) {
-            koordinaatit = muunnaTekstiKoordinaatiksi(sRuutu);
+        if (squareInput != null) {
+            coordinates = transformTextToCoordinates(squareInput);
         }
 
-        if (koordinaatit == null) {
+        if (coordinates == null) {
             return null;
         }
 
-        return lauta.haeRuutu(koordinaatit[0], koordinaatit[1]);
+        return board.getSquare(coordinates[0], coordinates[1]);
 
     }
 
-    private int[] muunnaTekstiKoordinaatiksi(String s) {
-        String sarakkeet = "abcdefgh";
+    private int[] transformTextToCoordinates(String s) {
+        final String columns = "abcdefgh";
 
         if (s.length() != 2) {
-            System.out.println("Koordinaatti on väärä! Sen on oltava muotoa 'a5'.");
+            System.out.println("Coordinate is wrong! It has be a form of 'a5'.");
             return null;
         }
 
-        int i0 = sarakkeet.indexOf(s.toLowerCase().charAt(0));
+        int i0 = columns.indexOf(s.toLowerCase().charAt(0));
         if (i0 == -1) {
-            System.out.println("Sarakkeen on oltava kirjain välillä a-h (esim. a5).");
+            System.out.println("Column has to be a letter between a-h (eg. a5).");
             return null;
         }
 
         int i1 = 8 - Character.getNumericValue(s.charAt(1));
         if (i1 < 0) {
-            System.out.println("Rivin on oltava numero välillä 1-8 (esim. a5).");
+            System.out.println("Row has to be a number between 1-8 (eg. a5).");
             return null;
         }
 
-        // System.out.println("TEKSTI KOORDINAATEIKSI: " + i1 + i0);
         return new int[] {i1, i0};
     }
 
-    private Square haeValittuRuutu(Board lauta) {
+    private Square getChosenSquare(Board board) {
 
-        ArrayList<Piece> nappulat;
+        ArrayList<Piece> pieces;
 
-        // Lasketaan siirrettävät nappulat
-        nappulat = lauta.haeNappulat(onValkoinen);
+        pieces = board.getPlayerPieces(isWhite);
 
-        // Käyttäjä valitsee ruudun
-        System.out.print("Valitse nappula: ");
+        System.out.print("Choose piece: ");
 
-        Square valittuRuutu = haeRuutu(lauta);
-        if (valittuRuutu == null) {
+        Square chosenSquare = getSquare(board);
+        if (chosenSquare == null) {
             return null;
         }
 
-        // Siirron tarkistus
-        if (valittuRuutu.haeNappula() == null) {
-            System.out.println("Ruudussa ei ole nappulaa!");
+        if (chosenSquare.getPiece() == null) {
+            System.out.println("There is no piece on the square!");
             return null;
-        } else if (!nappulat.contains(valittuRuutu.haeNappula())) {
-            System.out.println("Et voi siirtää tätä nappulaa!");
+        } else if (!pieces.contains(chosenSquare.getPiece())) {
+            System.out.println("You can't move this piece!");
             return null;
         }
 
-        return valittuRuutu;
+        return chosenSquare;
     }
 
-    ArrayList<Square> haeLaillisetSiirrot(Board lauta, Square valittuRuutu) {
+    ArrayList<Square> getLegalMoves(Board board, Square chosenSquare) {
 
-        ArrayList<Square> laillisetRuudut = new ArrayList<>();
-        ArrayList<Square> nappulanRuutuEhdokkaat = valittuRuutu.haeNappula().laillisetSiirrot(lauta, valittuRuutu);
+        ArrayList<Square> legalSquares = new ArrayList<>();
+        ArrayList<Square> squareCandidates = chosenSquare.getPiece().legalMoves(board, chosenSquare);
 
-        if (nappulanRuutuEhdokkaat == null) {
-            return laillisetRuudut;
+        if (squareCandidates == null) {
+            return legalSquares;
         }
 
-        for (Square kohdeRuutuEhdokas : nappulanRuutuEhdokkaat) {
-            Board kopioLauta = lauta.kopioi();
-            Square valittuRuutuKopio = kopioLauta.haeRuutu(valittuRuutu.haeY(), valittuRuutu.haeX());
-            Square kohdeRuutuEhdokasKopio = kopioLauta.haeRuutu(kohdeRuutuEhdokas.haeY(), kohdeRuutuEhdokas.haeX());
-            kopioLauta.teeSiirto(new Move(valittuRuutuKopio, kohdeRuutuEhdokasKopio));
-            if (!kopioLauta.onShakki(this)) {
-                laillisetRuudut.add(kohdeRuutuEhdokas);
+        for (Square destinationSquareCandidate : squareCandidates) {
+            Board copyBoard = board.copy();
+            Square chosenSquareCopy = copyBoard.getSquare(chosenSquare.getRow(), chosenSquare.getCol());
+            Square destinationSquareCandidateCopy = copyBoard.getSquare(destinationSquareCandidate.getRow(), destinationSquareCandidate.getCol());
+            copyBoard.makeMove(new Move(chosenSquareCopy, destinationSquareCandidateCopy));
+            if (!copyBoard.isCheck(this)) {
+                legalSquares.add(destinationSquareCandidate);
             }
         }
 
-        // System.out.println("Lailliset ruudut: " + laillisetRuudut.size());
-
-        return laillisetRuudut;
+        return legalSquares;
     }
 
-    private Square haeKohdeRuutu(Board lauta, Square valittuRuutu) {
+    private Square getDestinationSquare(Board board, Square chosenSquare) {
 
-        Square kohdeRuutu;
-        ArrayList<Square> laillisetRuudut = haeLaillisetSiirrot(lauta, valittuRuutu);
+        Square destinationSquare;
+        ArrayList<Square> legalSquares = getLegalMoves(board, chosenSquare);
 
-        if (laillisetRuudut.size() == 0) {
-            System.out.println("Tällä nappulalla ei ole laillisia siirtoja!");
+        if (legalSquares.size() == 0) {
+            System.out.println("This piece has no legal moves!");
             return null;
         }
 
-        // Tulosta mahdolliset siirrot
-        System.out.println(lauta.tulostaPelilauta(laillisetRuudut));
+        System.out.println(board.printBoard(legalSquares));
 
-        // Käyttäjä valitsee siirron kohderuudun
-        System.out.print("Valitse kohderuutu: ");
-        kohdeRuutu = haeRuutu(lauta);
+        System.out.print("Choose destination square: ");
+        destinationSquare = getSquare(board);
 
-        // Virheentarkistusta
-        if (!laillisetRuudut.contains(kohdeRuutu)) {
-            System.out.println("Siirto ei ole laillinen!");
+        if (!legalSquares.contains(destinationSquare)) {
+            System.out.println("Move is not legal!");
             return null;
         }
 
-        return kohdeRuutu;
+        return destinationSquare;
     }
 
-    Move muodostaSiirto(Board lauta) {
+    Move constructMove(Board board) {
 
-        // Tulosta pelilauta
-        System.out.println(onValkoinen ? "Valkoisen vuoro" : "Mustan vuoro");
-        System.out.println(lauta.tulostaPelilauta());
+        System.out.println(isWhite ? "White player's turn" : "Black player's turn");
+        System.out.println(board.printBoard());
 
-        // Valitse siirrettävä nappula
-        Square valittuRuutu = haeValittuRuutu(lauta);
-        if (valittuRuutu == null) {
+        Square chosenSquare = getChosenSquare(board);
+        if (chosenSquare == null) {
             return null;
         }
 
-        // Valitse kohderuutu
-        Square kohdeRuutu = haeKohdeRuutu(lauta, valittuRuutu);
-        if (kohdeRuutu == null) {
+        Square destinationSquare = getDestinationSquare(board, chosenSquare);
+        if (destinationSquare == null) {
             return null;
         }
 
-        return new Move(valittuRuutu, kohdeRuutu);
+        return new Move(chosenSquare, destinationSquare);
     }
 }

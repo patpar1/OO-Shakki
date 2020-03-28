@@ -7,46 +7,48 @@ import java.util.ArrayList;
 
 public class Bishop extends Piece {
 
-    private static final int[][] siirtoVektorit = {
-            {-1, 1}, // oikeelle ylös
-            {1, 1}, // oikeelle alas
-            {-1, -1}, // vasemmalle ylös
-            {1, -1} // vasemmalle alas
+    private static final int[][] moveVectors = {
+            {-1, 1}, // Right Up
+            {1, 1}, // Right Down
+            {-1, -1}, // Left Up
+            {1, -1} // Left Down
     };
 
-    public Bishop(boolean onValkoinen) {
-        super(onValkoinen);
+    public Bishop(boolean isWhite) {
+        super(isWhite);
     }
 
     @Override
-    public ArrayList<Square> laillisetSiirrot(Board lauta, int y, int x) {
-        ArrayList<Square> siirtoLista = new ArrayList<Square>();
-        for (int[] suunta : siirtoVektorit) {
+    public ArrayList<Square> legalMoves(Board board, int row, int col) {
+        ArrayList<Square> moveArray = new ArrayList<Square>();
+        for (int[] direction : moveVectors) {
+            int[] moveCandidate = {row, col};
             while (true) {
-                int[] siirtoEhdokas = {(y += suunta[0]), (x += suunta[1])};
-                // siirtää kerralla x ja y koordinaatteja siirtovektorien mukaiseen suuntaan
-                if (!onLaudalla(siirtoEhdokas[0], siirtoEhdokas[1])) {
+                moveCandidate[0] += direction[0];
+                moveCandidate[1] += direction[1];
+                if (!isOnBoard(moveCandidate[0], moveCandidate[1])) {
                     break;
                 }
-                if (!lauta.haeRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).onTyhjä()){
-                    if (this.onValkoinen() == lauta.haeRuutu(siirtoEhdokas[0], siirtoEhdokas[1]).haeNappula().onValkoinen()) {
+                if (board.getSquare(moveCandidate[0], moveCandidate[1]).hasPiece()){
+                    if (this.isWhite() == board.getSquare(moveCandidate[0], moveCandidate[1]).getPiece().isWhite()) {
                         break;
                     } else {
-                        siirtoLista.add(lauta.haeRuutu(siirtoEhdokas[0] , siirtoEhdokas[1]));
+                        moveArray.add(board.getSquare(moveCandidate[0] , moveCandidate[1]));
                         break;
                     }
                 }
-                siirtoLista.add(lauta.haeRuutu(siirtoEhdokas[0] , siirtoEhdokas[1]));
+                moveArray.add(board.getSquare(moveCandidate[0] , moveCandidate[1]));
             }
         }
-        return siirtoLista;
+        return moveArray;
     }
+
     @Override
     public String toString() {
-        if (this.onValkoinen()) {
-            return "L";
+        if (this.isWhite()) {
+            return "B";
         } else {
-            return "l";
+            return "b";
         }
     }
 }

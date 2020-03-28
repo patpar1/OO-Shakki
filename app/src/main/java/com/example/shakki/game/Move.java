@@ -4,75 +4,70 @@ import com.example.shakki.game.pieces.Piece;
 
 public class Move {
 
-    private int xAlku;
-    private int yAlku;
-    private int xLoppu;
-    private int yLoppu;
+    private int colStart;
+    private int rowStart;
+    private int colEnd;
+    private int rowEnd;
 
-    private Piece nappula;
-    private Piece tuhottuNappula;
+    private Piece piece;
+    private Piece removedPiece;
 
-    /*
-    private boolean onShakki;
-    private boolean onMatti;
-    private boolean linnoitus;
-     */
+    private boolean isCheck;
+    private boolean isStalemate;
+    private boolean isCastle;
 
-    public Move(Square aloitusRuutu, Square lopetusRuutu) {
-        xAlku = aloitusRuutu.haeX();
-        yAlku = aloitusRuutu.haeY();
-        nappula = aloitusRuutu.haeNappula();
-        xLoppu = lopetusRuutu.haeX();
-        yLoppu = lopetusRuutu.haeY();
-        tuhottuNappula = lopetusRuutu.haeNappula();
+    Move(Square startingSquare, Square endingSquare) {
+        colStart = startingSquare.getCol();
+        rowStart = startingSquare.getRow();
+        piece = startingSquare.getPiece();
+        colEnd = endingSquare.getCol();
+        rowEnd = endingSquare.getRow();
+        removedPiece = endingSquare.getPiece();
     }
 
-    public int getxAlku() {
-        return xAlku;
+    int getColStart() {
+        return colStart;
     }
-    public int getyAlku() {
-        return yAlku;
+    int getRowStart() {
+        return rowStart;
     }
-    public int getxLoppu() {
-        return xLoppu;
+    int getColEnd() {
+        return colEnd;
     }
-    public int getyLoppu() {
-        return yLoppu;
-    }
-
-    public Piece haeNappula() {
-        return nappula;
-    }
-    public Piece haeTuhottuNappula() {
-        return tuhottuNappula;
+    int getRowEnd() {
+        return rowEnd;
     }
 
-    /* Tarvitaan muissa toiminnallisuuksissa
-
-    public void asetaTuhottuNappula(Nappula tuhottuNappula) {
-        this.tuhottuNappula = tuhottuNappula;
+    public Piece getPiece() {
+        return piece;
+    }
+    Piece getRemovedPiece() {
+        return removedPiece;
     }
 
-    public boolean onShakki() {
-        return onShakki;
-    }
-    public void asetaShakki(boolean onShakki) {
-        this.onShakki = onShakki;
+    public void setRemovedPiece(Piece removedPiece) {
+        this.removedPiece = removedPiece;
     }
 
-    public boolean onMatti() {
-        return onMatti;
+    public boolean isCheck() {
+        return isCheck;
     }
-    public void asetaMatti(boolean onMatti) {
-        this.onMatti = onMatti;
+    public void setCheck(boolean isCheck) {
+        this.isCheck = isCheck;
     }
 
-    public boolean isLinnoitus() {
-        return linnoitus;
+    public boolean isStalemate() {
+        return isStalemate;
     }
-    public void asetaLinnoitus(boolean linnoitus) {
-        this.linnoitus = linnoitus;
+    public void setStalemate(boolean isStalemate) {
+        this.isStalemate = isStalemate;
     }
-     */
+
+    public boolean isCastle() {
+        return isCastle;
+    }
+    public void setCastle(boolean isCastle) {
+        this.isCastle = isCastle;
+    }
 
 }

@@ -15,10 +15,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void main(String[] args) {
-        int maksimiKierrokset = 100;
+        int maxTurns = 100;
 
-        Game peli = new Game();
-        int tulos = peli.peliSilmukka(maksimiKierrokset);
-        System.out.println(tulos);
+        Game game = new Game();
+        int result = game.gameLoop(maxTurns);
+        System.out.println(result);
     }
 }

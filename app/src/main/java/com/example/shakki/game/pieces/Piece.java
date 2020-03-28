@@ -6,24 +6,24 @@ import com.example.shakki.game.Square;
 import java.util.ArrayList;
 
 public abstract class Piece {
-    private boolean onValkoinen;
+    private boolean isWhite;
 
-    public Piece(boolean onValkoinen) {
-        this.onValkoinen = onValkoinen;
+    public Piece(boolean isWhite) {
+        this.isWhite = isWhite;
     }
 
-    // Laskee lailliset siirrot. Palauttaa listan laillisista siirroista
-    public abstract ArrayList<Square> laillisetSiirrot(Board lauta, int y, int x);
+    // Calculates legal moves. Returns ArrayList of legal moves.
+    public abstract ArrayList<Square> legalMoves(Board board, int row, int col);
 
-    public ArrayList<Square> laillisetSiirrot(Board lauta, Square ruutu) {
-        return laillisetSiirrot(lauta, ruutu.haeY(), ruutu.haeX());
+    public ArrayList<Square> legalMoves(Board board, Square square) {
+        return legalMoves(board, square.getRow(), square.getCol());
     }
 
-    public boolean onValkoinen() {
-        return onValkoinen;
+    public boolean isWhite() {
+        return isWhite;
     }
 
-    public static boolean onLaudalla(int y, int x) {
+    public static boolean isOnBoard(int y, int x) {
         if ((x > 7) || (y > 7)) {
             return false;
         }

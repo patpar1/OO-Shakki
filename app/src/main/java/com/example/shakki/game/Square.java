@@ -4,43 +4,43 @@ import com.example.shakki.game.pieces.Piece;
 
 public class Square {
 
-    private Piece nappula;
-    private int x;
-    private int y;
+    private Piece piece;
+    private int col;
+    private int row;
 
-    public Square(int y, int x) {
-        nappula = null;
-        this.x = x;
-        this.y = y;
+    public Square(int row, int col) {
+        piece = null;
+        this.col = col;
+        this.row = row;
     }
 
-    public Square(Piece nappula, int y, int x) {
-        this.nappula = nappula;
-        this.x = x;
-        this.y = y;
+    public Square(Piece piece, int row, int col) {
+        this.piece = piece;
+        this.col = col;
+        this.row = row;
     }
 
-    Square kopioi() {
-        return new Square(nappula, y, x);
+    Square copy() {
+        return new Square(piece, row, col);
     }
 
-    public Piece haeNappula() {
-        return nappula;
+    public Piece getPiece() {
+        return piece;
     }
 
-    public void asetaNappula(Piece nappula) {
-        this.nappula = nappula;
+    public void setPiece(Piece piece) {
+        this.piece = piece;
     }
 
-    public int haeX() {
-        return x;
+    public int getCol() {
+        return col;
     }
 
-    public int haeY() {
-        return y;
+    public int getRow() {
+        return row;
     }
 
-    public boolean onTyhjä() {
-        return (nappula == null);
+    public boolean hasPiece() {
+        return (piece != null);
     }
 }

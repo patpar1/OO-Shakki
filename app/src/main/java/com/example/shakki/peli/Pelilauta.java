@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Pelilauta {
 
-    static final int PELILAUDAN_KOKO = 8;
+    private static final int PELILAUDAN_KOKO = 8;
 
     private Ruutu[][] ruudut;
 
@@ -153,7 +153,7 @@ public class Pelilauta {
     }
 
     void teeSiirto(Siirto s) {
-        /* Tekee annetun siirron pelilaudalla */
+        // Tekee annetun siirron pelilaudalla
 
         ruudut[s.getyLoppu()][s.getxLoppu()].asetaNappula(s.haeNappula());
         ruudut[s.getyAlku()][s.getxAlku()].asetaNappula(null);

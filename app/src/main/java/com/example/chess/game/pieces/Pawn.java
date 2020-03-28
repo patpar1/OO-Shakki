@@ -20,13 +20,11 @@ public class Pawn extends Piece {
     }
 
     private int[][] getMoveCandidates() {
-        int[][] playerCandidates = new int[4][2];
-        if (isWhite()) {
-            playerCandidates = moveCandidates;
-        } else {
+        int[][] playerCandidates = moveCandidates.clone();
+        if (!isWhite()) {
             for (int i = 0; i < moveCandidates.length; i++) {
-                playerCandidates[i][0] = moveCandidates[i][0] * -1;
-                playerCandidates[i][1] = moveCandidates[i][1] * -1;
+                playerCandidates[i][0] *= -1;
+                playerCandidates[i][1] *= -1;
             }
         }
 
@@ -63,7 +61,7 @@ public class Pawn extends Piece {
             int[] attackMoveCandidate = {(row + moveCandidates[i][0]), col + moveCandidates[i][1]};
             if (isOnBoard(attackMoveCandidate[0], attackMoveCandidate[1])) {
                 if (board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]).hasPiece()
-                && this.isWhite() == board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]).getPiece().isWhite()) {
+                && this.isWhite() != board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]).getPiece().isWhite()) {
                     moveArray.add(board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]));
                 }
             }

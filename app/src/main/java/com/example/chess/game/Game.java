@@ -38,10 +38,10 @@ public class Game {
         // 2 = Draw
         // 3 = Black wins
 
-        int iter = 0;
+        int i = 0;
         int gameState;
 
-        while (iter++ < maxLoops) {
+        while (i++ < maxLoops) {
 
             if ((gameState = checkGameState()) != 0) {
                 return gameState;

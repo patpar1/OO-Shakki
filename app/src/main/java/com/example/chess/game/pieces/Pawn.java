@@ -46,8 +46,8 @@ public class Pawn extends Piece {
 
                 // Double move
                 if (!this.isMoved()) {
-                    int[] doubleMoveCandidate = {(moveCandidate[0] += moveCandidates[1][0]),
-                            (moveCandidate[1] += moveCandidates[1][1])};
+                    int[] doubleMoveCandidate = {(row += moveCandidates[1][0]),
+                            (col += moveCandidates[1][1])};
                     if (isOnBoard(doubleMoveCandidate[0], doubleMoveCandidate[1])) {
                         if (!board.getSquare(doubleMoveCandidate[0], doubleMoveCandidate[1]).hasPiece()) {
                             moveArray.add(board.getSquare(doubleMoveCandidate[0] , doubleMoveCandidate[1]));

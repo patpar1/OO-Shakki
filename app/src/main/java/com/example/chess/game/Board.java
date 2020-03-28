@@ -152,6 +152,7 @@ public class Board {
 
     void makeMove(Move m) {
         squares[m.getRowEnd()][m.getColEnd()].setPiece(m.getPiece());
+        m.getPiece().hasMoved();
         squares[m.getRowStart()][m.getColStart()].setPiece(null);
 
     }

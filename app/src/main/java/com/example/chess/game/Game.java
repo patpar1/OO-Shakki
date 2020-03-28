@@ -5,19 +5,37 @@ import java.util.ArrayList;
 public class Game {
 
     private Board board;
-    // private ArrayList<Move> moves;
+    private ArrayList<Move> moves;
     private boolean whiteTurn;
 
     private Player whitePlayer;
     private Player blackPlayer;
 
+    private static Square enPassantTarget;
+    private boolean clearEnPassant;
+
     public Game() {
         board = new Board();
-        // moves = new ArrayList<Move>();
+        moves = new ArrayList<Move>();
         whiteTurn = true;
 
         whitePlayer = new Player(true);
         blackPlayer = new Player(false);
+
+        enPassantTarget = null;
+        clearEnPassant = false;
+    }
+
+    public static Square getEnPassantTarget() {
+        return enPassantTarget;
+    }
+
+    public static void setEnPassantTarget(Square enPassantTarget) {
+        Game.enPassantTarget = enPassantTarget;
+    }
+
+    public ArrayList<Move> getMoves() {
+        return moves;
     }
 
     private Player getCurrentPlayer() {
@@ -52,15 +70,27 @@ public class Game {
                 continue;
             }
 
-            // moves.add(playerMove);
+            moves.add(playerMove);
             board.makeMove(playerMove);
 
             getCurrentPlayer().setCheck(false);
+            resetEnPassant();
 
             this.whiteTurn = !whiteTurn;
         }
 
         return 3;
+    }
+
+    private void resetEnPassant() {
+        if (enPassantTarget != null) {
+            if (clearEnPassant) {
+                enPassantTarget = null;
+                clearEnPassant = false;
+            } else {
+                clearEnPassant = true;
+            }
+        }
     }
 
     private int checkGameState() {
@@ -86,5 +116,6 @@ public class Game {
         }
         return 0;
     }
+
 
 }

@@ -7,9 +7,11 @@ import java.util.ArrayList;
 
 public abstract class Piece {
     private boolean isWhite;
+    private boolean isMoved;
 
     public Piece(boolean isWhite) {
         this.isWhite = isWhite;
+        this.isMoved = false;
     }
 
     // Calculates legal moves. Returns ArrayList of legal moves.
@@ -23,7 +25,15 @@ public abstract class Piece {
         return isWhite;
     }
 
-    public static boolean isOnBoard(int y, int x) {
+    public boolean isMoved() {
+        return isMoved;
+    }
+
+    public void hasMoved() {
+        isMoved = true;
+    }
+
+    static boolean isOnBoard(int y, int x) {
         if ((x > 7) || (y > 7)) {
             return false;
         }
@@ -32,5 +42,6 @@ public abstract class Piece {
         }
         return true;
     }
+
 
 }

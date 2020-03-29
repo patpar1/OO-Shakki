@@ -37,6 +37,7 @@ public class Board {
                 x = Column index (between 0-7, index 0 means column 'a' on board)
      */
 
+    /*
     public Board() {
 
         squares = new Square[BOARD_SIZE][BOARD_SIZE];
@@ -83,6 +84,35 @@ public class Board {
         }
     }
 
+     */
+
+    public Board() {
+
+        squares = new Square[BOARD_SIZE][BOARD_SIZE];
+
+        // White pieces
+
+        squares[7][0] = new Square(new Rook(true), 7, 0);
+        squares[7][4] = new Square(new King(true), 7, 4);
+        squares[7][7] = new Square(new Rook(true), 7, 7);
+
+        // Black pieces
+
+        squares[0][0] = new Square(new Rook(false), 0, 0);
+        squares[0][4] = new Square(new King(false), 0, 4);
+        squares[0][7] = new Square(new Rook(false), 0, 7);
+
+        // Empty squares
+
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                if (squares[j][i] == null) {
+                    squares[j][i] = new Square(j, i);
+                }
+            }
+        }
+    }
+
     public Board(Square[][] squares) {
         this.squares = squares;
     }
@@ -124,6 +154,19 @@ public class Board {
         return pieces;
     }
 
+    public boolean squareInEnemyLine(Player player, Square square) {
+        ArrayList<Square> enemySquares = new ArrayList<>();
+        ArrayList<Square> pieceSquareCandidates = new ArrayList<>();
+        for (Square r : getPlayerSquares(!player.isWhite())) {
+            for (Move m : r.getPiece().legalMoves(this, r)) {
+                pieceSquareCandidates.add(getSquare(m.getRowEnd(), m.getColEnd()));
+            }
+            enemySquares.addAll(pieceSquareCandidates);
+        }
+
+        return enemySquares.contains(square);
+    }
+
     boolean isCheck(Player player) {
         int kingX = -1;
         int kingY = -1;
@@ -143,16 +186,8 @@ public class Board {
             throw new IllegalStateException();
         }
 
-        ArrayList<Square> enemySquares = new ArrayList<>();
-        ArrayList<Square> pieceSquareCandidates = new ArrayList<>();
-        for (Square r : getPlayerSquares(!player.isWhite())) {
-            for (Move m : r.getPiece().legalMoves(this, r)) {
-                pieceSquareCandidates.add(getSquare(m.getRowEnd(), m.getColEnd()));
-            }
-            enemySquares.addAll(pieceSquareCandidates);
-        }
+        return squareInEnemyLine(player, getSquare(kingY, kingX));
 
-        return enemySquares.contains(getSquare(kingY, kingX));
     }
 
     String printBoard(ArrayList<Square> legalSquares) {

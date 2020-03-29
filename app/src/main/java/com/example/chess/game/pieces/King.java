@@ -45,13 +45,13 @@ public class King extends Piece {
         }
 
         // Check rooks
-        Square[] rooks = {null, null};
+        ArrayList<Square> rooks = new ArrayList<>();
         int pieceRow = isWhite() ? 7 : 0;
         if (board.getSquare(pieceRow, 7).getPiece() instanceof Rook) {
-            rooks[0] = board.getSquare(pieceRow, 7);
+            rooks.add(board.getSquare(pieceRow, 7));
         }
         if (board.getSquare(pieceRow, 0).getPiece() instanceof Rook) {
-            rooks[1] = board.getSquare(pieceRow, 0);
+            rooks.add(board.getSquare(pieceRow, 0));
         }
 
         // Castling moves

@@ -100,6 +100,7 @@ class Player {
 
         ArrayList<Move> legalMoveCandidates = new ArrayList<>();
         ArrayList<Move> moveCandidates = chosenSquare.getPiece().legalMoves(board, chosenSquare);
+        boolean isInBetween = false;
 
         if (moveCandidates == null) {
             return legalMoveCandidates;
@@ -109,7 +110,38 @@ class Player {
             Board copyBoard = board.copy();
             Move copyMove = moveCandidate.copy();
             copyMove.makeMove(copyBoard);
+
+            // Castling checks
+            if (moveCandidate instanceof Move.CastlingMove) {
+                // 4. The king is not currently in check.
+                if (isCheck) {
+                    continue;
+                }
+                // 5. The king does not pass through a square that is attacked by an enemy piece.
+                if (moveCandidate.getColEnd() < moveCandidate.getColStart()) {
+                    // Queen side
+                    for (int i = moveCandidate.getColEnd() + 1; i < moveCandidate.getColStart() - 1; i++) {
+                        if (board.squareInEnemyLine(this, board.getSquare(moveCandidate.getRowEnd(), i))) {
+                            isInBetween = true;
+                            break;
+                        }
+                    }
+                } else {
+                    // King side
+                    for (int i = moveCandidate.getColStart() + 1; i < moveCandidate.getColEnd() - 1; i++) {
+                        if (board.squareInEnemyLine(this, board.getSquare(moveCandidate.getRowEnd(), i))) {
+                            isInBetween = true;
+                            break;
+                        }
+                    }
+                }
+                if (isInBetween) {
+                    continue;
+                }
+            }
+
             if (!copyBoard.isCheck(this)) {
+                // 6. The king does not end up in check. (True of any legal move.)
                 legalMoveCandidates.add(moveCandidate);
             }
         }

@@ -120,7 +120,7 @@ class Player {
                 // 5. The king does not pass through a square that is attacked by an enemy piece.
                 if (moveCandidate.getColEnd() < moveCandidate.getColStart()) {
                     // Queen side
-                    for (int i = moveCandidate.getColEnd() + 1; i < moveCandidate.getColStart() - 1; i++) {
+                    for (int i = moveCandidate.getColEnd() + 1; i < moveCandidate.getColStart(); i++) {
                         if (board.squareInEnemyLine(this, board.getSquare(moveCandidate.getRowEnd(), i))) {
                             isInBetween = true;
                             break;
@@ -128,7 +128,7 @@ class Player {
                     }
                 } else {
                     // King side
-                    for (int i = moveCandidate.getColStart() + 1; i < moveCandidate.getColEnd() - 1; i++) {
+                    for (int i = moveCandidate.getColStart() + 1; i < moveCandidate.getColEnd(); i++) {
                         if (board.squareInEnemyLine(this, board.getSquare(moveCandidate.getRowEnd(), i))) {
                             isInBetween = true;
                             break;

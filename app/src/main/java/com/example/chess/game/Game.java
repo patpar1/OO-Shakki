@@ -8,8 +8,8 @@ public class Game {
     private ArrayList<Move> moves;
     private boolean whiteTurn;
 
-    private Player whitePlayer;
-    private Player blackPlayer;
+    private static Player whitePlayer;
+    private static Player blackPlayer;
 
     private static Square enPassantTarget;
     private static Player enPassantTargetPlayer;
@@ -44,6 +44,14 @@ public class Game {
 
     private Player getCurrentPlayer() {
         return getPlayer(whiteTurn);
+    }
+
+    static Player getEnemyPlayer(Player currentPlayer) {
+        if (currentPlayer == whitePlayer) {
+            return blackPlayer;
+        } else {
+            return whitePlayer;
+        }
     }
 
     private Player getPlayer(boolean playerTurn) {

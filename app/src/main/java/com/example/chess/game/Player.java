@@ -126,7 +126,7 @@ class Player {
             Board copyBoard = board.copy();
             Square chosenSquareCopy = copyBoard.getSquare(chosenSquare.getRow(), chosenSquare.getCol());
             Square destinationSquareCandidateCopy = copyBoard.getSquare(destinationSquareCandidate.getRow(), destinationSquareCandidate.getCol());
-            copyBoard.makeMove(new Move(chosenSquareCopy, destinationSquareCandidateCopy));
+            (new Move(chosenSquareCopy, destinationSquareCandidateCopy)).makeMove(copyBoard);
             if (!copyBoard.isCheck(this)) {
                 legalSquares.add(destinationSquareCandidate);
             }

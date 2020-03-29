@@ -150,18 +150,6 @@ public class Board {
         return enemySquares.contains(getSquare(kingY, kingX));
     }
 
-    void makeMove(Move m) {
-        squares[m.getRowEnd()][m.getColEnd()].setPiece(m.getPiece());
-        squares[m.getRowStart()][m.getColStart()].setPiece(null);
-
-    }
-
-    void undoMove(Move m) {
-        squares[m.getRowStart()][m.getColStart()].setPiece(m.getPiece());
-        squares[m.getRowEnd()][m.getColEnd()].setPiece(m.getRemovedPiece());
-
-    }
-
     String printBoard(ArrayList<Square> legalSquares) {
         StringBuilder sb = new StringBuilder();
 

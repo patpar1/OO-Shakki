@@ -9,17 +9,16 @@ public class Move {
     private int colEnd;
     private int rowEnd;
 
-    private Piece piece;
+    private Piece movingPiece;
     private Piece removedPiece;
 
     private boolean isCheck;
     private boolean isStalemate;
-    private boolean isCastle;
 
     Move(Square startingSquare, Square endingSquare) {
         colStart = startingSquare.getCol();
         rowStart = startingSquare.getRow();
-        piece = startingSquare.getPiece();
+        movingPiece = startingSquare.getPiece();
         colEnd = endingSquare.getCol();
         rowEnd = endingSquare.getRow();
         removedPiece = endingSquare.getPiece();
@@ -38,42 +37,52 @@ public class Move {
         return rowEnd;
     }
 
-    public Piece getPiece() {
-        return piece;
+    Piece getMovingPiece() {
+        return movingPiece;
     }
     Piece getRemovedPiece() {
         return removedPiece;
     }
 
-    public void setRemovedPiece(Piece removedPiece) {
+    void setRemovedPiece(Piece removedPiece) {
         this.removedPiece = removedPiece;
     }
 
-    public boolean isCheck() {
-        return isCheck;
-    }
-    public void setCheck(boolean isCheck) {
-        this.isCheck = isCheck;
-    }
-
-    public boolean isStalemate() {
-        return isStalemate;
-    }
-    public void setStalemate(boolean isStalemate) {
-        this.isStalemate = isStalemate;
-    }
-
-    public boolean isCastle() {
-        return isCastle;
-    }
-    public void setCastle(boolean isCastle) {
-        this.isCastle = isCastle;
+    void makeMove(Board board) {
+        board.getSquare(rowEnd, colEnd).setPiece(movingPiece);
+        board.getSquare(rowStart, colStart).setPiece(null);
     }
 
     static class PawnEnPassantMove extends Move {
         PawnEnPassantMove(Square startingSquare, Square endingSquare, Piece removedPiece) {
             super(startingSquare, endingSquare);
             super.setRemovedPiece(removedPiece);
+        }
+    }
+
+    static class CastlingMove extends Move {
+
+        private int rookColStart;
+        private int rookRowStart;
+        private int rookColEnd;
+        private int rookRowEnd;
+
+        private Piece rookPiece;
+
+        CastlingMove(Square kingStartingSquare, Square kingEndingSquare, Square rookStartingSquare, Square rookEndingSquare) {
+            super(kingStartingSquare, kingEndingSquare);
+            rookColStart = rookStartingSquare.getCol();
+            rookRowStart = rookStartingSquare.getRow();
+            rookPiece = rookStartingSquare.getPiece();
+            rookColEnd = rookEndingSquare.getCol();
+            rookRowEnd = rookEndingSquare.getRow();
+        }
+
+        @Override
+        void makeMove(Board board) {
+            super.makeMove(board);
+            board.getSquare(rookRowEnd, rookColEnd).setPiece(rookPiece);
+            board.getSquare(rookRowStart, rookColStart).setPiece(null);
         }
     }
 

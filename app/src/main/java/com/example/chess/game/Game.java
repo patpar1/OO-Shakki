@@ -71,7 +71,7 @@ public class Game {
             }
 
             moves.add(playerMove);
-            board.makeMove(playerMove);
+            playerMove.makeMove(board);
 
             getCurrentPlayer().setCheck(false);
             resetEnPassant();

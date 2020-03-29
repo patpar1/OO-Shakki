@@ -5,6 +5,7 @@ import com.example.chess.game.Game;
 import com.example.chess.game.Square;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Pawn extends Piece {
 
@@ -21,10 +22,15 @@ public class Pawn extends Piece {
 
     private int[][] getMoveCandidates() {
         int[][] playerCandidates = new int[4][2];
-        if (!isWhite()) {
+        if (isWhite()) {
+            for (int i = 0; i < moveCandidates.length; i++) {
+                playerCandidates[i][0] = moveCandidates[i][0];
+                playerCandidates[i][1] = moveCandidates[i][1];
+            }
+        } else {
             for (int i = 0; i < moveCandidates.length; i++) {
                 playerCandidates[i][0] = moveCandidates[i][0] * -1;
-                playerCandidates[i][1] = moveCandidates[i][0] * -1;
+                playerCandidates[i][1] = moveCandidates[i][1] * -1;
             }
         }
 

@@ -175,6 +175,31 @@ class Player {
 
         chosenSquare.getPiece().hasMoved();
 
+        // En passant
+        if (chosenSquare.getPiece() instanceof Pawn) {
+            // White pawn
+            if (chosenSquare.getRow() - destinationSquare.getRow() == 2) {
+                Game.setEnPassantTarget(board.getSquare(chosenSquare.getRow() - 1, chosenSquare.getCol()));
+            }
+            // Black pawn
+            if (chosenSquare.getRow() - destinationSquare.getRow() == -2) {
+                Game.setEnPassantTarget(board.getSquare(chosenSquare.getRow() + 1, chosenSquare.getCol()));
+            }
+
+            // Check en passant
+            if (destinationSquare.equals(Game.getEnPassantTarget())) {
+                Square removedSquare;
+                if (chosenSquare.getPiece().isWhite()) {
+                    removedSquare = board.getSquare(destinationSquare.getRow() + 1, destinationSquare.getCol());
+                } else {
+                    removedSquare = board.getSquare(destinationSquare.getRow() - 1, destinationSquare.getCol());
+                }
+                Piece removedPiece = removedSquare.getPiece();
+                removedSquare.setPiece(null);
+                return new Move.PawnEnPassantMove(chosenSquare, destinationSquare, removedPiece);
+            }
+        }
+
         return new Move(chosenSquare, destinationSquare);
     }
 

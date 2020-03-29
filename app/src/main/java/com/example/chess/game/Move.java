@@ -70,4 +70,11 @@ public class Move {
         this.isCastle = isCastle;
     }
 
+    static class PawnEnPassantMove extends Move {
+        PawnEnPassantMove(Square startingSquare, Square endingSquare, Piece removedPiece) {
+            super(startingSquare, endingSquare);
+            super.setRemovedPiece(removedPiece);
+        }
+    }
+
 }

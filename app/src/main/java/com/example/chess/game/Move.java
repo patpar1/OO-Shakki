@@ -12,10 +12,16 @@ public class Move {
     private Piece movingPiece;
     private Piece removedPiece;
 
-    private boolean isCheck;
-    private boolean isStalemate;
+    public Move(int colStart, int rowStart, int colEnd, int rowEnd, Piece movingPiece, Piece removedPiece) {
+        this.colStart = colStart;
+        this.rowStart = rowStart;
+        this.colEnd = colEnd;
+        this.rowEnd = rowEnd;
+        this.movingPiece = movingPiece;
+        this.removedPiece = removedPiece;
+    }
 
-    Move(Square startingSquare, Square endingSquare) {
+    public Move(Square startingSquare, Square endingSquare) {
         colStart = startingSquare.getCol();
         rowStart = startingSquare.getRow();
         movingPiece = startingSquare.getPiece();
@@ -24,28 +30,32 @@ public class Move {
         removedPiece = endingSquare.getPiece();
     }
 
-    int getColStart() {
-        return colStart;
-    }
-    int getRowStart() {
-        return rowStart;
-    }
     int getColEnd() {
         return colEnd;
     }
+
     int getRowEnd() {
         return rowEnd;
+    }
+
+    int getColStart() {
+        return colStart;
+    }
+
+    int getRowStart() {
+        return rowStart;
     }
 
     Piece getMovingPiece() {
         return movingPiece;
     }
-    Piece getRemovedPiece() {
-        return removedPiece;
-    }
 
     void setRemovedPiece(Piece removedPiece) {
         this.removedPiece = removedPiece;
+    }
+
+    Move copy() {
+        return new Move(colStart, rowStart, colEnd, rowEnd, movingPiece, removedPiece);
     }
 
     void makeMove(Board board) {
@@ -53,14 +63,27 @@ public class Move {
         board.getSquare(rowStart, colStart).setPiece(null);
     }
 
-    static class PawnEnPassantMove extends Move {
-        PawnEnPassantMove(Square startingSquare, Square endingSquare, Piece removedPiece) {
+    public static class PawnEnPassantMove extends Move {
+        public PawnEnPassantMove(Square startingSquare, Square endingSquare) {
             super(startingSquare, endingSquare);
-            super.setRemovedPiece(removedPiece);
+        }
+
+        @Override
+        void makeMove(Board board) {
+            super.makeMove(board);
+            Square removedSquare;
+            if (super.movingPiece.isWhite()) {
+                removedSquare = board.getSquare(getRowEnd() + 1, getColEnd());
+
+            } else {
+                removedSquare = board.getSquare(getRowEnd() - 1, getColEnd());
+            }
+            super.setRemovedPiece(removedSquare.getPiece());
+            removedSquare.setPiece(null);
         }
     }
 
-    static class CastlingMove extends Move {
+    public static class CastlingMove extends Move {
 
         private int rookColStart;
         private int rookRowStart;

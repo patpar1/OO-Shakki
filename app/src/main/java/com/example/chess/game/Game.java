@@ -12,7 +12,7 @@ public class Game {
     private Player blackPlayer;
 
     private static Square enPassantTarget;
-    private boolean clearEnPassant;
+    private static Player enPassantTargetPlayer;
 
     public Game() {
         board = new Board();
@@ -23,7 +23,7 @@ public class Game {
         blackPlayer = new Player(false);
 
         enPassantTarget = null;
-        clearEnPassant = false;
+        enPassantTargetPlayer = null;
     }
 
     public static Square getEnPassantTarget() {
@@ -32,6 +32,14 @@ public class Game {
 
     public static void setEnPassantTarget(Square enPassantTarget) {
         Game.enPassantTarget = enPassantTarget;
+    }
+
+    public static Player isEnPassantTargetPlayer() {
+        return enPassantTargetPlayer;
+    }
+
+    public static void setEnPassantTargetPlayer(Player enPassantTargetPlayer) {
+        Game.enPassantTargetPlayer = enPassantTargetPlayer;
     }
 
     public ArrayList<Move> getMoves() {
@@ -61,6 +69,10 @@ public class Game {
 
         while (i++ < maxLoops) {
 
+            if (enPassantTarget != null) {
+                System.out.println("En passant target: " + enPassantTarget);
+            }
+
             if ((gameState = checkGameState()) != 0) {
                 return gameState;
             }
@@ -73,6 +85,8 @@ public class Game {
             moves.add(playerMove);
             playerMove.makeMove(board);
 
+            playerMove.getMovingPiece().hasMoved();
+
             getCurrentPlayer().setCheck(false);
             resetEnPassant();
 
@@ -83,25 +97,21 @@ public class Game {
     }
 
     private void resetEnPassant() {
-        if (enPassantTarget != null) {
-            if (clearEnPassant) {
-                enPassantTarget = null;
-                clearEnPassant = false;
-            } else {
-                clearEnPassant = true;
-            }
+        if (enPassantTarget != null && enPassantTargetPlayer != getCurrentPlayer()) {
+            setEnPassantTarget(null);
+            setEnPassantTargetPlayer(null);
         }
     }
 
     private int checkGameState() {
 
-        ArrayList<Square> currentPlayerSquares = new ArrayList<>();
+        ArrayList<Move> currentPlayerMoves = new ArrayList<>();
         for (Square r : board.getPlayerSquares(whiteTurn)) {
-            currentPlayerSquares.addAll(getCurrentPlayer().getLegalMoves(board, r));
+            currentPlayerMoves.addAll(getCurrentPlayer().getLegalMoves(board, r));
         }
 
         boolean check = board.isCheck(getCurrentPlayer());
-        boolean stalemate = currentPlayerSquares.size() == 0;
+        boolean stalemate = currentPlayerMoves.size() == 0;
 
         if (check && stalemate) {
             return !whiteTurn ? 1 : 2;

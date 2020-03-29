@@ -1,7 +1,7 @@
 package com.example.chess.game.pieces;
 
 import com.example.chess.game.Board;
-import com.example.chess.game.Square;
+import com.example.chess.game.Move;
 
 import java.util.ArrayList;
 
@@ -23,8 +23,8 @@ public class Queen extends Piece {
     }
 
     @Override
-    public ArrayList<Square> legalMoves(Board board, int row, int col) {
-        ArrayList<Square> moveArray = new ArrayList<Square>();
+    public ArrayList<Move> legalMoves(Board board, int row, int col) {
+        ArrayList<Move> moveArray = new ArrayList<>();
         for (int[] direction : moveVectors) {
             int[] moveCandidate = {row, col};
             while (true) {
@@ -37,11 +37,11 @@ public class Queen extends Piece {
                     if (this.isWhite() == board.getSquare(moveCandidate[0], moveCandidate[1]).getPiece().isWhite()) {
                         break;
                     } else {
-                        moveArray.add(board.getSquare(moveCandidate[0] , moveCandidate[1]));
+                        moveArray.add(new Move(board.getSquare(row, col), board.getSquare(moveCandidate[0] , moveCandidate[1])));
                         break;
                     }
                 }
-                moveArray.add(board.getSquare(moveCandidate[0] , moveCandidate[1]));
+                moveArray.add(new Move(board.getSquare(row, col), board.getSquare(moveCandidate[0] , moveCandidate[1])));
             }
         }
         return moveArray;

@@ -2,6 +2,7 @@ package com.example.chess.game.pieces;
 
 import com.example.chess.game.Board;
 import com.example.chess.game.Game;
+import com.example.chess.game.Move;
 import com.example.chess.game.Square;
 
 import java.util.ArrayList;
@@ -38,15 +39,15 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public ArrayList<Square> legalMoves(Board board, int row, int col) {
-        ArrayList<Square> moveArray = new ArrayList<>();
+    public ArrayList<Move> legalMoves(Board board, int row, int col) {
+        ArrayList<Move> moveArray = new ArrayList<>();
         int[][] moveCandidates = getMoveCandidates();
 
         // Straight move
         int[] moveCandidate = {(row + moveCandidates[0][0]), col + moveCandidates[0][1]};
         if (isOnBoard(moveCandidate[0], moveCandidate[1])) {
             if (!board.getSquare(moveCandidate[0], moveCandidate[1]).hasPiece()) {
-                moveArray.add(board.getSquare(moveCandidate[0] , moveCandidate[1]));
+                moveArray.add(new Move(board.getSquare(row, col), board.getSquare(moveCandidate[0] , moveCandidate[1])));
 
                 // Double move
                 if (!this.isMoved()) {
@@ -54,7 +55,7 @@ public class Pawn extends Piece {
                             (col + moveCandidates[1][1])};
                     if (isOnBoard(doubleMoveCandidate[0], doubleMoveCandidate[1])) {
                         if (!board.getSquare(doubleMoveCandidate[0], doubleMoveCandidate[1]).hasPiece()) {
-                            moveArray.add(board.getSquare(doubleMoveCandidate[0] , doubleMoveCandidate[1]));
+                            moveArray.add(new Move(board.getSquare(row, col), board.getSquare(doubleMoveCandidate[0] , doubleMoveCandidate[1])));
                         }
                     }
                 }
@@ -65,10 +66,20 @@ public class Pawn extends Piece {
         for (int i = 2; i < 4; i++) {
             int[] attackMoveCandidate = {(row + moveCandidates[i][0]), col + moveCandidates[i][1]};
             if (isOnBoard(attackMoveCandidate[0], attackMoveCandidate[1])) {
+
+                // Basic attack
                 if ((board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]).hasPiece()
-                && this.isWhite() != board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]).getPiece().isWhite())
-                || board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]).equals(Game.getEnPassantTarget())) {
-                    moveArray.add(board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]));
+                && this.isWhite() != board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]).getPiece().isWhite())) {
+                    moveArray.add(new Move(board.getSquare(row, col), board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1])));
+                }
+
+                // En Passant
+                if (board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]).equals(Game.getEnPassantTarget())) {
+                    if (this.isWhite()) {
+                        moveArray.add(new Move.PawnEnPassantMove(board.getSquare(row, col), board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1])));
+                    } else {
+                        moveArray.add(new Move.PawnEnPassantMove(board.getSquare(row, col), board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1])));
+                    }
                 }
             }
         }

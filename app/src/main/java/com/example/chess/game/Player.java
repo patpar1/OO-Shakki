@@ -113,36 +113,41 @@ class Player {
         return chosenSquare;
     }
 
-    ArrayList<Square> getLegalMoves(Board board, Square chosenSquare) {
+    ArrayList<Move> getLegalMoves(Board board, Square chosenSquare) {
 
-        ArrayList<Square> legalSquares = new ArrayList<>();
-        ArrayList<Square> squareCandidates = chosenSquare.getPiece().legalMoves(board, chosenSquare);
+        ArrayList<Move> legalMoveCandidates = new ArrayList<>();
+        ArrayList<Move> moveCandidates = chosenSquare.getPiece().legalMoves(board, chosenSquare);
 
-        if (squareCandidates == null) {
-            return legalSquares;
+        if (moveCandidates == null) {
+            return legalMoveCandidates;
         }
 
-        for (Square destinationSquareCandidate : squareCandidates) {
+        for (Move moveCandidate : moveCandidates) {
             Board copyBoard = board.copy();
-            Square chosenSquareCopy = copyBoard.getSquare(chosenSquare.getRow(), chosenSquare.getCol());
-            Square destinationSquareCandidateCopy = copyBoard.getSquare(destinationSquareCandidate.getRow(), destinationSquareCandidate.getCol());
-            (new Move(chosenSquareCopy, destinationSquareCandidateCopy)).makeMove(copyBoard);
+            Move copyMove = moveCandidate.copy();
+            copyMove.makeMove(copyBoard);
             if (!copyBoard.isCheck(this)) {
-                legalSquares.add(destinationSquareCandidate);
+                legalMoveCandidates.add(moveCandidate);
             }
         }
 
-        return legalSquares;
+        return legalMoveCandidates;
     }
 
-    private Square getDestinationSquare(Board board, Square chosenSquare) {
+    private Move getChosenMove(Board board, Square chosenSquare) {
 
+        Move chosenMove = null;
         Square destinationSquare;
-        ArrayList<Square> legalSquares = getLegalMoves(board, chosenSquare);
+        ArrayList<Move> legalMoves = getLegalMoves(board, chosenSquare);
 
-        if (legalSquares.size() == 0) {
+        if (legalMoves.size() == 0) {
             System.out.println("This piece has no legal moves!");
             return null;
+        }
+
+        ArrayList<Square> legalSquares = new ArrayList<>();
+        for (Move m : legalMoves) {
+            legalSquares.add(board.getSquare(m.getRowEnd(), m.getColEnd()));
         }
 
         System.out.println(board.printBoard(legalSquares));
@@ -155,7 +160,13 @@ class Player {
             return null;
         }
 
-        return destinationSquare;
+        for (Move m : legalMoves) {
+            if (board.getSquare(m.getRowEnd(), m.getColEnd()) == destinationSquare) {
+                chosenMove = m;
+            }
+        }
+
+        return chosenMove;
     }
 
     Move constructMove(Board board) {
@@ -168,39 +179,24 @@ class Player {
             return null;
         }
 
-        Square destinationSquare = getDestinationSquare(board, chosenSquare);
-        if (destinationSquare == null) {
+        Move chosenMove = getChosenMove(board, chosenSquare);
+        if (chosenMove == null) {
             return null;
         }
 
-        chosenSquare.getPiece().hasMoved();
-
-        // En passant
+        // En Passant
         if (chosenSquare.getPiece() instanceof Pawn) {
             // White pawn
-            if (chosenSquare.getRow() - destinationSquare.getRow() == 2) {
+            if (chosenMove.getRowEnd() - chosenMove.getRowStart() == -2) {
                 Game.setEnPassantTarget(board.getSquare(chosenSquare.getRow() - 1, chosenSquare.getCol()));
-            }
-            // Black pawn
-            if (chosenSquare.getRow() - destinationSquare.getRow() == -2) {
+                Game.setEnPassantTargetPlayer(this);
+            } else if (chosenMove.getRowEnd() - chosenMove.getRowStart() == 2) {
                 Game.setEnPassantTarget(board.getSquare(chosenSquare.getRow() + 1, chosenSquare.getCol()));
-            }
-
-            // Check en passant
-            if (destinationSquare.equals(Game.getEnPassantTarget())) {
-                Square removedSquare;
-                if (chosenSquare.getPiece().isWhite()) {
-                    removedSquare = board.getSquare(destinationSquare.getRow() + 1, destinationSquare.getCol());
-                } else {
-                    removedSquare = board.getSquare(destinationSquare.getRow() - 1, destinationSquare.getCol());
-                }
-                Piece removedPiece = removedSquare.getPiece();
-                removedSquare.setPiece(null);
-                return new Move.PawnEnPassantMove(chosenSquare, destinationSquare, removedPiece);
+                Game.setEnPassantTargetPlayer(this);
             }
         }
 
-        return new Move(chosenSquare, destinationSquare);
+        return chosenMove;
     }
 
 }

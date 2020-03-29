@@ -83,8 +83,12 @@ public class Board {
         }
     }
 
+    public Board(Square[][] squares) {
+        this.squares = squares;
+    }
+
     Board copy() {
-        Board b = new Board();
+        Board b = new Board(new Square[8][8]);
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 b.squares[j][i] = squares[j][i].copy();
@@ -140,11 +144,12 @@ public class Board {
         }
 
         ArrayList<Square> enemySquares = new ArrayList<>();
-        ArrayList<Square> pieceMoveCandidates;
+        ArrayList<Square> pieceSquareCandidates = new ArrayList<>();
         for (Square r : getPlayerSquares(!player.isWhite())) {
-            if ((pieceMoveCandidates = r.getPiece().legalMoves(this, r)) != null) {
-                enemySquares.addAll(pieceMoveCandidates);
+            for (Move m : r.getPiece().legalMoves(this, r)) {
+                pieceSquareCandidates.add(getSquare(m.getRowEnd(), m.getColEnd()));
             }
+            enemySquares.addAll(pieceSquareCandidates);
         }
 
         return enemySquares.contains(getSquare(kingY, kingX));

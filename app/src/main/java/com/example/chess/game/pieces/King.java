@@ -105,10 +105,7 @@ public class King extends Piece {
                 rookEnd = board.getSquare(row, col + 1);
             }
 
-            moveArray.add(new Move.CastlingMove(board.getSquare(row, col),
-                    kingEnd,
-                    rookStart,
-                    rookEnd));
+            moveArray.add(new Move.CastlingMove(board.getSquare(row, col), kingEnd, rookStart, rookEnd));
         }
 
         return moveArray;

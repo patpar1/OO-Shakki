@@ -8,8 +8,8 @@ public class Game {
     private ArrayList<Move> moves;
     private boolean whiteTurn;
 
-    private static Player whitePlayer;
-    private static Player blackPlayer;
+    private Player whitePlayer;
+    private Player blackPlayer;
 
     private static Square enPassantTarget;
     private static Player enPassantTargetPlayer;
@@ -46,14 +46,6 @@ public class Game {
         return getPlayer(whiteTurn);
     }
 
-    static Player getEnemyPlayer(Player currentPlayer) {
-        if (currentPlayer == whitePlayer) {
-            return blackPlayer;
-        } else {
-            return whitePlayer;
-        }
-    }
-
     private Player getPlayer(boolean playerTurn) {
         if (playerTurn) {
             return whitePlayer;
@@ -72,10 +64,6 @@ public class Game {
         int gameState;
 
         while (i++ < maxLoops) {
-
-            if (enPassantTarget != null) {
-                System.out.println("En passant target: " + enPassantTarget);
-            }
 
             if ((gameState = checkGameState()) != 0) {
                 return gameState;

@@ -92,7 +92,7 @@ public class Move {
 
         private Piece rookPiece;
 
-        CastlingMove(Square kingStartingSquare, Square kingEndingSquare, Square rookStartingSquare, Square rookEndingSquare) {
+        public CastlingMove(Square kingStartingSquare, Square kingEndingSquare, Square rookStartingSquare, Square rookEndingSquare) {
             super(kingStartingSquare, kingEndingSquare);
             rookColStart = rookStartingSquare.getCol();
             rookRowStart = rookStartingSquare.getRow();

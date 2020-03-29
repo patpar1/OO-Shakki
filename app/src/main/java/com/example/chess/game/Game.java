@@ -16,7 +16,7 @@ public class Game {
 
     public Game() {
         board = new Board();
-        moves = new ArrayList<Move>();
+        moves = new ArrayList<>();
         whiteTurn = true;
 
         whitePlayer = new Player(true);
@@ -30,15 +30,11 @@ public class Game {
         return enPassantTarget;
     }
 
-    public static void setEnPassantTarget(Square enPassantTarget) {
+    static void setEnPassantTarget(Square enPassantTarget) {
         Game.enPassantTarget = enPassantTarget;
     }
 
-    public static Player isEnPassantTargetPlayer() {
-        return enPassantTargetPlayer;
-    }
-
-    public static void setEnPassantTargetPlayer(Player enPassantTargetPlayer) {
+    static void setEnPassantTargetPlayer(Player enPassantTargetPlayer) {
         Game.enPassantTargetPlayer = enPassantTargetPlayer;
     }
 

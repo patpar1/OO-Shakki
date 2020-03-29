@@ -11,14 +11,13 @@ class Player {
     private boolean isWhite;
     private boolean isCheck;
 
-    private boolean kingSideCastle;
-    private boolean queenSideCastle;
-
     Player(boolean isWhite) {
         this.isWhite = isWhite;
         this.isCheck = false;
-        this.kingSideCastle = true;
-        this.queenSideCastle = true;
+    }
+
+    public boolean isCheck() {
+        return isCheck;
     }
 
     void setCheck(boolean isCheck) {
@@ -27,22 +26,6 @@ class Player {
 
     boolean isWhite() {
         return isWhite;
-    }
-
-    public boolean isKingSideCastle() {
-        return kingSideCastle;
-    }
-
-    public void setKingSideCastle(boolean kingSideCastle) {
-        this.kingSideCastle = kingSideCastle;
-    }
-
-    public boolean isQueenSideCastle() {
-        return queenSideCastle;
-    }
-
-    public void setQueenSideCastle(boolean queenSideCastle) {
-        this.queenSideCastle = queenSideCastle;
     }
 
     private Square getSquare(Board board) {

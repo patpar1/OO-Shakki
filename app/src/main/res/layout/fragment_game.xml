@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#393734"
+    tools:context=".ui.main.MainFragment">
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="8"
+        android:elevation="4dp"
+        android:rowCount="8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <View
+            android:id="@+id/p56"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p57"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p58"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p59"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p60"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p61"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p62"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p63"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p48"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p49"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p50"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p51"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p52"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p53"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p54"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p55"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p40"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p41"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p42"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p43"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p44"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p45"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p46"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p47"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p32"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p33"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p34"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p35"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p36"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p37"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p38"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p39"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p24"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p25"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p26"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p27"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p28"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p29"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p30"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p31"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p16"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p17"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p18"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p19"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p20"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p21"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p22"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p23"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p08"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p09"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p10"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p11"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p12"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p13"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p14"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p15"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p00"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p01"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p02"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p03"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p04"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p05"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+        <View
+            android:id="@+id/p06"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/dark" />
+
+        <View
+            android:id="@+id/p07"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/light" />
+
+    </GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

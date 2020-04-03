@@ -1,5 +1,6 @@
 package com.example.chess.game.pieces;
 
+import com.example.chess.R;
 import com.example.chess.game.Board;
 import com.example.chess.game.Game;
 import com.example.chess.game.Move;
@@ -85,6 +86,10 @@ public class Pawn extends Piece {
         }
 
         return moveArray;
+    }
+
+    public int getDrawable() {
+        return isWhite() ? R.drawable.wp : R.drawable.bp;
     }
 
     @Override

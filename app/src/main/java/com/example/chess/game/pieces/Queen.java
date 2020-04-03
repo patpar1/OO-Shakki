@@ -1,5 +1,6 @@
 package com.example.chess.game.pieces;
 
+import com.example.chess.R;
 import com.example.chess.game.Board;
 import com.example.chess.game.Move;
 
@@ -45,6 +46,10 @@ public class Queen extends Piece {
             }
         }
         return moveArray;
+    }
+
+    public int getDrawable() {
+        return isWhite() ? R.drawable.wq : R.drawable.bq;
     }
 
     @Override

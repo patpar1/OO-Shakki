@@ -10,6 +10,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 
 import com.example.chess.game.Game;
 import com.google.android.material.navigation.NavigationView;
@@ -49,15 +50,4 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-
-    /*
-    public static void main(String[] args) {
-        int maxTurns = 100;
-
-        Game game = new Game();
-        int result = game.gameLoop(maxTurns);
-        System.out.println(result);
-    }
-
-     */
 }

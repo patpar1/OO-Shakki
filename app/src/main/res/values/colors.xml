@@ -3,4 +3,10 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+
+    // Board colors
+    <color name="tileLight">#ededd0</color>
+    <color name="tileDark">#74964e</color>
+    <color name="move_hint">#33000000</color>
+
 </resources>

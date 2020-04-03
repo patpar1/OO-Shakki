@@ -1,5 +1,6 @@
 package com.example.chess.game.pieces;
 
+import com.example.chess.R;
 import com.example.chess.game.Board;
 import com.example.chess.game.Move;
 
@@ -39,6 +40,10 @@ public class Knight extends Piece {
             moveArray.add(new Move(board.getSquare(row, col), board.getSquare(moveCandidate[0] , moveCandidate[1])));
         }
         return moveArray;
+    }
+
+    public int getDrawable() {
+        return isWhite() ? R.drawable.wn : R.drawable.bn;
     }
 
     @Override

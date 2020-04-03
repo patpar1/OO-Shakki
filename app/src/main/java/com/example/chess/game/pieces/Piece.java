@@ -18,6 +18,8 @@ public abstract class Piece {
     // Calculates legal moves. Returns ArrayList of legal moves.
     public abstract ArrayList<Move> legalMoves(Board board, int row, int col);
 
+    public abstract int getDrawable();
+
     public ArrayList<Move> legalMoves(Board board, Square square) {
         return legalMoves(board, square.getRow(), square.getCol());
     }

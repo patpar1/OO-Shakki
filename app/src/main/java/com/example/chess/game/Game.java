@@ -38,6 +38,10 @@ public class Game {
         Game.enPassantTargetPlayer = enPassantTargetPlayer;
     }
 
+    public Board getBoard() {
+        return board;
+    }
+
     public ArrayList<Move> getMoves() {
         return moves;
     }

@@ -88,10 +88,14 @@ public class Game {
             return;
         }
         if (!checkChosenSquareValidity()) {
-            chosenSquare = null;
+            resetMove();
             return;
         }
         if (destinationSquare == null) {
+            return;
+        }
+        if (chosenSquare == destinationSquare) {
+            resetMove();
             return;
         }
         constructMove();

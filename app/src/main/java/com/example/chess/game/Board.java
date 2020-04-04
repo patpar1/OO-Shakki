@@ -160,7 +160,7 @@ public class Board {
 
     }
 
-    String printBoard(ArrayList<Square> legalSquares) {
+    private String printBoard(ArrayList<Square> legalSquares) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("\n");

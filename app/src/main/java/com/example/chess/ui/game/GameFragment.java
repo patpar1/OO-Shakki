@@ -1,5 +1,7 @@
 package com.example.chess.ui.game;
 
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,13 +49,13 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Square sq = drawableTiles.get(v);
-        game.setClickEvent(sq);
+        game.handleSquareClickEvent(drawableTiles.get(v));
+
+       ArrayList<Square> moveHints = null;
         if (game.getChosenSquare() != null) {
-            drawGameBoard(sq);
-        } else {
-            drawGameBoard(null);
+            moveHints = game.getCurrentMoveSquares();
         }
+        drawGameBoard(moveHints);
     }
 
     private void initializeDrawableTiles() {
@@ -72,26 +74,25 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void drawGameBoard(Square sq) {
+    private void drawGameBoard(ArrayList<Square> moveHints) {
         Square s;
         ImageView iv;
-        ArrayList<Square> squares = new ArrayList<>();
+        LayerDrawable ld;
 
-        if (sq != null) {
-            squares = game.getCurrentLegalMoves(sq);
-        }
+        for (Map.Entry entry : drawableTiles.entrySet()) {
+            s = (Square) entry.getValue();
+            iv = (ImageView) entry.getKey();
+            ld = new LayerDrawable(new Drawable[]{});
 
-        for (Map.Entry e : drawableTiles.entrySet()) {
-            s = (Square) e.getValue();
-            iv = (ImageView) e.getKey();
-
-            if (squares.contains(sq)) {
-                iv.setImageResource(s.getPiece().getDrawable());
-            } else if (s.getPiece() == null) {
-                iv.setImageDrawable(null);
-            } else {
-                iv.setImageResource(s.getPiece().getDrawable());
+            if (s.getPiece() != null) {
+                ld.addLayer(getResources().getDrawable(s.getPiece().getDrawable()));
             }
+
+            if (moveHints != null && moveHints.contains(s)) {
+                ld.addLayer(getResources().getDrawable(R.drawable.legal_move_hint));
+            }
+
+            iv.setImageDrawable(ld);
         }
     }
 }

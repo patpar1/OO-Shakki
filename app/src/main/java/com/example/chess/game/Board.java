@@ -189,7 +189,7 @@ public class Board {
         return sb.toString();
     }
 
-    String printBoard() {
+    public String printBoard() {
         return printBoard(null);
     }
 

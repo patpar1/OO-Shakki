@@ -4,7 +4,6 @@ import com.example.chess.game.pieces.Pawn;
 import com.example.chess.game.pieces.Piece;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 class Player {
 
@@ -28,6 +27,8 @@ class Player {
         return isWhite;
     }
 
+    /*
+
     private Square getSquare(Board board) {
         String squareInput = null;
         int[] coordinates = new int[0];
@@ -49,6 +50,9 @@ class Player {
 
     }
 
+     */
+
+    /*
     private int[] transformTextToCoordinates(String s) {
         final String columns = "abcdefgh";
 
@@ -72,39 +76,41 @@ class Player {
         return new int[] {i1, i0};
     }
 
-    private Square getChosenSquare(Board board) {
+     */
 
-        ArrayList<Piece> pieces;
+    boolean checkChosenSquare(Board board, Square chosenSquare) {
 
-        pieces = board.getPlayerPieces(isWhite);
+        ArrayList<Piece> pieces = board.getPlayerPieces(isWhite);
 
-        System.out.print("Choose piece: ");
-
-        Square chosenSquare = getSquare(board);
         if (chosenSquare == null) {
-            return null;
-        }
-
-        if (chosenSquare.getPiece() == null) {
+            return false;
+        } else if (chosenSquare.getPiece() == null) {
             System.out.println("There is no piece on the square!");
-            return null;
+            return false;
         } else if (!pieces.contains(chosenSquare.getPiece())) {
             System.out.println("You can't move this piece!");
-            return null;
+            return false;
         }
 
-        return chosenSquare;
+        return true;
     }
 
     ArrayList<Move> getLegalMoves(Board board, Square chosenSquare) {
+        ArrayList<Move> legalMoveCandidates;
+        ArrayList<Move> moveCandidates;
+        boolean isInBetween;
 
-        ArrayList<Move> legalMoveCandidates = new ArrayList<>();
-        ArrayList<Move> moveCandidates = chosenSquare.getPiece().legalMoves(board, chosenSquare);
-        boolean isInBetween = false;
+        legalMoveCandidates = new ArrayList<>();
+        if (chosenSquare == null) {
+            return legalMoveCandidates;
+        }
 
+        moveCandidates = chosenSquare.getPiece().legalMoves(board, chosenSquare);
         if (moveCandidates == null) {
             return legalMoveCandidates;
         }
+
+        isInBetween = false;
 
         for (Move moveCandidate : moveCandidates) {
             Board copyBoard = board.copy();
@@ -149,10 +155,9 @@ class Player {
         return legalMoveCandidates;
     }
 
-    private Move getChosenMove(Board board, Square chosenSquare) {
+    Move getChosenMove(Board board, Square chosenSquare, Square destinationSquare) {
 
         Move chosenMove = null;
-        Square destinationSquare;
         ArrayList<Move> legalMoves = getLegalMoves(board, chosenSquare);
 
         if (legalMoves.size() == 0) {
@@ -165,11 +170,6 @@ class Player {
             legalSquares.add(board.getSquare(m.getRowEnd(), m.getColEnd()));
         }
 
-        System.out.println(board.printBoard(legalSquares));
-
-        System.out.print("Choose destination square: ");
-        destinationSquare = getSquare(board);
-
         if (!legalSquares.contains(destinationSquare)) {
             System.out.println("Move is not legal!");
             return null;
@@ -181,25 +181,10 @@ class Player {
             }
         }
 
-        return chosenMove;
-    }
-
-    Move constructMove(Board board) {
-
-        System.out.println(isWhite ? "White player's turn" : "Black player's turn");
-        System.out.println(board.printBoard());
-
-        Square chosenSquare = getChosenSquare(board);
-        if (chosenSquare == null) {
-            return null;
-        }
-
-        Move chosenMove = getChosenMove(board, chosenSquare);
         if (chosenMove == null) {
             return null;
         }
 
-        // En Passant
         if (chosenSquare.getPiece() instanceof Pawn) {
             // White pawn
             if (chosenMove.getRowEnd() - chosenMove.getRowStart() == -2) {
@@ -213,5 +198,4 @@ class Player {
 
         return chosenMove;
     }
-
 }

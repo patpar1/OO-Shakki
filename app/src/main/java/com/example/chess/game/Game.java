@@ -8,6 +8,8 @@ public class Game {
     private ArrayList<Move> moves;
     private boolean whiteTurn;
 
+    private Square chosenSquare;
+
     private Player whitePlayer;
     private Player blackPlayer;
 
@@ -18,6 +20,8 @@ public class Game {
         board = new Board();
         moves = new ArrayList<>();
         whiteTurn = true;
+
+        chosenSquare = null;
 
         whitePlayer = new Player(true);
         blackPlayer = new Player(false);
@@ -46,7 +50,7 @@ public class Game {
         return moves;
     }
 
-    private Player getCurrentPlayer() {
+    public Player getCurrentPlayer() {
         return getPlayer(whiteTurn);
     }
 
@@ -58,38 +62,8 @@ public class Game {
         }
     }
 
-    public int gameLoop(int maxLoops) {
-
-        // 1 = White wins
-        // 2 = Draw
-        // 3 = Black wins
-
-        int i = 0;
-        int gameState;
-
-        while (i++ < maxLoops) {
-
-            if ((gameState = checkGameState()) != 0) {
-                return gameState;
-            }
-
-            Move playerMove = getCurrentPlayer().constructMove(board);
-            if (playerMove == null) {
-                continue;
-            }
-
-            moves.add(playerMove);
-            playerMove.makeMove(board);
-
-            playerMove.getMovingPiece().hasMoved();
-
-            getCurrentPlayer().setCheck(false);
-            resetEnPassant();
-
-            this.whiteTurn = !whiteTurn;
-        }
-
-        return 3;
+    public Square getChosenSquare() {
+        return chosenSquare;
     }
 
     private void resetEnPassant() {
@@ -99,7 +73,12 @@ public class Game {
         }
     }
 
-    private int checkGameState() {
+    private void checkGameState() {
+
+        getCurrentPlayer().setCheck(false);
+        resetEnPassant();
+
+        this.whiteTurn = !whiteTurn;
 
         ArrayList<Move> currentPlayerMoves = new ArrayList<>();
         for (Square r : board.getPlayerSquares(whiteTurn)) {
@@ -110,18 +89,47 @@ public class Game {
         boolean stalemate = currentPlayerMoves.size() == 0;
 
         if (check && stalemate) {
-            return !whiteTurn ? 1 : 2;
+            return;
         }
 
         if (stalemate) {
-            return 3;
+            return;
         }
 
         if (check) {
             getCurrentPlayer().setCheck(true);
         }
-        return 0;
     }
 
+    public void setClickEvent(Square sq) {
+        if (chosenSquare == null) {
+            if (getCurrentPlayer().checkChosenSquare(board, sq)) {
+                chosenSquare = sq;
+            }
+        } else {
+            Move playerMove = getCurrentPlayer().getChosenMove(board, chosenSquare, sq);
+            if (playerMove != null) {
+                makeMove(playerMove);
+                checkGameState();
+                chosenSquare = null;
+            }
+        }
+    }
 
+    private void makeMove(Move m) {
+        moves.add(m);
+        m.makeMove(board);
+        m.getMovingPiece().hasMoved();
+    }
+
+    public ArrayList<Square> getCurrentLegalMoves(Square chosenSquare) {
+        ArrayList<Square> squares = new ArrayList<>();
+        ArrayList<Move> legalMoves = getCurrentPlayer().getLegalMoves(board, chosenSquare);
+
+        for (Move m : legalMoves) {
+            squares.add(board.getSquare(m.getRowEnd(), m.getColEnd()));
+        }
+
+        return squares;
+    }
 }

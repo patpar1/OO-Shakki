@@ -1,12 +1,8 @@
 package com.example.chess.ui.game;
 
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.chess.R;
 import com.example.chess.game.Game;
+import com.example.chess.game.Move;
 import com.example.chess.game.Square;
 
 import java.util.ArrayList;
@@ -48,7 +45,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        drawGameBoard(null);
+        drawGameBoard(null, null);
     }
 
     @Override
@@ -59,7 +56,13 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         if (game.getChosenSquare() != null) {
             moveHints = game.getCurrentMoveSquares();
         }
-        drawGameBoard(moveHints);
+
+        Move lastMove = null;
+        ArrayList<Move> moves = game.getMoves();
+        if (moves.size() > 0) {
+            lastMove = moves.get(moves.size() - 1);
+        }
+        drawGameBoard(moveHints, lastMove);
     }
 
     private void initializeDrawableTiles() {
@@ -78,22 +81,40 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void drawGameBoard(ArrayList<Square> moveHints) {
+    private void drawGameBoard(ArrayList<Square> moveHints, Move lastMove) {
         Square s;
         ImageView iv;
         LayerDrawable ld;
+        ArrayList<Square> moveSquares = new ArrayList<>();
+        Square chosenSquare;
+
+        if (lastMove != null) {
+            moveSquares.add(game.getBoard().getSquare(lastMove.getRowStart(), lastMove.getColStart()));
+            moveSquares.add(game.getBoard().getSquare(lastMove.getRowEnd(), lastMove.getColEnd()));
+        }
 
         for (Map.Entry entry : drawableTiles.entrySet()) {
             s = (Square) entry.getValue();
             iv = (ImageView) entry.getKey();
             ld = new LayerDrawable(new Drawable[]{});
+            chosenSquare = game.getChosenSquare();
 
-            if (s.getPiece() != null) {
-                ld.addLayer(getResources().getDrawable(s.getPiece().getDrawable()));
+            if (s.equals(chosenSquare)) {
+                ld.addLayer(getResources().getDrawable(R.drawable.last_moved));
+            }
+
+            if (lastMove != null) {
+                if (moveSquares.contains(s)) {
+                    ld.addLayer(getResources().getDrawable(R.drawable.last_moved));
+                }
             }
 
             if (moveHints != null && moveHints.contains(s)) {
                 ld.addLayer(getResources().getDrawable(R.drawable.legal_move_hint));
+            }
+
+            if (s.getPiece() != null) {
+                ld.addLayer(getResources().getDrawable(s.getPiece().getDrawable()));
             }
 
             iv.setImageDrawable(ld);

@@ -30,19 +30,19 @@ public class Move {
         removedPiece = endingSquare.getPiece();
     }
 
-    int getColEnd() {
+    public int getColEnd() {
         return colEnd;
     }
 
-    int getRowEnd() {
+    public int getRowEnd() {
         return rowEnd;
     }
 
-    int getColStart() {
+    public int getColStart() {
         return colStart;
     }
 
-    int getRowStart() {
+    public int getRowStart() {
         return rowStart;
     }
 

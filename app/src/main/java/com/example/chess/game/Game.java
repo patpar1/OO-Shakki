@@ -39,6 +39,10 @@ public class Game {
         return board;
     }
 
+    public ArrayList<Move> getMoves() {
+        return moves;
+    }
+
     private Player getPlayer(boolean playerTurn) {
         if (playerTurn) {
             return whitePlayer;
@@ -75,57 +79,40 @@ public class Game {
     }
 
     public void handleSquareClickEvent(Square sq) {
+        if (sq == null) {
+            return;
+        }
+
         if (chosenSquare == null) {
+            if (sq.getPiece() == null) {
+                System.out.println("There is no piece on the square!");
+                resetMove();
+                return;
+            }
+
+            if (!board.getPlayerSquares(whiteTurn).contains(sq)) {
+                System.out.println("You can't move this piece!");
+                resetMove();
+                return;
+            }
+
             chosenSquare = sq;
-        } else {
+
+        } else { // chosenSquare != null
+            if (chosenSquare.equals(sq)) {
+                resetMove();
+                return;
+            }
+
+            if (board.getPlayerSquares(whiteTurn).contains(sq)) {
+                chosenSquare = sq;
+                return;
+            }
+
             destinationSquare = sq;
-        }
-        updateGameState();
-    }
-
-    private void updateGameState() {
-        if (chosenSquare == null) {
-            return;
-        }
-        if (!checkChosenSquareValidity()) {
-            resetMove();
-            return;
-        }
-        if (destinationSquare == null) {
-            return;
-        }
-        if (chosenSquare == destinationSquare) {
-            resetMove();
-            return;
-        }
-        constructMove();
-    }
-
-    private boolean checkChosenSquareValidity() {
-        ArrayList<Piece> pieces = board.getPlayerPieces(whiteTurn);
-
-        if (chosenSquare == null) {
-            resetMove();
-            return false;
-        } else if (chosenSquare.getPiece() == null) {
-            System.out.println("There is no piece on the square!");
-            resetMove();
-            return false;
-        } else if (!pieces.contains(chosenSquare.getPiece())) {
-            System.out.println("You can't move this piece!");
-            resetMove();
-            return false;
+            constructMove();
         }
 
-        ArrayList<Move> legalMoves = getCurrentPlayer().getLegalMoves(board, chosenSquare);
-
-        if (legalMoves.size() == 0) {
-            System.out.println("This piece has no legal moves!");
-            resetMove();
-            return false;
-        }
-
-        return true;
     }
 
     private void constructMove() {

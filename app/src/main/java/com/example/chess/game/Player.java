@@ -12,10 +12,6 @@ class Player {
         this.isCheck = false;
     }
 
-    public boolean isCheck() {
-        return isCheck;
-    }
-
     void setCheck(boolean isCheck) {
         this.isCheck = isCheck;
     }

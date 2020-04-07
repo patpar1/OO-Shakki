@@ -52,13 +52,4 @@ public class Queen extends Piece {
         return isWhite() ? R.drawable.wq : R.drawable.bq;
     }
 
-    @Override
-    public String toString() {
-        if (this.isWhite()) {
-            return "Q";
-        } else {
-            return "q";
-        }
-    }
-
 }

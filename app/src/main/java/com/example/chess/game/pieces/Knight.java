@@ -46,12 +46,4 @@ public class Knight extends Piece {
         return isWhite() ? R.drawable.wn : R.drawable.bn;
     }
 
-    @Override
-    public String toString() {
-        if (this.isWhite()) {
-            return "K";
-        } else {
-            return "k";
-        }
-    }
 }

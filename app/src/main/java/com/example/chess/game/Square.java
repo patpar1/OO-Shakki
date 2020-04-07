@@ -8,13 +8,13 @@ public class Square {
     private int col;
     private int row;
 
-    public Square(int row, int col) {
+    Square(int row, int col) {
         piece = null;
         this.col = col;
         this.row = row;
     }
 
-    public Square(Piece piece, int row, int col) {
+    Square(Piece piece, int row, int col) {
         this.piece = piece;
         this.col = col;
         this.row = row;

@@ -1,7 +1,6 @@
 package com.example.chess.game;
 
 import com.example.chess.game.pieces.Pawn;
-import com.example.chess.game.pieces.Piece;
 
 import java.util.ArrayList;
 

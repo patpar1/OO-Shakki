@@ -116,12 +116,4 @@ public class King extends Piece {
         return isWhite() ? R.drawable.wk : R.drawable.bk;
     }
 
-    @Override
-    public String toString() {
-        if (this.isWhite()) {
-            return "K";
-        } else {
-            return "k";
-        }
-    }
 }

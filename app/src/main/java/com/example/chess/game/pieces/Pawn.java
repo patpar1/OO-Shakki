@@ -92,13 +92,4 @@ public class Pawn extends Piece {
         return isWhite() ? R.drawable.wp : R.drawable.bp;
     }
 
-    @Override
-    public String toString() {
-        if (this.isWhite()) {
-            return "P";
-        } else {
-            return "p";
-        }
-    }
-
 }

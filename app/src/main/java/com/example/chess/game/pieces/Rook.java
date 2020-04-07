@@ -48,12 +48,4 @@ public class Rook extends Piece {
         return isWhite() ? R.drawable.wr : R.drawable.br;
     }
 
-    @Override
-    public String toString() {
-       if (this.isWhite()) {
-           return "R";
-       } else {
-           return "r";
-       }
-    }
 }

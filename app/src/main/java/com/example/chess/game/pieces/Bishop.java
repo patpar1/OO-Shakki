@@ -47,13 +47,4 @@ public class Bishop extends Piece {
     public int getDrawable() {
         return isWhite() ? R.drawable.wb : R.drawable.bb;
     }
-
-    @Override
-    public String toString() {
-        if (this.isWhite()) {
-            return "B";
-        } else {
-            return "b";
-        }
-    }
 }

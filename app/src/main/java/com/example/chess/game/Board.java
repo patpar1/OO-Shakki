@@ -24,7 +24,7 @@ public class Board {
                     a b c d e f g h
 
             P = Pawn
-            K = Knight
+            N = Knight
             B = Bishop
             R = Rook
             Q = Queen
@@ -116,14 +116,6 @@ public class Board {
         return r;
     }
 
-    ArrayList<Piece> getPlayerPieces(boolean isWhite) {
-        ArrayList<Piece> pieces = new ArrayList<>();
-        for (Square s : getPlayerSquares(isWhite)) {
-            pieces.add(s.getPiece());
-        }
-        return pieces;
-    }
-
     boolean squareInEnemyLine(Player currentPlayer, Square square) {
         ArrayList<Square> enemySquares = new ArrayList<>();
         ArrayList<Square> pieceSquareCandidates = new ArrayList<>();
@@ -157,40 +149,6 @@ public class Board {
         }
 
         return squareInEnemyLine(player, getSquare(kingY, kingX));
-
-    }
-
-    private String printBoard(ArrayList<Square> legalSquares) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("\n");
-
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            sb.append(8 - i).append("\t");
-
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                if (legalSquares != null) {
-                    if (legalSquares.contains(this.getSquare(i, j))) {
-                        sb.append('*').append(" ");
-                        continue;
-                    }
-                }
-                if (this.getSquare(i, j).getPiece() == null) {
-                    sb.append('-');
-                } else {
-                    sb.append(this.getSquare(i, j).getPiece().toString());
-                }
-                sb.append(" ");
-            }
-            sb.append("\n");
-        }
-        sb.append("\n \ta b c d e f g h");
-
-        return sb.toString();
-    }
-
-    public String printBoard() {
-        return printBoard(null);
     }
 
 }

@@ -77,22 +77,22 @@ public class Game {
         }
     }
 
-    public void handleSquareClickEvent(Square sq) {
+    public int handleSquareClickEvent(Square sq) {
         if (sq == null) {
-            return;
+            return -1;
         }
 
         if (chosenSquare == null) {
             if (sq.getPiece() == null) {
                 System.out.println("There is no piece on the square!");
                 resetMove();
-                return;
+                return 0;
             }
 
             if (!board.getPlayerSquares(whiteTurn).contains(sq)) {
                 System.out.println("You can't move this piece!");
                 resetMove();
-                return;
+                return 0;
             }
 
             chosenSquare = sq;
@@ -100,22 +100,23 @@ public class Game {
         } else { // chosenSquare != null
             if (chosenSquare.equals(sq)) {
                 resetMove();
-                return;
+                return 0;
             }
 
             if (board.getPlayerSquares(whiteTurn).contains(sq)) {
                 chosenSquare = sq;
-                return;
+                return 0;
             }
 
             destinationSquare = sq;
-            constructMove();
+            return constructMove();
         }
-
+        return 0;
     }
 
-    private void constructMove() {
+    private int constructMove() {
         Move currentMove = null;
+        int gameState;
 
         ArrayList<Move> legalMoves = getCurrentPlayer().getLegalMoves(board, chosenSquare);
 
@@ -130,13 +131,13 @@ public class Game {
         if (!legalSquares.contains(destinationSquare)) {
             System.out.println("Move is not legal!");
             resetMove();
-            return;
+            return -1;
         }
 
         if (currentMove == null) {
             System.out.println("Current move was not found!");
             resetMove();
-            return;
+            return -1;
         }
 
         if (chosenSquare.getPiece() instanceof Pawn) {
@@ -151,7 +152,8 @@ public class Game {
         }
 
         makeMove(currentMove);
-        checkGameState();
+        gameState = checkGameState();
+        return gameState;
     }
 
     private void makeMove(Move m) {
@@ -166,7 +168,7 @@ public class Game {
         destinationSquare = null;
     }
 
-    private void checkGameState() {
+    private int checkGameState() {
         getCurrentPlayer().setCheck(false);
         resetEnPassant();
 
@@ -181,16 +183,18 @@ public class Game {
         boolean stalemate = currentPlayerMoves.size() == 0;
 
         if (check && stalemate) {
-            return;
+            return whiteTurn ? 2 : 1;
         }
 
         if (stalemate) {
-            return;
+            return 3;
         }
 
         if (check) {
             getCurrentPlayer().setCheck(true);
         }
+
+        return 0;
     }
 
     public ArrayList<Square> getCurrentMoveSquares() {

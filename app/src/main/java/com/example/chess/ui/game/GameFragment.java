@@ -27,6 +27,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     private GridLayout chessboard;
     private Map<ImageView, Square> drawableTiles;
     private Game game;
+    private int gameState;
 
     @Nullable
     @Override
@@ -50,7 +51,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        game.handleSquareClickEvent(drawableTiles.get(v));
+        gameState = game.handleSquareClickEvent(drawableTiles.get(v));
 
        ArrayList<Square> moveHints = null;
         if (game.getChosenSquare() != null) {
@@ -63,6 +64,24 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             lastMove = moves.get(moves.size() - 1);
         }
         drawGameBoard(moveHints, lastMove);
+
+        switch (gameState) {
+            case 1:
+                // White won
+                break;
+            case 2:
+                // Black won
+                break;
+            case 3:
+                // Stalemate
+                break;
+            case -1:
+                // Error
+                return;
+            default:
+                // Game continues
+                break;
+        }
     }
 
     private void initializeDrawableTiles() {
@@ -110,7 +129,11 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             }
 
             if (moveHints != null && moveHints.contains(s)) {
-                ld.addLayer(getResources().getDrawable(R.drawable.legal_move_hint));
+                if (s.getPiece() != null || s.equals(Game.getEnPassantTarget())) {
+                    ld.addLayer(getResources().getDrawable(R.drawable.legal_attack_hint));
+                } else {
+                    ld.addLayer(getResources().getDrawable(R.drawable.legal_move_hint));
+                }
             }
 
             if (s.getPiece() != null) {

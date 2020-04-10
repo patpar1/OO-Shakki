@@ -101,6 +101,28 @@ public class Board {
         return squares[row][col];
     }
 
+    public Square findPlayerKing(Player player) {
+        int kingX = -1;
+        int kingY = -1;
+
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (squares[i][j].getPiece() instanceof King &&
+                        squares[i][j].getPiece().isWhite() == player.isWhite()) {
+                    kingY = i;
+                    kingX = j;
+                    break;
+                }
+            }
+        }
+
+        if (kingX == -1) {
+            throw new IllegalStateException();
+        }
+
+        return getSquare(kingY, kingX);
+    }
+
     ArrayList<Square> getPlayerSquares(boolean isWhite) {
         ArrayList<Square> r = new ArrayList<>();
 
@@ -130,25 +152,7 @@ public class Board {
     }
 
     boolean isCheck(Player player) {
-        int kingX = -1;
-        int kingY = -1;
-
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                if (squares[i][j].getPiece() instanceof King &&
-                        squares[i][j].getPiece().isWhite() == player.isWhite()) {
-                    kingY = i;
-                    kingX = j;
-                    break;
-                }
-            }
-        }
-
-        if (kingX == -1) {
-            throw new IllegalStateException();
-        }
-
-        return squareInEnemyLine(player, getSquare(kingY, kingX));
+        return squareInEnemyLine(player, findPlayerKing(player));
     }
 
 }

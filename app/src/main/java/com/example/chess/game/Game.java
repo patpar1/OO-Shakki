@@ -50,7 +50,7 @@ public class Game {
         }
     }
 
-    private Player getCurrentPlayer() {
+    public Player getCurrentPlayer() {
         return getPlayer(whiteTurn);
     }
 
@@ -75,6 +75,10 @@ public class Game {
             setEnPassantTarget(null);
             setEnPassantTargetPlayer(null);
         }
+    }
+
+    public boolean isCheck() {
+        return getCurrentPlayer().isCheck();
     }
 
     public int handleSquareClickEvent(Square sq) {

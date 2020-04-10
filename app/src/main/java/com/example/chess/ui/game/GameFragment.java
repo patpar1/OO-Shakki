@@ -27,7 +27,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     private GridLayout chessboard;
     private Map<ImageView, Square> drawableTiles;
     private Game game;
-    private int gameState;
 
     @Nullable
     @Override
@@ -46,12 +45,12 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        drawGameBoard(null, null);
+        drawGameBoard(null, null, false);
     }
 
     @Override
     public void onClick(View v) {
-        gameState = game.handleSquareClickEvent(drawableTiles.get(v));
+        int gameState = game.handleSquareClickEvent(drawableTiles.get(v));
 
        ArrayList<Square> moveHints = null;
         if (game.getChosenSquare() != null) {
@@ -63,7 +62,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         if (moves.size() > 0) {
             lastMove = moves.get(moves.size() - 1);
         }
-        drawGameBoard(moveHints, lastMove);
+        drawGameBoard(moveHints, lastMove, game.isCheck());
 
         switch (gameState) {
             case 1:
@@ -100,16 +99,21 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void drawGameBoard(ArrayList<Square> moveHints, Move lastMove) {
+    private void drawGameBoard(ArrayList<Square> moveHints, Move lastMove, boolean isCheck) {
         Square s;
         ImageView iv;
         LayerDrawable ld;
         ArrayList<Square> moveSquares = new ArrayList<>();
         Square chosenSquare;
+        Square kingSquare = null;
 
         if (lastMove != null) {
             moveSquares.add(game.getBoard().getSquare(lastMove.getRowStart(), lastMove.getColStart()));
             moveSquares.add(game.getBoard().getSquare(lastMove.getRowEnd(), lastMove.getColEnd()));
+        }
+
+        if (isCheck) {
+            kingSquare = game.getBoard().findPlayerKing(game.getCurrentPlayer());
         }
 
         for (Map.Entry entry : drawableTiles.entrySet()) {
@@ -134,6 +138,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 } else {
                     ld.addLayer(getResources().getDrawable(R.drawable.legal_move_hint));
                 }
+            }
+
+            if (isCheck && s.equals(kingSquare)) {
+                ld.addLayer(getResources().getDrawable(R.drawable.legal_attack_hint));
             }
 
             if (s.getPiece() != null) {

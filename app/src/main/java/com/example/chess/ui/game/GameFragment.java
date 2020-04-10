@@ -1,8 +1,10 @@
 package com.example.chess.ui.game;
 
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +13,14 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.chess.R;
 import com.example.chess.game.Game;
 import com.example.chess.game.Move;
 import com.example.chess.game.Square;
+import com.example.chess.game.pieces.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,7 +66,16 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         if (moves.size() > 0) {
             lastMove = moves.get(moves.size() - 1);
         }
+
         drawGameBoard(moveHints, lastMove, game.isCheck());
+
+        // Handle pawn promotion
+        if (lastMove != null && lastMove.getMovingPiece() instanceof Pawn &&
+                (lastMove.getRowEnd() == 7 || lastMove.getRowEnd() == 0)) {
+            Piece promotablePiece = pawnPromotion();
+            game.promotePawn(lastMove.getRowEnd(), lastMove.getColEnd(), promotablePiece);
+            drawGameBoard(moveHints, lastMove, game.isCheck());
+        }
 
         switch (gameState) {
             case 1:
@@ -81,6 +94,53 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 // Game continues
                 break;
         }
+    }
+
+    private int pawnPromotionDialog() {
+        final int[] clickedItem = new int[1];
+        AlertDialog.Builder builder;
+
+        if (getActivity() != null) {
+            builder = new AlertDialog.Builder(getActivity());
+        } else {
+            return -1;
+        }
+
+        builder.setTitle("Pick a piece to promote:")
+                .setItems(R.array.promotablePieces, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        clickedItem[0] = which;
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        return clickedItem[0];
+    }
+
+    private Piece pawnPromotion() {
+        Piece p;
+        boolean currentPlayer = !game.isWhiteTurn();
+
+        switch (pawnPromotionDialog()) {
+            case 0:
+                p = new Queen(currentPlayer);
+                break;
+            case 1:
+                p = new Knight(currentPlayer);
+                break;
+            case 2:
+                p = new Rook(currentPlayer);
+                break;
+            case 3:
+                p = new Bishop(currentPlayer);
+                break;
+            default:
+                return null;
+        }
+        return p;
     }
 
     private void initializeDrawableTiles() {

@@ -1,6 +1,7 @@
 package com.example.chess.game;
 
 import com.example.chess.game.pieces.Pawn;
+import com.example.chess.game.pieces.Piece;
 
 import java.util.ArrayList;
 
@@ -40,6 +41,10 @@ public class Game {
 
     public ArrayList<Move> getMoves() {
         return moves;
+    }
+
+    public boolean isWhiteTurn() {
+        return whiteTurn;
     }
 
     private Player getPlayer(boolean playerTurn) {
@@ -144,17 +149,6 @@ public class Game {
             return -1;
         }
 
-        if (chosenSquare.getPiece() instanceof Pawn) {
-            // White pawn
-            if (currentMove.getRowEnd() - currentMove.getRowStart() == -2) {
-                Game.setEnPassantTarget(board.getSquare(chosenSquare.getRow() - 1, chosenSquare.getCol()));
-                Game.setEnPassantTargetPlayer(getCurrentPlayer());
-            } else if (currentMove.getRowEnd() - currentMove.getRowStart() == 2) {
-                Game.setEnPassantTarget(board.getSquare(chosenSquare.getRow() + 1, chosenSquare.getCol()));
-                Game.setEnPassantTargetPlayer(getCurrentPlayer());
-            }
-        }
-
         makeMove(currentMove);
         gameState = checkGameState();
         return gameState;
@@ -164,7 +158,24 @@ public class Game {
         moves.add(m);
         m.makeMove(board);
         m.getMovingPiece().hasMoved();
+        if (chosenSquare.getPiece() instanceof Pawn) {
+            checkEnPassant(m);
+        }
         resetMove();
+    }
+
+    public void promotePawn(int row, int col, Piece promotablePiece) {
+        board.getSquare(row, col).setPiece(promotablePiece);
+    }
+
+    private void checkEnPassant(Move m) {
+        if (m.getRowEnd() - m.getRowStart() == -2) {
+            Game.setEnPassantTarget(board.getSquare(chosenSquare.getRow() - 1, chosenSquare.getCol()));
+            Game.setEnPassantTargetPlayer(getCurrentPlayer());
+        } else if (m.getRowEnd() - m.getRowStart() == 2) {
+            Game.setEnPassantTarget(board.getSquare(chosenSquare.getRow() + 1, chosenSquare.getCol()));
+            Game.setEnPassantTargetPlayer(getCurrentPlayer());
+        }
     }
 
     private void resetMove() {

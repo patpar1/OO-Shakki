@@ -117,6 +117,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         AlertDialog dialog = builder.create();
         dialog.show();
 
+        //TODO Program should wait for user input
+
         return clickedItem[0];
     }
 

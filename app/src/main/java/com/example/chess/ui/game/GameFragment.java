@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,11 +69,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         drawGameBoard(moveHints, lastMove, game.isCheck());
 
         // Handle pawn promotion
-        if (lastMove != null && lastMove.getMovingPiece() instanceof Pawn &&
-                (lastMove.getRowEnd() == 7 || lastMove.getRowEnd() == 0)) {
-            Piece promotablePiece = pawnPromotion();
-            game.promotePawn(lastMove.getRowEnd(), lastMove.getColEnd(), promotablePiece);
-            drawGameBoard(moveHints, lastMove, game.isCheck());
+        if (lastMove != null
+                && game.getBoard().getSquare(lastMove.getRowEnd(), lastMove.getColEnd()).getPiece() instanceof Pawn
+                && (lastMove.getRowEnd() == 7 || lastMove.getRowEnd() == 0)) {
+            pawnPromotionDialog(lastMove.getRowEnd(), lastMove.getColEnd(), lastMove);
         }
 
         switch (gameState) {
@@ -96,53 +94,46 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private int pawnPromotionDialog() {
-        final int[] clickedItem = new int[1];
+    private void pawnPromotionDialog(final int row, final int col, final Move lastMove) {
         AlertDialog.Builder builder;
 
         if (getActivity() != null) {
             builder = new AlertDialog.Builder(getActivity());
         } else {
-            return -1;
+            return;
         }
 
         builder.setTitle("Pick a piece to promote:")
                 .setItems(R.array.promotablePieces, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        clickedItem[0] = which;
+                        Piece promotablePiece = null;
+                        boolean currentPlayer = !game.isWhiteTurn();
+
+                        switch (which) {
+                            case 0:
+                                promotablePiece = new Queen(currentPlayer);
+                                break;
+                            case 1:
+                                promotablePiece = new Knight(currentPlayer);
+                                break;
+                            case 2:
+                                promotablePiece = new Rook(currentPlayer);
+                                break;
+                            case 3:
+                                promotablePiece = new Bishop(currentPlayer);
+                                break;
+                        }
+
+                        if (promotablePiece != null) {
+                            game.promotePawn(row, col, promotablePiece);
+                        }
+                        drawGameBoard(null, lastMove, game.isCheck());
                     }
                 });
 
         AlertDialog dialog = builder.create();
         dialog.show();
-
-        //TODO Program should wait for user input
-
-        return clickedItem[0];
-    }
-
-    private Piece pawnPromotion() {
-        Piece p;
-        boolean currentPlayer = !game.isWhiteTurn();
-
-        switch (pawnPromotionDialog()) {
-            case 0:
-                p = new Queen(currentPlayer);
-                break;
-            case 1:
-                p = new Knight(currentPlayer);
-                break;
-            case 2:
-                p = new Rook(currentPlayer);
-                break;
-            case 3:
-                p = new Bishop(currentPlayer);
-                break;
-            default:
-                return null;
-        }
-        return p;
     }
 
     private void initializeDrawableTiles() {
@@ -151,11 +142,9 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 int index = 8 * row + col;
                 Square sq = game.getBoard().getSquare(row, col);
                 View tempV = chessboard.getChildAt(index);
-                if (tempV != null) {
-                    if (tempV instanceof ImageView) {
-                        tempV.setOnClickListener(this);
-                        drawableTiles.put((ImageView) tempV, sq);
-                    }
+                if (tempV instanceof ImageView) {
+                    tempV.setOnClickListener(this);
+                    drawableTiles.put((ImageView) tempV, sq);
                 }
             }
         }

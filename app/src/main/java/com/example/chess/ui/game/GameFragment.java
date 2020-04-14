@@ -1,5 +1,6 @@
 package com.example.chess.ui.game;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -22,6 +23,10 @@ import com.example.chess.game.Move;
 import com.example.chess.game.Square;
 import com.example.chess.game.pieces.*;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,7 +74,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
         drawGameBoard(moveHints, lastMove, game.isCheck());
 
-        if (gameState != 0) {
+        if (gameState > 0) {
             gameEndingDialog(gameState);
         }
 
@@ -82,7 +87,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    private void gameEndingDialog(int gameState) {
+    private void gameEndingDialog(final int gameState) {
         AlertDialog.Builder builder;
 
         if (getActivity() != null) {
@@ -107,7 +112,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 builder.setTitle("Stalemate!")
                         .setMessage("Player has no legal moves!");
                 break;
-            case -1:
+            default:
                 // Error
                 builder.setTitle("Error occurred!")
                         .setMessage("An error has occurred!");
@@ -127,7 +132,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         builder.setNeutralButton("Save Game", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                saveGameState(gameState);
             }
         });
 
@@ -143,6 +148,19 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         });
 
         builder.create().show();
+    }
+
+    private void saveGameState(int gameState) {
+        try {
+            FileOutputStream fos = getContext().openFileOutput("temp.txt", Context.MODE_PRIVATE);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(game);
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        gameEndingDialog(gameState);
     }
 
     private void pawnPromotionDialog(final int row, final int col, final Move lastMove) {

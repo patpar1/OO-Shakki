@@ -12,7 +12,7 @@ class Player {
         this.isCheck = false;
     }
 
-    public boolean isCheck() {
+    boolean isCheck() {
         return isCheck;
     }
 

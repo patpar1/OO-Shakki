@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.chess.R;
 import com.example.chess.game.Game;
@@ -68,6 +69,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
         drawGameBoard(moveHints, lastMove, game.isCheck());
 
+        if (gameState != 0) {
+            gameEndingDialog(gameState);
+        }
+
         // Handle pawn promotion
         if (lastMove != null
                 && game.getBoard().getSquare(lastMove.getRowEnd(), lastMove.getColEnd()).getPiece() instanceof Pawn
@@ -75,23 +80,69 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             pawnPromotionDialog(lastMove.getRowEnd(), lastMove.getColEnd(), lastMove);
         }
 
+    }
+
+    private void gameEndingDialog(int gameState) {
+        AlertDialog.Builder builder;
+
+        if (getActivity() != null) {
+            builder = new AlertDialog.Builder(getActivity());
+        } else {
+            return;
+        }
+
         switch (gameState) {
             case 1:
                 // White won
+                builder.setTitle("White player won!")
+                        .setMessage("White player has won the game!");
                 break;
             case 2:
                 // Black won
+                builder.setTitle("Black player won!")
+                        .setMessage("Black player has won the game!");
                 break;
             case 3:
                 // Stalemate
+                builder.setTitle("Stalemate!")
+                        .setMessage("Player has no legal moves!");
                 break;
             case -1:
                 // Error
-                return;
-            default:
-                // Game continues
+                builder.setTitle("Error occurred!")
+                        .setMessage("An error has occurred!");
                 break;
         }
+
+        builder.setPositiveButton("New Game", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                View v;
+                if ((v = getView()) != null) {
+                    Navigation.findNavController(v).navigate(R.id.nav_game);
+                }
+            }
+        });
+
+        builder.setNeutralButton("Save Game", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.setNegativeButton("Main Menu", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                View v;
+                if ((v = getView()) != null) {
+                    // Navigation.findNavController(v).navigateUp();
+                    Navigation.findNavController(v).navigate(R.id.nav_main);
+                }
+            }
+        });
+
+        builder.create().show();
     }
 
     private void pawnPromotionDialog(final int row, final int col, final Move lastMove) {

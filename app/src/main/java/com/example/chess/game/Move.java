@@ -46,7 +46,7 @@ public class Move {
         return rowStart;
     }
 
-    public Piece getMovingPiece() {
+    Piece getMovingPiece() {
         return movingPiece;
     }
 

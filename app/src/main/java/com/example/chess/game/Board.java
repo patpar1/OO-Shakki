@@ -55,7 +55,6 @@ public class Board {
 
         for (int i = 0; i < BOARD_SIZE; i++) {
             squares[6][i] = new Square(new Pawn(true), 6, i);
-            //squares[6][i] = new Square(6, i);
         }
 
         // Black pieces
@@ -71,7 +70,6 @@ public class Board {
 
         for (int i = 0; i < BOARD_SIZE; i++) {
             squares[1][i] = new Square(new Pawn(false), 1, i);
-            //squares[1][i] = new Square(1, i);
         }
 
         // Empty squares
@@ -102,25 +100,15 @@ public class Board {
     }
 
     public Square findPlayerKing(Player player) {
-        int kingX = -1;
-        int kingY = -1;
-
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 if (squares[i][j].getPiece() instanceof King &&
                         squares[i][j].getPiece().isWhite() == player.isWhite()) {
-                    kingY = i;
-                    kingX = j;
-                    break;
+                    return getSquare(i, j);
                 }
             }
         }
-
-        if (kingX == -1) {
-            throw new IllegalStateException();
-        }
-
-        return getSquare(kingY, kingX);
+        throw new IllegalStateException();
     }
 
     ArrayList<Square> getPlayerSquares(boolean isWhite) {

@@ -5,9 +5,11 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
@@ -21,9 +23,13 @@ import com.example.chess.R;
 import com.example.chess.game.Game;
 import com.example.chess.game.Move;
 import com.example.chess.game.Square;
-import com.example.chess.game.pieces.*;
+import com.example.chess.game.pieces.Bishop;
+import com.example.chess.game.pieces.Knight;
+import com.example.chess.game.pieces.Pawn;
+import com.example.chess.game.pieces.Piece;
+import com.example.chess.game.pieces.Queen;
+import com.example.chess.game.pieces.Rook;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -87,6 +93,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    public Game getGame() {
+        return game;
+    }
+
     private void gameEndingDialog(final int gameState) {
         AlertDialog.Builder builder;
 
@@ -124,6 +134,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             public void onClick(DialogInterface dialog, int which) {
                 View v;
                 if ((v = getView()) != null) {
+                    Navigation.findNavController(v).popBackStack();
                     Navigation.findNavController(v).navigate(R.id.nav_game);
                 }
             }
@@ -132,7 +143,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         builder.setNeutralButton("Save Game", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                saveGameState(gameState);
+                saveGameFragment();
             }
         });
 
@@ -150,17 +161,49 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         builder.create().show();
     }
 
-    private void saveGameState(int gameState) {
+    private void saveGameFragment() {
+        Context c;
+        if ((c = getContext()) == null) {
+            return;
+        }
+        final EditText input = new EditText(c);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        new AlertDialog.Builder(c)
+                .setTitle("Save Game")
+                .setMessage("Type the file name:")
+                .setView(input)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    String fileOutput;
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        fileOutput = input.getText().toString();
+                        saveGameState(fileOutput);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .create()
+                .show();
+    }
+
+    private void saveGameState(String fileOutput) {
+        Context c;
+        if ((c = getContext()) == null) {
+            return;
+        }
         try {
-            FileOutputStream fos = getContext().openFileOutput("temp.txt", Context.MODE_PRIVATE);
+            FileOutputStream fos = c.openFileOutput(fileOutput, Context.MODE_PRIVATE);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(game);
+            fos.close();
             oos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        gameEndingDialog(gameState);
     }
 
     private void pawnPromotionDialog(final int row, final int col, final Move lastMove) {

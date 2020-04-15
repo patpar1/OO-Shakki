@@ -5,9 +5,10 @@ import com.example.chess.game.Board;
 import com.example.chess.game.Move;
 import com.example.chess.game.Square;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class King extends Piece {
+public class King extends Piece implements Serializable {
 
     private static final int KING_COLUMN = 4;
 

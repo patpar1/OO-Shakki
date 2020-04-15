@@ -4,9 +4,10 @@ import com.example.chess.game.Board;
 import com.example.chess.game.Move;
 import com.example.chess.game.Square;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class Piece {
+public abstract class Piece implements Serializable {
     private boolean isWhite;
     private boolean isMoved;
 

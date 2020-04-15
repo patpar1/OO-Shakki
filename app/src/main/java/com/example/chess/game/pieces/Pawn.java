@@ -4,12 +4,11 @@ import com.example.chess.R;
 import com.example.chess.game.Board;
 import com.example.chess.game.Game;
 import com.example.chess.game.Move;
-import com.example.chess.game.Square;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class Pawn extends Piece {
+public class Pawn extends Piece implements Serializable {
 
     private static final int[][] moveCandidates = {
             {-1, 0}, // White pawn move

@@ -1,8 +1,9 @@
 package com.example.chess.game;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-class Player {
+class Player implements Serializable {
 
     private boolean isWhite;
     private boolean isCheck;

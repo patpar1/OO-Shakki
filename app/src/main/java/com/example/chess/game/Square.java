@@ -2,7 +2,9 @@ package com.example.chess.game;
 
 import com.example.chess.game.pieces.Piece;
 
-public class Square {
+import java.io.Serializable;
+
+public class Square implements Serializable {
 
     private Piece piece;
     private int col;

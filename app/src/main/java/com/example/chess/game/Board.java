@@ -2,9 +2,10 @@ package com.example.chess.game;
 
 import com.example.chess.game.pieces.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Board {
+public class Board implements Serializable {
 
     private static final int BOARD_SIZE = 8;
 

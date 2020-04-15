@@ -4,9 +4,10 @@ import com.example.chess.R;
 import com.example.chess.game.Board;
 import com.example.chess.game.Move;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Bishop extends Piece {
+public class Bishop extends Piece implements Serializable {
 
     private static final int[][] moveVectors = {
             {-1, 1}, // Right Up

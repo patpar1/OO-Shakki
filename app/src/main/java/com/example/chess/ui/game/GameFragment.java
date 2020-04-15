@@ -7,11 +7,15 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,8 +34,10 @@ import com.example.chess.game.pieces.Piece;
 import com.example.chess.game.pieces.Queen;
 import com.example.chess.game.pieces.Rook;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,38 +53,54 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_game, container, false);
-
+        setHasOptionsMenu(true);
         chessboard = v.findViewById(R.id.chessboard);
         drawableTiles = new HashMap<>();
         game = new Game();
-
         initializeDrawableTiles();
-
         return v;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        drawGameBoard(null, null, false);
+        drawGameBoard();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_game, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.new_game:
+                newGame();
+                return true;
+            case R.id.save_game:
+                saveGameDialog();
+                return true;
+            case R.id.load_game:
+                loadGameDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
     public void onClick(View v) {
         int gameState = game.handleSquareClickEvent(drawableTiles.get(v));
-
-       ArrayList<Square> moveHints = null;
-        if (game.getChosenSquare() != null) {
-            moveHints = game.getCurrentMoveSquares();
-        }
-
-        Move lastMove = null;
         ArrayList<Move> moves = game.getMoves();
+        Move lastMove = null;
+
         if (moves.size() > 0) {
             lastMove = moves.get(moves.size() - 1);
         }
 
-        drawGameBoard(moveHints, lastMove, game.isCheck());
+        drawGameBoard();
 
         if (gameState > 0) {
             gameEndingDialog(gameState);
@@ -93,18 +115,20 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public Game getGame() {
-        return game;
+    private void newGame() {
+        View v;
+        if ((v = getView()) != null) {
+            Navigation.findNavController(v).popBackStack();
+            Navigation.findNavController(v).navigate(R.id.nav_game);
+        }
     }
 
     private void gameEndingDialog(final int gameState) {
-        AlertDialog.Builder builder;
-
-        if (getActivity() != null) {
-            builder = new AlertDialog.Builder(getActivity());
-        } else {
+        final Context c;
+        if ((c = getContext()) == null) {
             return;
         }
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
 
         switch (gameState) {
             case 1:
@@ -132,18 +156,14 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         builder.setPositiveButton("New Game", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                View v;
-                if ((v = getView()) != null) {
-                    Navigation.findNavController(v).popBackStack();
-                    Navigation.findNavController(v).navigate(R.id.nav_game);
-                }
+                newGame();
             }
         });
 
         builder.setNeutralButton("Save Game", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                saveGameFragment();
+                saveGameDialog();
             }
         });
 
@@ -152,8 +172,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             public void onClick(DialogInterface dialog, int which) {
                 View v;
                 if ((v = getView()) != null) {
-                    // Navigation.findNavController(v).navigateUp();
-                    Navigation.findNavController(v).navigate(R.id.nav_main);
+                    Navigation.findNavController(v).navigateUp();
                 }
             }
         });
@@ -161,8 +180,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         builder.create().show();
     }
 
-    private void saveGameFragment() {
-        Context c;
+    private void saveGameDialog() {
+        final Context c;
         if ((c = getContext()) == null) {
             return;
         }
@@ -177,7 +196,17 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         fileOutput = input.getText().toString();
-                        saveGameState(fileOutput);
+                        try {
+                            FileOutputStream fos = c.openFileOutput(fileOutput, Context.MODE_PRIVATE);
+                            ObjectOutputStream oos = new ObjectOutputStream(fos);
+                            oos.writeObject(game);
+                            fos.close();
+                            oos.close();
+                            Toast.makeText(c, "Game Saved!", Toast.LENGTH_SHORT).show();
+                        } catch (IOException e) {
+                            Toast.makeText(c, "Error occured: " + e, Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -190,30 +219,44 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 .show();
     }
 
-    private void saveGameState(String fileOutput) {
-        Context c;
+    private void loadGameDialog() {
+        final Context c;
         if ((c = getContext()) == null) {
             return;
         }
-        try {
-            FileOutputStream fos = c.openFileOutput(fileOutput, Context.MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(game);
-            fos.close();
-            oos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        final String[] fileList = c.fileList();
+        new AlertDialog.Builder(c)
+                .setTitle("Pick a game to load")
+                .setItems(fileList, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String filePath = fileList[which];
+                        try {
+                            FileInputStream fis = c.openFileInput(filePath);
+                            ObjectInputStream ois = new ObjectInputStream(fis);
+                            game = (Game) ois.readObject();
+                            ois.close();
+                            fis.close();
+                            drawGameBoard();
+                            Toast.makeText(c, "Game successfully loaded!", Toast.LENGTH_SHORT).show();
+                        } catch (ClassNotFoundException e) {
+                            game = new Game();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .create()
+                .show();
     }
 
     private void pawnPromotionDialog(final int row, final int col, final Move lastMove) {
-        AlertDialog.Builder builder;
-
-        if (getActivity() != null) {
-            builder = new AlertDialog.Builder(getActivity());
-        } else {
+        final Context c;
+        if ((c = getContext()) == null) {
             return;
         }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
 
         builder.setTitle("Pick a piece to promote:")
                 .setItems(R.array.promotablePieces, new DialogInterface.OnClickListener() {
@@ -240,7 +283,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                         if (promotablePiece != null) {
                             game.promotePawn(row, col, promotablePiece);
                         }
-                        drawGameBoard(null, lastMove, game.isCheck());
+                        drawGameBoard();
                     }
                 });
 
@@ -262,13 +305,25 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void drawGameBoard(ArrayList<Square> moveHints, Move lastMove, boolean isCheck) {
+    private void drawGameBoard() {
         Square s;
         ImageView iv;
         LayerDrawable ld;
         ArrayList<Square> moveSquares = new ArrayList<>();
         Square chosenSquare;
         Square kingSquare = null;
+        ArrayList<Square> moveHints = null;
+        Move lastMove = null;
+        ArrayList<Move> moves = game.getMoves();
+        boolean isCheck = game.isCheck();
+
+        if (game.getChosenSquare() != null) {
+            moveHints = game.getCurrentMoveSquares();
+        }
+
+        if (moves.size() > 0) {
+            lastMove = moves.get(moves.size() - 1);
+        }
 
         if (lastMove != null) {
             moveSquares.add(game.getBoard().getSquare(lastMove.getRowStart(), lastMove.getColStart()));

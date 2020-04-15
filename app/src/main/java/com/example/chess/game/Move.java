@@ -2,7 +2,9 @@ package com.example.chess.game;
 
 import com.example.chess.game.pieces.Piece;
 
-public class Move {
+import java.io.Serializable;
+
+public class Move implements Serializable {
 
     private int colStart;
     private int rowStart;

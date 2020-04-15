@@ -3,9 +3,10 @@ package com.example.chess.game;
 import com.example.chess.game.pieces.Pawn;
 import com.example.chess.game.pieces.Piece;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Game {
+public class Game implements Serializable {
 
     private Board board;
     private ArrayList<Move> moves;

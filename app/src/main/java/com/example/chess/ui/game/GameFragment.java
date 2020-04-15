@@ -110,7 +110,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         if (lastMove != null
                 && game.getBoard().getSquare(lastMove.getRowEnd(), lastMove.getColEnd()).getPiece() instanceof Pawn
                 && (lastMove.getRowEnd() == 7 || lastMove.getRowEnd() == 0)) {
-            pawnPromotionDialog(lastMove.getRowEnd(), lastMove.getColEnd(), lastMove);
+            pawnPromotionDialog(lastMove.getRowEnd(), lastMove.getColEnd());
         }
 
     }
@@ -237,6 +237,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                             game = (Game) ois.readObject();
                             ois.close();
                             fis.close();
+                            initializeDrawableTiles();
                             drawGameBoard();
                             Toast.makeText(c, "Game successfully loaded!", Toast.LENGTH_SHORT).show();
                         } catch (ClassNotFoundException e) {
@@ -250,7 +251,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 .show();
     }
 
-    private void pawnPromotionDialog(final int row, final int col, final Move lastMove) {
+    private void pawnPromotionDialog(final int row, final int col) {
         final Context c;
         if ((c = getContext()) == null) {
             return;

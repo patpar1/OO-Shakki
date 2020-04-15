@@ -56,6 +56,10 @@ public class Move implements Serializable {
         this.removedPiece = removedPiece;
     }
 
+    Piece getRemovedPiece() {
+        return removedPiece;
+    }
+
     Move copy() {
         return new Move(colStart, rowStart, colEnd, rowEnd, movingPiece, removedPiece);
     }
@@ -65,23 +69,38 @@ public class Move implements Serializable {
         board.getSquare(rowStart, colStart).setPiece(null);
     }
 
+    void undoMove(Board board) {
+        board.getSquare(rowStart, colStart).setPiece(movingPiece);
+        board.getSquare(rowEnd, colEnd).setPiece(removedPiece);
+    }
+
     public static class PawnEnPassantMove extends Move {
         public PawnEnPassantMove(Square startingSquare, Square endingSquare) {
             super(startingSquare, endingSquare);
         }
 
+        private Square getRemovedSquare(Board board) {
+            if (super.movingPiece.isWhite()) {
+                return board.getSquare(getRowEnd() + 1, getColEnd());
+
+            } else {
+                return board.getSquare(getRowEnd() - 1, getColEnd());
+            }
+        }
+
         @Override
         void makeMove(Board board) {
             super.makeMove(board);
-            Square removedSquare;
-            if (super.movingPiece.isWhite()) {
-                removedSquare = board.getSquare(getRowEnd() + 1, getColEnd());
-
-            } else {
-                removedSquare = board.getSquare(getRowEnd() - 1, getColEnd());
-            }
-            super.setRemovedPiece(removedSquare.getPiece());
+            Square removedSquare = getRemovedSquare(board);
+            setRemovedPiece(removedSquare.getPiece());
             removedSquare.setPiece(null);
+        }
+
+        @Override
+        void undoMove(Board board) {
+            super.undoMove(board);
+            Square removedSquare = getRemovedSquare(board);
+            removedSquare.setPiece(getRemovedPiece());
         }
     }
 
@@ -108,6 +127,13 @@ public class Move implements Serializable {
             super.makeMove(board);
             board.getSquare(rookRowEnd, rookColEnd).setPiece(rookPiece);
             board.getSquare(rookRowStart, rookColStart).setPiece(null);
+        }
+
+        @Override
+        void undoMove(Board board) {
+            super.undoMove(board);
+            board.getSquare(rookRowStart, rookColStart).setPiece(rookPiece);
+            board.getSquare(rookRowEnd, rookColEnd).setPiece(null);
         }
     }
 

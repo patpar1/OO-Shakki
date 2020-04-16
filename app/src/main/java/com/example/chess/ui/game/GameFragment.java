@@ -325,7 +325,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                             Toast.makeText(c, "Game Saved!", Toast.LENGTH_SHORT).show();
                         } catch (IOException e) {
                             // File was not found.
-                            Toast.makeText(c, "Error occured: " + e, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(c, "Error occurred: " + e, Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         }
                     }
@@ -377,11 +377,11 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                             Toast.makeText(c, "Game successfully loaded!", Toast.LENGTH_SHORT).show();
                         } catch (ClassNotFoundException e) {
                             // If Game class was not found, return a new Game class
-                            Toast.makeText(c, "Error occured: " + e, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(c, "Error occurred: " + e, Toast.LENGTH_SHORT).show();
                             game = new Game();
                         } catch (IOException e) {
                             // File was not found
-                            Toast.makeText(c, "Error occured: " + e, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(c, "Error occurred: " + e, Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         }
                     }
@@ -395,7 +395,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
      * and the method replaces the pawn with the piece chosen by the user.
      *
      * @param row Row of the promotable pawn.
-     * @param col Column of the promotavble pawn.
+     * @param col Column of the promotable pawn.
      */
     private void pawnPromotionDialog(final int row, final int col) {
         // Find the application context for the builder.

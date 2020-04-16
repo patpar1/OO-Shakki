@@ -33,8 +33,8 @@ public abstract class Piece implements Serializable {
         return isMoved;
     }
 
-    public void hasMoved() {
-        isMoved = true;
+    public void setMoved(boolean moved) {
+        isMoved = moved;
     }
 
     static boolean isOnBoard(int y, int x) {

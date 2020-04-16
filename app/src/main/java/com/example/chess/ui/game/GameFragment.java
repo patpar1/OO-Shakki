@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -33,6 +34,7 @@ import com.example.chess.game.pieces.Pawn;
 import com.example.chess.game.pieces.Piece;
 import com.example.chess.game.pieces.Queen;
 import com.example.chess.game.pieces.Rook;
+import com.google.android.material.bottomappbar.BottomAppBar;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -53,11 +55,48 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_game, container, false);
+
         setHasOptionsMenu(true);
+
+        BottomAppBar bottomAppBar = v.findViewById(R.id.bar);
+        bottomAppBar.replaceMenu(R.menu.bottom_navigation);
+        bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int moveIndex = game.getMoveIndex();
+                switch (item.getItemId()) {
+                    case R.id.button_back:
+                        if (moveIndex > 0) {
+                            game.getMoves().get(moveIndex - 1).undoMove(game.getBoard());
+                            game.setMoveIndex(moveIndex - 1);
+                            game.switchPlayerTurn();
+                        } else {
+                            Toast.makeText(getContext(), "First Move!", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    case R.id.button_forward:
+                        if (moveIndex < game.getMoves().size()) {
+                            game.getMoves().get(moveIndex).makeMove(game.getBoard());
+                            game.setMoveIndex(moveIndex + 1);
+                            game.switchPlayerTurn();
+                        } else {
+                            Toast.makeText(getContext(), "Last Move!", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                drawGameBoard();
+                return true;
+            }
+        });
+
         chessboard = v.findViewById(R.id.chessboard);
         drawableTiles = new HashMap<>();
         game = new Game();
+
         initializeDrawableTiles();
+
         return v;
     }
 

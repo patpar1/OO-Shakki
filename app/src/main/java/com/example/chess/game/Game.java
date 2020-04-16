@@ -21,6 +21,8 @@ public class Game implements Serializable {
     private static Square enPassantTarget;
     private static Player enPassantTargetPlayer;
 
+    private int moveIndex;
+
     public Game() {
         board = new Board();
         moves = new ArrayList<>();
@@ -34,6 +36,8 @@ public class Game implements Serializable {
 
         enPassantTarget = null;
         enPassantTargetPlayer = null;
+
+        moveIndex = 0;
     }
 
     public Board getBoard() {
@@ -85,6 +89,18 @@ public class Game implements Serializable {
 
     public boolean isCheck() {
         return getCurrentPlayer().isCheck();
+    }
+
+    public int getMoveIndex() {
+        return moveIndex;
+    }
+
+    public void setMoveIndex(int moveIndex) {
+        this.moveIndex = moveIndex;
+    }
+
+    public void switchPlayerTurn() {
+        this.whiteTurn = !whiteTurn;
     }
 
     public int handleSquareClickEvent(Square sq) {
@@ -150,6 +166,10 @@ public class Game implements Serializable {
             return -1;
         }
 
+        if (moveIndex < moves.size()) {
+            moves.subList(moveIndex, moves.size()).clear();
+        }
+
         makeMove(currentMove);
         gameState = checkGameState();
         return gameState;
@@ -158,7 +178,8 @@ public class Game implements Serializable {
     private void makeMove(Move m) {
         moves.add(m);
         m.makeMove(board);
-        m.getMovingPiece().hasMoved();
+        m.setFirstMove();
+        moveIndex++;
         if (chosenSquare.getPiece() instanceof Pawn) {
             checkEnPassant(m);
         }
@@ -188,7 +209,7 @@ public class Game implements Serializable {
         getCurrentPlayer().setCheck(false);
         resetEnPassant();
 
-        this.whiteTurn = !whiteTurn;
+        switchPlayerTurn();
 
         ArrayList<Move> currentPlayerMoves = new ArrayList<>();
         for (Square r : board.getPlayerSquares(whiteTurn)) {

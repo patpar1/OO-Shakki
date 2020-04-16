@@ -69,18 +69,23 @@ public class Move implements Serializable {
         board.getSquare(rowStart, colStart).setPiece(null);
     }
 
+    public void setFirstMove() {
+        if (!movingPiece.isMoved()) {
+            firstMove = true;
+            movingPiece.setMoved(true);
+        }
+    }
+
+    public void makeFinalMove(Board board) {
+        makeMove(board);
+        setFirstMove();
+    }
+
     public void undoMove(Board board) {
         board.getSquare(rowStart, colStart).setPiece(movingPiece);
         board.getSquare(rowEnd, colEnd).setPiece(removedPiece);
         if (firstMove) {
             movingPiece.setMoved(false);
-        }
-    }
-
-    public void setFirstMove() {
-        if (!movingPiece.isMoved()) {
-            firstMove = true;
-            movingPiece.setMoved(true);
         }
     }
 

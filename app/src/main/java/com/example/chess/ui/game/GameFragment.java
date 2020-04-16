@@ -76,7 +76,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                         break;
                     case R.id.button_forward:
                         if (moveIndex < game.getMoves().size()) {
-                            game.getMoves().get(moveIndex).makeMove(game.getBoard());
+                            game.getMoves().get(moveIndex).makeFinalMove(game.getBoard());
                             game.setMoveIndex(moveIndex + 1);
                             game.switchPlayerTurn();
                         } else {

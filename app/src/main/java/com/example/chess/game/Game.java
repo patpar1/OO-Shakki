@@ -177,8 +177,7 @@ public class Game implements Serializable {
 
     private void makeMove(Move m) {
         moves.add(m);
-        m.makeMove(board);
-        m.setFirstMove();
+        m.makeFinalMove(board);
         moveIndex++;
         if (chosenSquare.getPiece() instanceof Pawn) {
             checkEnPassant(m);

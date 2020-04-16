@@ -91,11 +91,11 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        chessboard = v.findViewById(R.id.chessboard);
         drawableTiles = new HashMap<>();
-        game = new Game();
-
         initializeDrawableTiles();
+
+        chessboard = v.findViewById(R.id.chessboard);
+        game = new Game();
 
         return v;
     }

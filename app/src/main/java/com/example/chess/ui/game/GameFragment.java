@@ -106,15 +106,15 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        // Initializes the map which maps all Squares of the Board to corresponding ImageViews
-        drawableTiles = new HashMap<>();
-        initializeDrawableTiles();
+        // Game class for the game logic
+        game = new Game();
 
         // Main chessboard view
         chessboard = v.findViewById(R.id.chessboard);
 
-        // Game class for the game logic
-        game = new Game();
+        // Initializes the map which maps all Squares of the Board to corresponding ImageViews
+        drawableTiles = new HashMap<>();
+        initializeDrawableTiles();
 
         return v;
     }

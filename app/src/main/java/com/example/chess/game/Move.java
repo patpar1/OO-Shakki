@@ -80,7 +80,7 @@ public class Move implements Serializable {
         }
     }
 
-    public void makeFinalMove(Board board) {
+    void makeFinalMove(Board board) {
         makeMove(board);
         setFirstMove();
     }
@@ -145,6 +145,28 @@ public class Move implements Serializable {
         private Piece rookPiece;
         private boolean rookFirstMove;
 
+        CastlingMove(int colStart,
+                     int rowStart,
+                     int colEnd,
+                     int rowEnd,
+                     Piece movingPiece,
+                     Piece removedPiece,
+                     boolean firstMove,
+                     int rookColStart,
+                     int rookRowStart,
+                     int rookColEnd,
+                     int rookRowEnd,
+                     Piece rookPiece,
+                     boolean rookFirstMove) {
+            super(colStart, rowStart, colEnd, rowEnd, movingPiece, removedPiece, firstMove);
+            this.rookColStart = rookColStart;
+            this.rookRowStart = rookRowStart;
+            this.rookColEnd = rookColEnd;
+            this.rookRowEnd = rookRowEnd;
+            this.rookPiece = rookPiece;
+            this.rookFirstMove = rookFirstMove;
+        }
+
         public CastlingMove(Square kingStartingSquare, Square kingEndingSquare, Square rookStartingSquare, Square rookEndingSquare) {
             super(kingStartingSquare, kingEndingSquare);
             rookColStart = rookStartingSquare.getCol();
@@ -183,14 +205,19 @@ public class Move implements Serializable {
 
         @Override
         CastlingMove copy() {
-            CastlingMove cm = (CastlingMove) super.copy();
-            cm.rookColStart = rookColStart;
-            cm.rookRowStart = rookRowStart;
-            cm.rookColEnd = rookColEnd;
-            cm.rookRowEnd = rookRowEnd;
-            cm.rookPiece = rookPiece;
-            cm.rookFirstMove = rookFirstMove;
-            return cm;
+            return new CastlingMove(super.colStart,
+                    super.rowStart,
+                    super.colEnd,
+                    super.rowEnd,
+                    super.movingPiece,
+                    super.removedPiece,
+                    super.firstMove,
+                    rookColStart,
+                    rookRowStart,
+                    rookColEnd,
+                    rookRowEnd,
+                    rookPiece,
+                    rookFirstMove);
         }
     }
 

@@ -78,13 +78,6 @@ public class Game implements Serializable {
         Game.enPassantTargetPlayer = enPassantTargetPlayer;
     }
 
-    private void resetEnPassant() {
-        if (enPassantTarget != null && enPassantTargetPlayer != getCurrentPlayer()) {
-            setEnPassantTarget(null);
-            setEnPassantTargetPlayer(null);
-        }
-    }
-
     public boolean isCheck() {
         return getCurrentPlayer().isCheck();
     }
@@ -93,11 +86,7 @@ public class Game implements Serializable {
         return moveIndex;
     }
 
-    public void setMoveIndex(int moveIndex) {
-        this.moveIndex = moveIndex;
-    }
-
-    public void switchPlayerTurn() {
+    private void switchPlayerTurn() {
         this.whiteTurn = !whiteTurn;
     }
 
@@ -174,7 +163,6 @@ public class Game implements Serializable {
      */
     private int constructMove() {
         Move currentMove = null;
-        int gameState;
 
         // Get all legal moves of the current player.
         ArrayList<Move> legalMoves = getCurrentPlayer().getLegalMoves(board, chosenSquare);
@@ -209,9 +197,8 @@ public class Game implements Serializable {
         }
 
         // Make the move on the game board and check the game's current state.
-        makeMove(currentMove);
-        gameState = checkGameState();
-        return gameState;
+        moves.add(currentMove);
+        return makeMove(currentMove);
     }
 
     /**
@@ -219,21 +206,50 @@ public class Game implements Serializable {
      *
      * @param m Move needed to be made on the game board.
      */
-    private void makeMove(Move m) {
-        // Add move to the move list
-        moves.add(m);
-
+    private int makeMove(Move m) {
         // Make the final move on the game board.
         m.makeFinalMove(board);
         moveIndex++;
 
-        // If the moved piece is a pawn, check en passant.
-        if (chosenSquare.getPiece() instanceof Pawn) {
-            checkEnPassant(m);
+        // If the moved piece is a pawn and move is an en passant move, set the en passant.
+        if (m.getMovingPiece() instanceof Pawn
+                && m instanceof Move.PawnDoubleMove) {
+            setEnPassant(m);
         }
 
         // Reset the move after the move has been done.
         resetMove();
+        return checkGameState();
+    }
+
+    public int makeNextMove() {
+        return makeMove(moves.get(moveIndex));
+    }
+
+    private int undoMove(Move m) {
+        m.undoMove(board);
+        moveIndex--;
+
+        Move dp;
+        if (moveIndex > 0
+                && (dp = moves.get(moveIndex - 1)) instanceof Move.PawnDoubleMove) {
+            if (dp.getMovingPiece().isWhite()) {
+                Game.setEnPassantTarget(board.getSquare(dp.getRowEnd() + 1, dp.getColEnd()));
+                Game.setEnPassantTargetPlayer(getCurrentPlayer());
+            } else {
+                Game.setEnPassantTarget(board.getSquare(dp.getRowEnd() - 1, dp.getColEnd()));
+                Game.setEnPassantTargetPlayer(getCurrentPlayer());
+            }
+        } else {
+            Game.setEnPassantTarget(null);
+            Game.setEnPassantTargetPlayer(null);
+        }
+        resetMove();
+        return checkGameState();
+    }
+
+    public int undoPreviousMove() {
+        return undoMove(moves.get(moveIndex - 1));
     }
 
     /**
@@ -253,13 +269,20 @@ public class Game implements Serializable {
      *
      * @param m Move needed to be checked.
      */
-    private void checkEnPassant(Move m) {
-        if (m.getRowEnd() - m.getRowStart() == -2) {
-            Game.setEnPassantTarget(board.getSquare(chosenSquare.getRow() - 1, chosenSquare.getCol()));
+    private void setEnPassant(Move m) {
+        if (m.getMovingPiece().isWhite()) {
+            Game.setEnPassantTarget(board.getSquare(m.getRowEnd() + 1, m.getColEnd()));
             Game.setEnPassantTargetPlayer(getCurrentPlayer());
-        } else if (m.getRowEnd() - m.getRowStart() == 2) {
-            Game.setEnPassantTarget(board.getSquare(chosenSquare.getRow() + 1, chosenSquare.getCol()));
+        } else {
+            Game.setEnPassantTarget(board.getSquare(m.getRowEnd() - 1, m.getColEnd()));
             Game.setEnPassantTargetPlayer(getCurrentPlayer());
+        }
+    }
+
+    private void resetEnPassant() {
+        if (enPassantTarget != null && enPassantTargetPlayer != getCurrentPlayer()) {
+            setEnPassantTarget(null);
+            setEnPassantTargetPlayer(null);
         }
     }
 

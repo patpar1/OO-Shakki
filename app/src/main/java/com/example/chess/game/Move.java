@@ -52,6 +52,10 @@ public class Move implements Serializable {
         return rowStart;
     }
 
+    Piece getMovingPiece() {
+        return movingPiece;
+    }
+
     void setRemovedPiece(Piece removedPiece) {
         this.removedPiece = removedPiece;
     }
@@ -86,6 +90,12 @@ public class Move implements Serializable {
         board.getSquare(rowEnd, colEnd).setPiece(removedPiece);
         if (firstMove) {
             movingPiece.setMoved(false);
+        }
+    }
+
+    public static class PawnDoubleMove extends Move {
+        public PawnDoubleMove(Square startingSquare, Square endingSquare) {
+            super(startingSquare, endingSquare);
         }
     }
 

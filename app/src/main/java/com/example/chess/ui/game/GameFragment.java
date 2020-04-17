@@ -80,9 +80,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                     case R.id.button_back:
                         // Undo move
                         if (moveIndex > 0) {
-                            game.getMoves().get(moveIndex - 1).undoMove(game.getBoard());
-                            game.setMoveIndex(moveIndex - 1);
-                            game.switchPlayerTurn();
+                            doGameLoop(game.undoPreviousMove());
                         } else {
                             Toast.makeText(getContext(), "First Move!", Toast.LENGTH_SHORT).show();
                         }
@@ -90,9 +88,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                     case R.id.button_forward:
                         // Redo move
                         if (moveIndex < game.getMoves().size()) {
-                            game.getMoves().get(moveIndex).makeFinalMove(game.getBoard());
-                            game.setMoveIndex(moveIndex + 1);
-                            game.switchPlayerTurn();
+                            doGameLoop(game.makeNextMove());
                         } else {
                             Toast.makeText(getContext(), "Last Move!", Toast.LENGTH_SHORT).show();
                         }
@@ -100,8 +96,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                     default:
                         break;
                 }
-                // When board manipulation command is done, the board needs to be updated
-                drawGameBoard();
                 return true;
             }
         });
@@ -174,13 +168,13 @@ public class GameFragment extends Fragment implements View.OnClickListener {
      */
     @Override
     public void onClick(View v) {
-        /*
-         * First onClick method searches the square in Game classes board that corresponds to the clicked
+        /* First onClick method searches the square in Game classes board that corresponds to the clicked
          * square. After that the Game class handles the click event and makes the move on it's board.
-         * Game class returns an integer which represents the game's state after the move is done.
-         */
-        int gameState = game.handleSquareClickEvent(drawableTiles.get(v));
+         * Game class returns an integer which represents the game's state after the move is done. */
+        doGameLoop(game.handleSquareClickEvent(drawableTiles.get(v)));
+    }
 
+    private void doGameLoop(int gameState) {
         // If game does not continue, shows the game ending dialog.
         if (gameState > 0) {
             gameEndingDialog(gameState);
@@ -190,10 +184,9 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         drawGameBoard();
 
         // Get the latest made move for pawn promotion dialog.
-        int moves;
         Move lastMove = null;
-        if ((moves = game.getMoves().size()) > 0) {
-            lastMove = game.getMoves().get(moves - 1);
+        if (game.getMoves().size() > 0 && game.getMoveIndex() > 0) {
+            lastMove = game.getMoves().get(game.getMoveIndex() - 1);
         }
 
         // Handle pawn promotion.
@@ -202,7 +195,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 && (lastMove.getRowEnd() == 7 || lastMove.getRowEnd() == 0)) {
             pawnPromotionDialog(lastMove.getRowEnd(), lastMove.getColEnd());
         }
-
     }
 
     /**
@@ -484,8 +476,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         }
 
         // Get the latest move made for drawing the latest move.
-        if (moves.size() > 0) {
-            lastMove = moves.get(moves.size() - 1);
+        if (moves.size() > 0 && game.getMoveIndex() > 0) {
+            lastMove = moves.get(game.getMoveIndex() - 1);
         }
 
         // Add the squares of the latest move made to an ArrayList.

@@ -55,7 +55,7 @@ public class Pawn extends Piece implements Serializable {
                             (col + moveCandidates[1][1])};
                     if (isOnBoard(doubleMoveCandidate[0], doubleMoveCandidate[1])) {
                         if (!board.getSquare(doubleMoveCandidate[0], doubleMoveCandidate[1]).hasPiece()) {
-                            moveArray.add(new Move(board.getSquare(row, col), board.getSquare(doubleMoveCandidate[0] , doubleMoveCandidate[1])));
+                            moveArray.add(new Move.PawnDoubleMove(board.getSquare(row, col), board.getSquare(doubleMoveCandidate[0] , doubleMoveCandidate[1])));
                         }
                     }
                 }

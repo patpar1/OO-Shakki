@@ -16,7 +16,13 @@ public class Move implements Serializable {
 
     private boolean firstMove;
 
-    public Move(int colStart, int rowStart, int colEnd, int rowEnd, Piece movingPiece, Piece removedPiece, boolean firstMove) {
+    private Move(int colStart,
+                 int rowStart,
+                 int colEnd,
+                 int rowEnd,
+                 Piece movingPiece,
+                 Piece removedPiece,
+                 boolean firstMove) {
         this.colStart = colStart;
         this.rowStart = rowStart;
         this.colEnd = colEnd;
@@ -35,6 +41,8 @@ public class Move implements Serializable {
         removedPiece = endingSquare.getPiece();
         firstMove = false;
     }
+
+    /* Basic getter and setter methods. */
 
     public int getColEnd() {
         return colEnd;
@@ -64,28 +72,53 @@ public class Move implements Serializable {
         return removedPiece;
     }
 
+    /**
+     * Creates a new square and copies the attributes of this move to the created move.
+     *
+     * @return A copy of this move.
+     */
     Move copy() {
         return new Move(colStart, rowStart, colEnd, rowEnd, movingPiece, removedPiece, firstMove);
     }
 
-    public void makeMove(Board board) {
+    /**
+     * Makes this move on the game board.
+     *
+     * @param board Current state of the board.
+     */
+    void makeMove(Board board) {
         board.getSquare(rowEnd, colEnd).setPiece(movingPiece);
         board.getSquare(rowStart, colStart).setPiece(null);
     }
 
-    public void setFirstMove() {
+    /**
+     * Sets the moving pieces first move status, when the player makes first move with the piece.
+     */
+    void setFirstMove() {
         if (!movingPiece.isMoved()) {
             firstMove = true;
             movingPiece.setMoved(true);
         }
     }
 
+    /**
+     * Makes the final move on the board. Used to prevent the isCheck function changing the isMoved
+     * status.
+     *
+     * @param board Current state of the board.
+     */
     void makeFinalMove(Board board) {
         makeMove(board);
         setFirstMove();
     }
 
-    public void undoMove(Board board) {
+    /**
+     * Undoes this move on the game board. Resets also the pieces moving status, if the move is
+     * first move made with the chosen piece.
+     *
+     * @param board Current state of the board.
+     */
+    void undoMove(Board board) {
         board.getSquare(rowStart, colStart).setPiece(movingPiece);
         board.getSquare(rowEnd, colEnd).setPiece(removedPiece);
         if (firstMove) {
@@ -93,12 +126,22 @@ public class Move implements Serializable {
         }
     }
 
+    /**
+     * Class for the pawn double move. It is identical to the superclass but it is used for
+     * detecting this kind of move.
+     */
     public static class PawnDoubleMove extends Move {
         public PawnDoubleMove(Square startingSquare, Square endingSquare) {
             super(startingSquare, endingSquare);
         }
     }
 
+    /**
+     * Inherited class from the Move superclass. Used to make the pawn en passant move on the
+     * game board. En passant move has different moving piece ending square from the attacked
+     * square so this class overrides the methods for making and undoing moves and sets the
+     * correct removed squares and ending squares to this move.
+     */
     public static class PawnEnPassantMove extends Move {
 
         public PawnEnPassantMove(Square startingSquare, Square endingSquare) {
@@ -115,7 +158,7 @@ public class Move implements Serializable {
         }
 
         @Override
-        public void makeMove(Board board) {
+        void makeMove(Board board) {
             super.makeMove(board);
             Square removedSquare = getRemovedSquare(board);
             setRemovedPiece(removedSquare.getPiece());
@@ -123,7 +166,7 @@ public class Move implements Serializable {
         }
 
         @Override
-        public void undoMove(Board board) {
+        void undoMove(Board board) {
             super.undoMove(board);
             Square removedSquare = getRemovedSquare(board);
             removedSquare.setPiece(getRemovedPiece());
@@ -135,72 +178,51 @@ public class Move implements Serializable {
         }
     }
 
+    /**
+     * Inherited class from the Move superclass. Used to make the castling move on the board.
+     * Castling move makes two moves on the board. The super class stores the king's move and
+     * this subclass creates a new move for the rook's movement.
+     */
     public static class CastlingMove extends Move {
 
-        private int rookColStart;
-        private int rookRowStart;
-        private int rookColEnd;
-        private int rookRowEnd;
+        private Move rookMove;
 
-        private Piece rookPiece;
-        private boolean rookFirstMove;
-
-        CastlingMove(int colStart,
-                     int rowStart,
-                     int colEnd,
-                     int rowEnd,
-                     Piece movingPiece,
-                     Piece removedPiece,
-                     boolean firstMove,
-                     int rookColStart,
-                     int rookRowStart,
-                     int rookColEnd,
-                     int rookRowEnd,
-                     Piece rookPiece,
-                     boolean rookFirstMove) {
+        private CastlingMove(int colStart,
+                             int rowStart,
+                             int colEnd,
+                             int rowEnd,
+                             Piece movingPiece,
+                             Piece removedPiece,
+                             boolean firstMove,
+                             Move rookMove) {
             super(colStart, rowStart, colEnd, rowEnd, movingPiece, removedPiece, firstMove);
-            this.rookColStart = rookColStart;
-            this.rookRowStart = rookRowStart;
-            this.rookColEnd = rookColEnd;
-            this.rookRowEnd = rookRowEnd;
-            this.rookPiece = rookPiece;
-            this.rookFirstMove = rookFirstMove;
+            this.rookMove = rookMove;
         }
 
-        public CastlingMove(Square kingStartingSquare, Square kingEndingSquare, Square rookStartingSquare, Square rookEndingSquare) {
-            super(kingStartingSquare, kingEndingSquare);
-            rookColStart = rookStartingSquare.getCol();
-            rookRowStart = rookStartingSquare.getRow();
-            rookPiece = rookStartingSquare.getPiece();
-            rookColEnd = rookEndingSquare.getCol();
-            rookRowEnd = rookEndingSquare.getRow();
-            rookFirstMove = false;
+        public CastlingMove(Square startingSquare,
+                            Square endingSquare,
+                            Square rookStartingSquare,
+                            Square rookEndingSquare) {
+            super(startingSquare, endingSquare);
+            rookMove = new Move(rookStartingSquare, rookEndingSquare);
         }
 
         @Override
-        public void makeMove(Board board) {
+        void makeMove(Board board) {
             super.makeMove(board);
-            board.getSquare(rookRowEnd, rookColEnd).setPiece(rookPiece);
-            board.getSquare(rookRowStart, rookColStart).setPiece(null);
+            rookMove.makeMove(board);
         }
 
         @Override
-        public void undoMove(Board board) {
+        void undoMove(Board board) {
             super.undoMove(board);
-            board.getSquare(rookRowStart, rookColStart).setPiece(rookPiece);
-            board.getSquare(rookRowEnd, rookColEnd).setPiece(null);
-            if (rookFirstMove) {
-                rookPiece.setMoved(false);
-            }
+            rookMove.undoMove(board);
         }
 
         @Override
-        public void setFirstMove() {
+        void setFirstMove() {
             super.setFirstMove();
-            if (!rookPiece.isMoved()) {
-                rookFirstMove = true;
-                rookPiece.setMoved(true);
-            }
+            rookMove.setFirstMove();
         }
 
         @Override
@@ -212,13 +234,7 @@ public class Move implements Serializable {
                     super.movingPiece,
                     super.removedPiece,
                     super.firstMove,
-                    rookColStart,
-                    rookRowStart,
-                    rookColEnd,
-                    rookRowEnd,
-                    rookPiece,
-                    rookFirstMove);
+                    rookMove.copy());
         }
     }
-
 }

@@ -205,6 +205,7 @@ public class Game implements Serializable {
      * Method for making the move on the game board.
      *
      * @param m Move needed to be made on the game board.
+     * @return integer value representing the current state of the game.
      */
     private int makeMove(Move m) {
         // Make the final move on the game board.
@@ -222,17 +223,30 @@ public class Game implements Serializable {
         return checkGameState();
     }
 
+    /**
+     * Makes the last move on the moves array.
+     *
+     * @return integer value representing the current state of the game.
+     */
     public int makeNextMove() {
         return makeMove(moves.get(moveIndex));
     }
 
+    /**
+     * Method for undoing a move on the game board. Updates the board, decreases the move index and
+     * sets the pawn en passant, if the move previous to move needed to undo was pawn double move.
+     *
+     * @param m Move needed to be undone on the game board.
+     * @return integer value representing the current state of the game.
+     */
     private int undoMove(Move m) {
         m.undoMove(board);
         moveIndex--;
 
+        // Check if the move previous to the Move "m" was pawn double move. If it was, reset the
+        // en passant.
         Move dp;
-        if (moveIndex > 0
-                && (dp = moves.get(moveIndex - 1)) instanceof Move.PawnDoubleMove) {
+        if (moveIndex > 0 && (dp = moves.get(moveIndex - 1)) instanceof Move.PawnDoubleMove) {
             if (dp.getMovingPiece().isWhite()) {
                 Game.setEnPassantTarget(board.getSquare(dp.getRowEnd() + 1, dp.getColEnd()));
                 Game.setEnPassantTargetPlayer(getCurrentPlayer());
@@ -241,13 +255,17 @@ public class Game implements Serializable {
                 Game.setEnPassantTargetPlayer(getCurrentPlayer());
             }
         } else {
-            Game.setEnPassantTarget(null);
-            Game.setEnPassantTargetPlayer(null);
+            resetEnPassant();
         }
         resetMove();
         return checkGameState();
     }
 
+    /**
+     * Undoes the previous move made.
+     *
+     * @return integer value representing the current state of the game.
+     */
     public int undoPreviousMove() {
         return undoMove(moves.get(moveIndex - 1));
     }
@@ -279,11 +297,12 @@ public class Game implements Serializable {
         }
     }
 
+    /**
+     * Resets the en passant target square and the en passant target player.
+     */
     private void resetEnPassant() {
-        if (enPassantTarget != null && enPassantTargetPlayer != getCurrentPlayer()) {
-            setEnPassantTarget(null);
-            setEnPassantTargetPlayer(null);
-        }
+        setEnPassantTarget(null);
+        setEnPassantTargetPlayer(null);
     }
 
     /**
@@ -304,7 +323,9 @@ public class Game implements Serializable {
         // If the game is in this point, the check of the current player can be unset and the en
         // passant can be reset.
         getCurrentPlayer().setCheck(false);
-        resetEnPassant();
+        if (enPassantTarget != null && enPassantTargetPlayer != getCurrentPlayer()) {
+            resetEnPassant();
+        }
 
         // Give the turn to the other player
         switchPlayerTurn();

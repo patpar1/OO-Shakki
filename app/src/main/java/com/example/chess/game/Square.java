@@ -22,9 +22,16 @@ public class Square implements Serializable {
         this.row = row;
     }
 
+    /**
+     * Creates a new square and copies the attributes of this square to the created square.
+     *
+     * @return A copy of this square.
+     */
     Square copy() {
         return new Square(piece, row, col);
     }
+
+    /* Basic getter and setter methods. */
 
     public Piece getPiece() {
         return piece;

@@ -133,7 +133,7 @@ public class Board implements Serializable {
      * @param isWhite Current player's color.
      * @return An ArrayList of all squares with current players pieces.
      */
-    ArrayList<Square> getPlayerSquares(boolean isWhite) {
+    public ArrayList<Square> getPlayerSquares(boolean isWhite) {
         ArrayList<Square> playerSquares = new ArrayList<>();
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {

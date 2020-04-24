@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.chess.R;
+import com.example.chess.ai.AlphaBetaPlayer;
 import com.example.chess.game.Game;
 import com.example.chess.game.Move;
 import com.example.chess.game.Square;
@@ -75,7 +76,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                int moveIndex = game.getMoveIndex();
+                int moveIndex = Game.getMoveIndex();
                 switch (item.getItemId()) {
                     case R.id.button_back:
                         // Undo move
@@ -171,7 +172,11 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         /* First onClick method searches the square in Game classes board that corresponds to the clicked
          * square. After that the Game class handles the click event and makes the move on it's board.
          * Game class returns an integer which represents the game's state after the move is done. */
-        doGameLoop(game.handleSquareClickEvent(drawableTiles.get(v)));
+        Square clickedSquare = drawableTiles.get(v);
+        doGameLoop(game.handleSquareClickEvent(clickedSquare));
+        if (game.getCurrentPlayer() instanceof AlphaBetaPlayer) {
+            doGameLoop(game.handleSquareClickEvent(clickedSquare));
+        }
     }
 
     private void doGameLoop(int gameState) {
@@ -185,8 +190,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
         // Get the latest made move for pawn promotion dialog.
         Move lastMove = null;
-        if (game.getMoves().size() > 0 && game.getMoveIndex() > 0) {
-            lastMove = game.getMoves().get(game.getMoveIndex() - 1);
+        if (game.getMoves().size() > 0 && Game.getMoveIndex() > 0) {
+            lastMove = game.getMoves().get(Game.getMoveIndex() - 1);
         }
 
         // Handle pawn promotion.
@@ -476,8 +481,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         }
 
         // Get the latest move made for drawing the latest move.
-        if (moves.size() > 0 && game.getMoveIndex() > 0) {
-            lastMove = moves.get(game.getMoveIndex() - 1);
+        if (moves.size() > 0 && Game.getMoveIndex() > 0) {
+            lastMove = moves.get(Game.getMoveIndex() - 1);
         }
 
         // Add the squares of the latest move made to an ArrayList.

@@ -87,7 +87,7 @@ public class Move implements Serializable {
      *
      * @return A copy of this move.
      */
-    Move copy() {
+    public Move copy() {
         return new Move(colStart, rowStart, colEnd, rowEnd, movingPiece, removedPiece, firstMove, pieceBeforePromotion);
     }
 
@@ -96,7 +96,7 @@ public class Move implements Serializable {
      *
      * @param board Current state of the board.
      */
-    void makeMove(Board board) {
+    public void makeMove(Board board) {
         board.getSquare(rowEnd, colEnd).setPiece(movingPiece);
         board.getSquare(rowStart, colStart).setPiece(null);
     }
@@ -172,7 +172,7 @@ public class Move implements Serializable {
         }
 
         @Override
-        void makeMove(Board board) {
+        public void makeMove(Board board) {
             super.makeMove(board);
             Square removedSquare = getRemovedSquare(board);
             setRemovedPiece(removedSquare.getPiece());
@@ -218,7 +218,7 @@ public class Move implements Serializable {
         }
 
         @Override
-        void makeMove(Board board) {
+        public void makeMove(Board board) {
             super.makeMove(board);
             rookMove.makeMove(board);
         }
@@ -236,7 +236,7 @@ public class Move implements Serializable {
         }
 
         @Override
-        CastlingMove copy() {
+        public CastlingMove copy() {
             return new CastlingMove(super.colStart,
                     super.rowStart,
                     super.colEnd,

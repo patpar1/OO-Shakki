@@ -15,7 +15,6 @@ public class Game implements Serializable {
     private static Square enPassantTarget;
     private static Player enPassantTargetPlayer;
     private int moveIndex;
-    private static boolean canEndTurn;
 
     /**
      * Main constructor for the Game class. This class tracks the Game Board, players, current
@@ -31,7 +30,6 @@ public class Game implements Serializable {
         enPassantTarget = null;
         enPassantTargetPlayer = null;
         moveIndex = 0;
-        canEndTurn = false;
     }
 
     /* Some simple getter and setter methods which I will not describe further */
@@ -104,12 +102,12 @@ public class Game implements Serializable {
         this.whiteTurn = !whiteTurn;
     }
 
-    public static boolean canEndTurn() {
-        return canEndTurn;
+    public boolean canEndTurn() {
+        return getCurrentPlayer().canEndTurn();
     }
 
-    static void setCanEndTurn(boolean b) {
-        Game.canEndTurn = b;
+    public void setCanEndTurn(boolean b) {
+        getCurrentPlayer().setCanEndTurn(b);
     }
 
     /**

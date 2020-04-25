@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class Knight extends Piece implements Serializable {
 
+    private static final int ABSOLUTE_PIECE_VALUE = 30;
     private static final int[][] moveCandidates = {
             {-2, -1},
             {-1, -2},
@@ -21,7 +22,7 @@ public class Knight extends Piece implements Serializable {
     };
 
     public Knight(boolean isWhite) {
-        super(isWhite);
+        super(isWhite, isWhite ? ABSOLUTE_PIECE_VALUE : -ABSOLUTE_PIECE_VALUE);
     }
 
     @Override

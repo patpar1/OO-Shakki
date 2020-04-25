@@ -10,10 +10,12 @@ import java.util.ArrayList;
 public abstract class Piece implements Serializable {
     private boolean isWhite;
     private boolean isMoved;
+    private int pieceValue;
 
-    public Piece(boolean isWhite) {
+    protected Piece(boolean isWhite, int pieceValue) {
         this.isWhite = isWhite;
         this.isMoved = false;
+        this.pieceValue = pieceValue;
     }
 
     // Calculates legal moves. Returns ArrayList of legal moves.
@@ -35,6 +37,10 @@ public abstract class Piece implements Serializable {
 
     public void setMoved(boolean moved) {
         isMoved = moved;
+    }
+
+    public int getPieceValue() {
+        return pieceValue;
     }
 
     static boolean isOnBoard(int y, int x) {

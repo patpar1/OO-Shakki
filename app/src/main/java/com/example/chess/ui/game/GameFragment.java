@@ -187,7 +187,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             // If the pawn is in first or last rank, promote the pawn.
             pawnPromotionDialog(currentMove, true);
         } else {
-            if (Game.canEndTurn()) {
+            if (game.canEndTurn()) {
                 endTurn();
             } else {
                 drawGameBoard();
@@ -205,10 +205,11 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         // If game does not continue, shows the game ending dialog.
         if (gameState > 0) {
             gameEndingDialog(gameState);
+            return;
         }
 
         if (game.getCurrentPlayer() instanceof AlphaBetaPlayer) {
-            ((AlphaBetaPlayer) game.getCurrentPlayer()).makeMove(game);
+            ((AlphaBetaPlayer) game.getCurrentPlayer()).calculateMove(game);
             doGameLoop();
         }
     }

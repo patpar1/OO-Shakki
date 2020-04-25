@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class Pawn extends Piece implements Serializable {
 
+    private static final int ABSOLUTE_PIECE_VALUE = 10;
     private static final int[][] moveCandidates = {
             {-1, 0}, // White pawn move
             {-2, 0}, // White pawn double-step
@@ -18,7 +19,7 @@ public class Pawn extends Piece implements Serializable {
     };
 
     public Pawn(boolean isWhite) {
-        super(isWhite);
+        super(isWhite, isWhite ? ABSOLUTE_PIECE_VALUE : -ABSOLUTE_PIECE_VALUE);
     }
 
     private int[][] getMoveCandidates() {

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class King extends Piece implements Serializable {
 
     private static final int KING_COLUMN = 4;
-
+    private static final int ABSOLUTE_PIECE_VALUE = 900;
     private static final int[][] moveCandidates = {
             {1, 0}, // Down
             {1, 1}, // Down Right
@@ -24,7 +24,7 @@ public class King extends Piece implements Serializable {
     };
 
     public King(boolean isWhite) {
-        super(isWhite);
+        super(isWhite, isWhite ? ABSOLUTE_PIECE_VALUE : -ABSOLUTE_PIECE_VALUE);
     }
 
     @Override

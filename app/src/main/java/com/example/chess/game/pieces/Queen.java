@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class Queen extends Piece implements Serializable {
 
+    private static final int ABSOLUTE_PIECE_VALUE = 90;
     private static final int[][] moveVectors = {
             {-1, 0}, // Up
             {1, 0}, // Down
@@ -21,7 +22,7 @@ public class Queen extends Piece implements Serializable {
     };
 
     public Queen(boolean isWhite) {
-        super(isWhite);
+        super(isWhite, isWhite ? ABSOLUTE_PIECE_VALUE : -ABSOLUTE_PIECE_VALUE);
     }
 
     @Override

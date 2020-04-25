@@ -86,7 +86,7 @@ public class Board implements Serializable {
      *
      * @return A copy of this board.
      */
-    Board copy() {
+    public Board copy() {
         Board b = new Board(new Square[8][8]);
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {

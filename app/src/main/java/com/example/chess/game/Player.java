@@ -13,13 +13,15 @@ public class Player implements Serializable {
     private Square chosenSquare;
     private Square destinationSquare;
 
-    private Move currentMove;
+    private boolean canEndTurn;
+    protected Move currentMove;
 
     public Player(boolean isWhite) {
         this.isWhite = isWhite;
         this.isCheck = false;
         chosenSquare = null;
         destinationSquare = null;
+        canEndTurn = false;
         currentMove = null;
     }
 
@@ -39,6 +41,14 @@ public class Player implements Serializable {
 
     Square getChosenSquare() {
         return chosenSquare;
+    }
+
+    boolean canEndTurn() {
+        return canEndTurn;
+    }
+
+    protected void setCanEndTurn(boolean b) {
+        canEndTurn = b;
     }
 
     Move getCurrentMove() {
@@ -182,7 +192,7 @@ public class Player implements Serializable {
     private void resetMove() {
         chosenSquare = null;
         destinationSquare = null;
-        Game.setCanEndTurn(false);
+        setCanEndTurn(false);
     }
 
     /**
@@ -229,7 +239,7 @@ public class Player implements Serializable {
         // Add the move to the current move. Move is made after GameFragment calls endTurn method.
         this.currentMove = currentMove;
         game.getMoves().add(currentMove);
-        Game.setCanEndTurn(true);
+        setCanEndTurn(true);
     }
 
     /**
@@ -238,7 +248,7 @@ public class Player implements Serializable {
      * @param m Move needed to be made on the game board.
      * @return integer value representing the current state of the game.
      */
-    protected int makeMove(Game game, Board board, Move m) {
+    int makeMove(Game game, Board board, Move m) {
         // Make the final move on the game board.
         m.makeFinalMove(board);
         game.increaseMoveIndex();

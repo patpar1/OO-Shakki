@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.chess.R;
+import com.example.chess.ai.AlphaBetaPlayer;
 import com.example.chess.game.Game;
 import com.example.chess.game.Move;
 import com.example.chess.game.Square;
@@ -76,7 +77,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int moveIndex = game.getMoveIndex();
-                System.out.println(moveIndex);
                 switch (item.getItemId()) {
                     case R.id.button_back:
                         // Undo move
@@ -205,6 +205,11 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         // If game does not continue, shows the game ending dialog.
         if (gameState > 0) {
             gameEndingDialog(gameState);
+        }
+
+        if (game.getCurrentPlayer() instanceof AlphaBetaPlayer) {
+            ((AlphaBetaPlayer) game.getCurrentPlayer()).makeMove(game);
+            doGameLoop();
         }
     }
 

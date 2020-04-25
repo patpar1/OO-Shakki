@@ -185,11 +185,6 @@ public class Move implements Serializable {
             Square removedSquare = getRemovedSquare(board);
             removedSquare.setPiece(getRemovedPiece());
         }
-
-        @Override
-        PawnEnPassantMove copy() {
-            return (PawnEnPassantMove) super.copy();
-        }
     }
 
     /**

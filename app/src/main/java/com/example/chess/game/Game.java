@@ -1,6 +1,6 @@
 package com.example.chess.game;
 
-import com.example.chess.game.pieces.Piece;
+import com.example.chess.ai.AlphaBetaPlayer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,8 +26,8 @@ public class Game implements Serializable {
         moves = new ArrayList<>();
         whiteTurn = true;
         whitePlayer = new Player(true);
-        blackPlayer = new Player(false);
-        // blackPlayer = new AlphaBetaPlayer(false);
+        // blackPlayer = new Player(false);
+        blackPlayer = new AlphaBetaPlayer(false);
         enPassantTarget = null;
         enPassantTargetPlayer = null;
         moveIndex = 0;
@@ -146,17 +146,6 @@ public class Game implements Serializable {
      */
     public int undoPreviousMove() {
         return getCurrentPlayer().undoMove(this, board, moves.get(moveIndex - 1));
-    }
-
-    /**
-     * Method for promoting a pawn on the game board.
-     *
-     * @param row             Row of the pawn to be promoted.
-     * @param col             Column of the pawn to be promoted.
-     * @param promotablePiece The Piece which the pawn is promoted to.
-     */
-    public void promotePawn(int row, int col, Piece promotablePiece) {
-        board.getSquare(row, col).setPiece(promotablePiece);
     }
 
     /**

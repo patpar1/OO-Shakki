@@ -173,12 +173,16 @@ public class GameFragment extends Fragment implements View.OnClickListener {
          * square. After that the Game class handles the click event and makes the move on it's board.
          * Game class returns an integer which represents the game's state after the move is done. */
         game.handleSquareClickEvent(drawableTiles.get(v));
-        doGameLoop();
+        checkPawnPromotionDialog();
     }
 
-    private void doGameLoop() {
+    /**
+     * Checks if pawn promotion dialog is needed to show. If it is, calls the pawn promotion dialog
+     * function. If it isn't ends the player turn or draws the game board.
+     */
+    private void checkPawnPromotionDialog() {
         // Get the latest made move for pawn promotion dialog.
-        Move currentMove = game.getCurrentPlayerMove();
+        Move currentMove = game.getCurrentPlayer().getCurrentMove();
 
         // Handle pawn promotion.
         if (currentMove != null
@@ -187,7 +191,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             // If the pawn is in first or last rank, promote the pawn.
             pawnPromotionDialog(currentMove, true);
         } else {
-            if (game.canEndTurn()) {
+            if (game.getCurrentPlayer().canEndTurn()) {
                 endTurn();
             } else {
                 drawGameBoard();
@@ -195,6 +199,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Method which ends the current players turn. Used to make sure user can do all actions
+     * (eg. promote a pawn) before AI does it's turn.
+     */
     private void endTurn() {
         // End the turn.
         int gameState = game.endTurn();
@@ -210,10 +218,15 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
         if (game.getCurrentPlayer() instanceof AlphaBetaPlayer) {
             ((AlphaBetaPlayer) game.getCurrentPlayer()).calculateMove(game);
-            doGameLoop();
+            checkPawnPromotionDialog();
         }
     }
 
+    /**
+     * Method for checking the game state, after user has manually undone or redone moves.
+     *
+     * @param gameState integer value representing the current state of the game.
+     */
     private void checkGameState(int gameState) {
         Move currentMove = null;
         ArrayList<Move> moves = game.getMoves();
@@ -421,10 +434,13 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 .show();
     }
 
+
     /**
-     * Creates a dialog for pawn promotion. User can choose the piece to promote to from a list
-     * and the method replaces the pawn with the piece chosen by the user.
+     * Creates a dialog for pawn promotion. User can choose the piece to promote to from a list and
+     * the method replaces the pawn with the piece chosen by the user.
      *
+     * @param currentMove Current pawn move.
+     * @param endTurn     Boolean value, true if this is at the end of turn.
      */
     private void pawnPromotionDialog(final Move currentMove, final boolean endTurn) {
         // Find the application context for the builder.
@@ -500,41 +516,40 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         Square s;
         ImageView iv;
         LayerDrawable ld;
-        ArrayList<Square> moveSquares = new ArrayList<>();
-        Square chosenSquare;
-        Square kingSquare = null;
-        ArrayList<Square> moveHints = null;
-        Move lastMove = null;
-        ArrayList<Move> moves = game.getMoves();
-        boolean isCheck = game.isCheck();
 
         // Calculate the move hints for chosen piece for drawing the move hints.
-        if (game.getChosenSquare() != null) {
+        Square chosenSquare = game.getCurrentPlayer().getChosenSquare();
+        ArrayList<Square> moveHints = null;
+        if (chosenSquare != null) {
             moveHints = game.getCurrentMoveSquares();
         }
 
         // Get the latest move made for drawing the latest move.
+        Move lastMove = null;
+        ArrayList<Move> moves = game.getMoves();
         if (moves.size() > 0 && game.getMoveIndex() > 0) {
             lastMove = moves.get(game.getMoveIndex() - 1);
         }
 
         // Add the squares of the latest move made to an ArrayList.
+        ArrayList<Square> moveSquares = new ArrayList<>();
         if (lastMove != null) {
             moveSquares.add(game.getBoard().getSquare(lastMove.getRowStart(), lastMove.getColStart()));
             moveSquares.add(game.getBoard().getSquare(lastMove.getRowEnd(), lastMove.getColEnd()));
         }
 
         // If there is a check on the board, visualize it on the king's square.
+        Square kingSquare = null;
+        boolean isCheck = game.getCurrentPlayer().isCheck();
         if (isCheck) {
             kingSquare = game.getBoard().findPlayerKing(game.getCurrentPlayer());
         }
 
-        // Loops and draws all squares.
+        // Loop through and draw all squares.
         for (Map.Entry entry : drawableTiles.entrySet()) {
             s = (Square) entry.getValue();
             iv = (ImageView) entry.getKey();
             ld = new LayerDrawable(new Drawable[]{});
-            chosenSquare = game.getChosenSquare();
 
             // If player has chosen a square, visualize the chosen square.
             if (s.equals(chosenSquare)) {

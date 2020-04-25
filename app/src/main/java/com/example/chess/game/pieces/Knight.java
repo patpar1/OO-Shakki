@@ -11,20 +11,29 @@ public class Knight extends Piece implements Serializable {
 
     private static final int ABSOLUTE_PIECE_VALUE = 30;
     private static final int[][] moveCandidates = {
-            {-2, -1},
-            {-1, -2},
-            {1, -2},
-            {2, -1},
-            {2, 1},
-            {1, 2},
-            {-1, 2},
-            {-2, 1}
+            {-2, -1}, // NNW
+            {-1, -2}, // NWW
+            {1, -2}, // SWW
+            {2, -1}, // SSW
+            {2, 1}, // SSE
+            {1, 2}, // SEE
+            {-1, 2}, // NEE
+            {-2, 1} // NNE
     };
 
     public Knight(boolean isWhite) {
         super(isWhite, isWhite ? ABSOLUTE_PIECE_VALUE : -ABSOLUTE_PIECE_VALUE);
     }
 
+    /**
+     * Calculates legal moves of a knight. These moves are not necessarily legal and the rest of the
+     * calculation is done on the player class.
+     *
+     * @param board Current board object.
+     * @param row   Row of calculating piece.
+     * @param col   Column of calculating piece.
+     * @return An ArrayList of all possible moves.
+     */
     @Override
     public ArrayList<Move> legalMoves(Board board, int row, int col) {
         ArrayList<Move> moveArray = new ArrayList<>();
@@ -37,9 +46,8 @@ public class Knight extends Piece implements Serializable {
                 if (this.isWhite() == board.getSquare(moveCandidate[0], moveCandidate[1]).getPiece().isWhite()) {
                     continue;
                 }
-
             }
-            moveArray.add(new Move(board.getSquare(row, col), board.getSquare(moveCandidate[0] , moveCandidate[1])));
+            moveArray.add(new Move(board.getSquare(row, col), board.getSquare(moveCandidate[0], moveCandidate[1])));
         }
         return moveArray;
     }

@@ -22,6 +22,11 @@ public class Pawn extends Piece implements Serializable {
         super(isWhite, isWhite ? ABSOLUTE_PIECE_VALUE : -ABSOLUTE_PIECE_VALUE);
     }
 
+    /**
+     * Calculates the move candidates based on the color of this piece. Black goes to the positive
+     * direction and white goes to the negative direction.
+     * @return Move candidates.
+     */
     private int[][] getMoveCandidates() {
         int[][] playerCandidates = new int[4][2];
         if (isWhite()) {
@@ -39,6 +44,15 @@ public class Pawn extends Piece implements Serializable {
         return playerCandidates;
     }
 
+    /**
+     * Calculates legal moves of a pawn. These moves are not necessarily legal and the rest of the
+     * calculation is done on the player class.
+     *
+     * @param board Current board object.
+     * @param row   Row of calculating piece.
+     * @param col   Column of calculating piece.
+     * @return An ArrayList of all possible moves.
+     */
     @Override
     public ArrayList<Move> legalMoves(Board board, int row, int col) {
         ArrayList<Move> moveArray = new ArrayList<>();
@@ -48,7 +62,8 @@ public class Pawn extends Piece implements Serializable {
         int[] moveCandidate = {(row + moveCandidates[0][0]), col + moveCandidates[0][1]};
         if (isOnBoard(moveCandidate[0], moveCandidate[1])) {
             if (!board.getSquare(moveCandidate[0], moveCandidate[1]).hasPiece()) {
-                moveArray.add(new Move(board.getSquare(row, col), board.getSquare(moveCandidate[0] , moveCandidate[1])));
+                moveArray.add(new Move(board.getSquare(row, col),
+                        board.getSquare(moveCandidate[0], moveCandidate[1])));
 
                 // Double move
                 if (!this.isMoved()) {
@@ -56,7 +71,8 @@ public class Pawn extends Piece implements Serializable {
                             (col + moveCandidates[1][1])};
                     if (isOnBoard(doubleMoveCandidate[0], doubleMoveCandidate[1])) {
                         if (!board.getSquare(doubleMoveCandidate[0], doubleMoveCandidate[1]).hasPiece()) {
-                            moveArray.add(new Move.PawnDoubleMove(board.getSquare(row, col), board.getSquare(doubleMoveCandidate[0] , doubleMoveCandidate[1])));
+                            moveArray.add(new Move.PawnDoubleMove(board.getSquare(row, col),
+                                    board.getSquare(doubleMoveCandidate[0], doubleMoveCandidate[1])));
                         }
                     }
                 }
@@ -70,26 +86,27 @@ public class Pawn extends Piece implements Serializable {
 
                 // Basic attack
                 if ((board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]).hasPiece()
-                && this.isWhite() != board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]).getPiece().isWhite())) {
-                    moveArray.add(new Move(board.getSquare(row, col), board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1])));
+                        && this.isWhite() != board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]).getPiece().isWhite())) {
+                    moveArray.add(new Move(board.getSquare(row, col),
+                            board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1])));
                 }
 
                 // En Passant
                 if (board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1]).equals(Game.getEnPassantTarget())) {
                     if (this.isWhite()) {
-                        moveArray.add(new Move.PawnEnPassantMove(board.getSquare(row, col), board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1])));
+                        moveArray.add(new Move.PawnEnPassantMove(board.getSquare(row, col),
+                                board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1])));
                     } else {
-                        moveArray.add(new Move.PawnEnPassantMove(board.getSquare(row, col), board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1])));
+                        moveArray.add(new Move.PawnEnPassantMove(board.getSquare(row, col),
+                                board.getSquare(attackMoveCandidate[0], attackMoveCandidate[1])));
                     }
                 }
             }
         }
-
         return moveArray;
     }
 
     public int getDrawable() {
         return isWhite() ? R.drawable.wp : R.drawable.bp;
     }
-
 }

@@ -27,9 +27,17 @@ public class King extends Piece implements Serializable {
         super(isWhite, isWhite ? ABSOLUTE_PIECE_VALUE : -ABSOLUTE_PIECE_VALUE);
     }
 
+    /**
+     * Calculates legal moves of a king. These moves are not necessarily legal and the rest of the
+     * calculation is done on the player class.
+     *
+     * @param board Current board object.
+     * @param row   Row of calculating piece.
+     * @param col   Column of calculating piece.
+     * @return An ArrayList of all possible moves.
+     */
     @Override
     public ArrayList<Move> legalMoves(Board board, int row, int col) {
-
         // Basic moveCandidate moves
         ArrayList<Move> moveArray = new ArrayList<>();
         for (int[] move : moveCandidates) {
@@ -41,9 +49,8 @@ public class King extends Piece implements Serializable {
                 if (this.isWhite() == board.getSquare(moveCandidate[0], moveCandidate[1]).getPiece().isWhite()) {
                     continue;
                 }
-
             }
-            moveArray.add(new Move(board.getSquare(row, col), board.getSquare(moveCandidate[0] , moveCandidate[1])));
+            moveArray.add(new Move(board.getSquare(row, col), board.getSquare(moveCandidate[0], moveCandidate[1])));
         }
 
         // Check rooks
@@ -106,15 +113,12 @@ public class King extends Piece implements Serializable {
                 kingEnd = board.getSquare(row, col + 2);
                 rookEnd = board.getSquare(row, col + 1);
             }
-
             moveArray.add(new Move.CastlingMove(board.getSquare(row, col), kingEnd, rookStart, rookEnd));
         }
-
         return moveArray;
     }
 
     public int getDrawable() {
         return isWhite() ? R.drawable.wk : R.drawable.bk;
     }
-
 }

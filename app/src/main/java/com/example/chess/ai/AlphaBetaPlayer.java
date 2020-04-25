@@ -8,27 +8,52 @@ import com.example.chess.game.Square;
 
 import java.util.ArrayList;
 
+/**
+ * An AI player that uses MiniMax-algorithm with Alpha-Beta pruning to calculate optimal move on
+ * the game board. This code is inspired by a guide made by Lauri Hartikka named 'A step-by-step
+ * guide to building a simple chess AI'.
+ * Available at: https://www.freecodecamp.org/news/simple-chess-ai-step-by-step-1d55a9266977/
+ */
 public class AlphaBetaPlayer extends Player {
 
+    // How deep to search the minimax algorithm.
     private static final int SEARCH_DEPTH = 3;
 
     public AlphaBetaPlayer(boolean isWhite) {
         super(isWhite);
     }
 
+    /**
+     * This overrides the parent class's method so that this class doesn't respond to user input.
+     *
+     * @param game Current game instance.
+     * @param sq   Clicked square.
+     */
     @Override
     public void handleSquareClickEvent(Game game, Square sq) {
     }
 
+    /**
+     * Method that calculates the current move and adds it to the moves list.
+     *
+     * @param game Current game object.
+     */
     public void calculateMove(Game game) {
-        Move m = calculateBestMove(game);
-        game.getMoves().add(m);
-        currentMove = m;
+        currentMove = calculateBestMove(game);
+        game.getMoves().add(currentMove);
         setCanEndTurn(true);
     }
 
+    /**
+     * Calculates the best possible move by using MiniMax-algorithm.
+     *
+     * @param game Current game object.
+     * @return Move determined by the algorithm.
+     */
     private Move calculateBestMove(Game game) {
         Board board = game.getBoard();
+
+        // Calculate all possible legal moves.
         ArrayList<Square> squares = board.getPlayerSquares(isWhite());
         ArrayList<Move> moves = new ArrayList<>();
         for (Square s : squares) {
@@ -38,13 +63,16 @@ public class AlphaBetaPlayer extends Player {
         Move bestMove = null;
         int bestScore = -9999;
 
+        // Iterate through each move
         for (Move m : moves) {
             Move copyMove = m.copy();
             Board copyBoard = board.copy();
             copyMove.makeMove(copyBoard);
 
+            // Search the moves boardValue with MiniMax.
             int boardValue = minimax(SEARCH_DEPTH - 1, copyBoard, false);
 
+            // If the board value is larger than previous best score, this is current best move.
             if (boardValue > bestScore) {
                 bestScore = boardValue;
                 bestMove = m;
@@ -53,38 +81,62 @@ public class AlphaBetaPlayer extends Player {
         return bestMove;
     }
 
+    /**
+     * Main recursive loop for the MiniMax-algorithm.
+     *
+     * @param depth       Level of the search tree.
+     * @param board       The game board needed to be evaluated.
+     * @param isMaxPlayer Boolean value representing, if current player is maximizing the board value.
+     * @return Largest board value.
+     */
     private int minimax(int depth, Board board, boolean isMaxPlayer) {
+        // If this is lowest level of the search tree, evaluate the game board.
         if (depth == 0) {
             return -evaluateBoard(board);
         }
 
+        // Calculate all possible legal moves.
         ArrayList<Square> squares = board.getPlayerSquares(!isMaxPlayer);
         ArrayList<Move> moves = new ArrayList<>();
         for (Square s : squares) {
             moves.addAll(getLegalMoves(board, s));
         }
 
+        // If the current player tries to maximize the board value, set the best move value to a
+        // large negative value. Otherwise set it to a large positive value
         if (isMaxPlayer) {
             int bestMove = -9999;
             for (Move m : moves) {
+                // Make the move on the copy board.
                 Move copyMove = m.copy();
                 Board copyBoard = board.copy();
                 copyMove.makeMove(copyBoard);
+
+                // Call this function recursively until depth is 0.
                 bestMove = Math.max(bestMove, minimax(depth - 1, copyBoard, false));
             }
             return bestMove;
         } else {
             int bestMove = 9999;
             for (Move m : moves) {
+                // Make the move on the copy board.
                 Move copyMove = m.copy();
                 Board copyBoard = board.copy();
                 copyMove.makeMove(copyBoard);
+
+                // Call this function recursively until depth is 0.
                 bestMove = Math.min(bestMove, minimax(depth - 1, copyBoard, true));
             }
             return bestMove;
         }
     }
 
+    /**
+     * Evaluates the board's value by calculating all pieces' scores.
+     *
+     * @param board Board object needed to be evaluated.
+     * @return Board's value.
+     */
     private int evaluateBoard(Board board) {
         int totalScore = 0;
         for (int i = 0; i < 8; i++) {

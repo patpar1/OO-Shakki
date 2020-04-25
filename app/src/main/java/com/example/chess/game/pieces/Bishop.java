@@ -21,6 +21,15 @@ public class Bishop extends Piece implements Serializable {
         super(isWhite, isWhite ? ABSOLUTE_PIECE_VALUE : -ABSOLUTE_PIECE_VALUE);
     }
 
+    /**
+     * Calculates legal moves of a bishop. These moves are not necessarily legal and the rest of the
+     * calculation is done on the player class.
+     *
+     * @param board Current board object.
+     * @param row   Row of calculating piece.
+     * @param col   Column of calculating piece.
+     * @return An ArrayList of all possible moves.
+     */
     @Override
     public ArrayList<Move> legalMoves(Board board, int row, int col) {
         ArrayList<Move> moveArray = new ArrayList<>();
@@ -32,15 +41,15 @@ public class Bishop extends Piece implements Serializable {
                 if (!isOnBoard(moveCandidate[0], moveCandidate[1])) {
                     break;
                 }
-                if (board.getSquare(moveCandidate[0], moveCandidate[1]).hasPiece()){
+                if (board.getSquare(moveCandidate[0], moveCandidate[1]).hasPiece()) {
                     if (this.isWhite() == board.getSquare(moveCandidate[0], moveCandidate[1]).getPiece().isWhite()) {
                         break;
                     } else {
-                        moveArray.add(new Move(board.getSquare(row, col), board.getSquare(moveCandidate[0] , moveCandidate[1])));
+                        moveArray.add(new Move(board.getSquare(row, col), board.getSquare(moveCandidate[0], moveCandidate[1])));
                         break;
                     }
                 }
-                moveArray.add(new Move(board.getSquare(row, col), board.getSquare(moveCandidate[0] , moveCandidate[1])));
+                moveArray.add(new Move(board.getSquare(row, col), board.getSquare(moveCandidate[0], moveCandidate[1])));
             }
         }
         return moveArray;

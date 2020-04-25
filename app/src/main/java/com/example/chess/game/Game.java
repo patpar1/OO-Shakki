@@ -32,7 +32,7 @@ public class Game implements Serializable {
         moveIndex = 0;
     }
 
-    /* Some simple getter and setter methods which I will not describe further */
+    /* Some simple getter and setter methods */
 
     public Board getBoard() {
         return board;
@@ -46,24 +46,8 @@ public class Game implements Serializable {
         return whiteTurn;
     }
 
-    public Square getChosenSquare() {
-        return getCurrentPlayer().getChosenSquare();
-    }
-
-    private Player getPlayer(boolean playerTurn) {
-        if (playerTurn) {
-            return whitePlayer;
-        } else {
-            return blackPlayer;
-        }
-    }
-
     public Player getCurrentPlayer() {
-        return getPlayer(whiteTurn);
-    }
-
-    public Move getCurrentPlayerMove() {
-        return getCurrentPlayer().getCurrentMove();
+        return whiteTurn ? whitePlayer : blackPlayer;
     }
 
     public static Square getEnPassantTarget() {
@@ -82,10 +66,6 @@ public class Game implements Serializable {
         Game.enPassantTargetPlayer = enPassantTargetPlayer;
     }
 
-    public boolean isCheck() {
-        return getCurrentPlayer().isCheck();
-    }
-
     public int getMoveIndex() {
         return moveIndex;
     }
@@ -100,14 +80,6 @@ public class Game implements Serializable {
 
     void switchPlayerTurn() {
         this.whiteTurn = !whiteTurn;
-    }
-
-    public boolean canEndTurn() {
-        return getCurrentPlayer().canEndTurn();
-    }
-
-    public void setCanEndTurn(boolean b) {
-        getCurrentPlayer().setCanEndTurn(b);
     }
 
     /**
@@ -155,6 +127,11 @@ public class Game implements Serializable {
         return getCurrentPlayer().getCurrentMoveSquares(board);
     }
 
+    /**
+     * Method for telling the current player to end the turn.
+     *
+     * @return integer value representing the current state of the game.
+     */
     public int endTurn() {
         return getCurrentPlayer().endTurn(this);
     }

@@ -83,7 +83,7 @@ public class Move implements Serializable {
     }
 
     /**
-     * Creates a new square and copies the attributes of this move to the created move.
+     * Creates a new Move and copies the attributes of this move to the created move.
      *
      * @return A copy of this move.
      */
@@ -142,7 +142,7 @@ public class Move implements Serializable {
 
     /**
      * Class for the pawn double move. It is identical to the superclass but it is used for
-     * detecting this kind of move.
+     * detecting double moves to set the en passant target square.
      */
     public static class PawnDoubleMove extends Move {
         public PawnDoubleMove(Square startingSquare, Square endingSquare) {
@@ -162,6 +162,12 @@ public class Move implements Serializable {
             super(startingSquare, endingSquare);
         }
 
+        /**
+         * Gets the square which was targeted on the pawn en passant move.
+         *
+         * @param board Current status of the board.
+         * @return The square targeted by the en passant move.
+         */
         private Square getRemovedSquare(Board board) {
             if (super.movingPiece.isWhite()) {
                 return board.getSquare(getRowEnd() + 1, getColEnd());
@@ -171,6 +177,11 @@ public class Move implements Serializable {
             }
         }
 
+        /**
+         * Makes this move on the game board.
+         *
+         * @param board Current state of the board.
+         */
         @Override
         public void makeMove(Board board) {
             super.makeMove(board);
@@ -179,6 +190,12 @@ public class Move implements Serializable {
             removedSquare.setPiece(null);
         }
 
+        /**
+         * Undoes this move on the game board. Resets also the pieces moving status, if the move is
+         * first move made with the chosen piece.
+         *
+         * @param board Current state of the board.
+         */
         @Override
         void undoMove(Board board) {
             super.undoMove(board);
@@ -217,24 +234,43 @@ public class Move implements Serializable {
             rookMove = new Move(rookStartingSquare, rookEndingSquare);
         }
 
+        /**
+         * Makes this move on the game board.
+         *
+         * @param board Current state of the board.
+         */
         @Override
         public void makeMove(Board board) {
             super.makeMove(board);
             rookMove.makeMove(board);
         }
 
+        /**
+         * Undoes this move on the game board. Resets also the pieces moving status, if the move is
+         * first move made with the chosen piece.
+         *
+         * @param board Current state of the board.
+         */
         @Override
         void undoMove(Board board) {
             super.undoMove(board);
             rookMove.undoMove(board);
         }
 
+        /**
+         * Sets the moving pieces first move status, when the player makes first move with the piece.
+         */
         @Override
         void setFirstMove() {
             super.setFirstMove();
             rookMove.setFirstMove();
         }
 
+        /**
+         * Creates a new Move and copies the attributes of this move to the created move.
+         *
+         * @return A copy of this move.
+         */
         @Override
         public CastlingMove copy() {
             return new CastlingMove(super.colStart,

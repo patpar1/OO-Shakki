@@ -9,11 +9,10 @@ public class Player implements Serializable {
 
     private boolean isWhite;
     private boolean isCheck;
-
     private Square chosenSquare;
     private Square destinationSquare;
-
     private boolean canEndTurn;
+
     protected Move currentMove;
 
     public Player(boolean isWhite) {
@@ -27,7 +26,7 @@ public class Player implements Serializable {
 
     /* Simple getter and setter methods */
 
-    boolean isCheck() {
+    public boolean isCheck() {
         return isCheck;
     }
 
@@ -39,11 +38,11 @@ public class Player implements Serializable {
         return isWhite;
     }
 
-    Square getChosenSquare() {
+    public Square getChosenSquare() {
         return chosenSquare;
     }
 
-    boolean canEndTurn() {
+    public boolean canEndTurn() {
         return canEndTurn;
     }
 
@@ -51,7 +50,7 @@ public class Player implements Serializable {
         canEndTurn = b;
     }
 
-    Move getCurrentMove() {
+    public Move getCurrentMove() {
         return currentMove;
     }
 
@@ -133,8 +132,9 @@ public class Player implements Serializable {
 
     /**
      * Handles the square click event on the player side.
+     *
      * @param game Current game instance.
-     * @param sq Clicked square.
+     * @param sq   Clicked square.
      */
     public void handleSquareClickEvent(Game game, Square sq) {
         Board board = game.getBoard();
@@ -164,8 +164,8 @@ public class Player implements Serializable {
             chosenSquare = sq;
         }
 
-        // If there has chosen a square (chosenSquare != null), sets this square to a destination
-        // square and tries to construct a move based on these 2 squares.
+        // If there is a chosen square (chosenSquare != null), set this square to a destination
+        // square and try to construct a move based on these 2 squares.
         else {
             // If the chosenSquare equals destinationSquare, reset the move.
             if (chosenSquare.equals(sq)) {
@@ -375,9 +375,15 @@ public class Player implements Serializable {
         return currentMoveSquares;
     }
 
+    /**
+     * Make the final move on the game board and return the game state to the main method.
+     *
+     * @param game Current game.
+     * @return integer value representing the current state of the game.
+     */
     int endTurn(Game game) {
-        int gamestate = makeMove(game, game.getBoard(), currentMove);
+        int gameState = makeMove(game, game.getBoard(), currentMove);
         currentMove = null;
-        return gamestate;
+        return gameState;
     }
 }

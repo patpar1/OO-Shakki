@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.chess.R;
 
-public class MainFragment extends Fragment {
+class MainFragment extends Fragment {
 
     @Nullable
     @Override

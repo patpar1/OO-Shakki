@@ -7,13 +7,12 @@ import java.util.ArrayList;
 
 public class Player implements Serializable {
 
-    private boolean isWhite;
+    protected Move currentMove;
+    private final boolean isWhite;
     private boolean isCheck;
     private Square chosenSquare;
     private Square destinationSquare;
     private boolean canEndTurn;
-
-    protected Move currentMove;
 
     public Player(boolean isWhite) {
         this.isWhite = isWhite;

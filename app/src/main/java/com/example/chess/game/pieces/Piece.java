@@ -8,14 +8,25 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public abstract class Piece implements Serializable {
-    private boolean isWhite;
+    private final boolean isWhite;
     private boolean isMoved;
-    private int pieceValue;
+    private final int pieceValue;
 
-    protected Piece(boolean isWhite, int pieceValue) {
+    Piece(boolean isWhite, int pieceValue) {
         this.isWhite = isWhite;
         this.isMoved = false;
         this.pieceValue = pieceValue;
+    }
+
+    /**
+     * Calculates if these coordinates are on the game board.
+     *
+     * @param row Row of the coordinates.
+     * @param col Column of the coordinates.
+     * @return Boolean value. True if these coordinates are on the game board.
+     */
+    static boolean isOnBoard(int row, int col) {
+        return (col <= 7) && (row <= 7) && (col >= 0) && (row >= 0);
     }
 
     /**
@@ -27,7 +38,7 @@ public abstract class Piece implements Serializable {
      * @param col   Column of calculating piece.
      * @return An ArrayList of all possible moves.
      */
-    public abstract ArrayList<Move> legalMoves(Board board, int row, int col);
+    protected abstract ArrayList<Move> legalMoves(Board board, int row, int col);
 
     /**
      * Returns the drawable resource of this piece.
@@ -46,17 +57,6 @@ public abstract class Piece implements Serializable {
      */
     public ArrayList<Move> legalMoves(Board board, Square square) {
         return legalMoves(board, square.getRow(), square.getCol());
-    }
-
-    /**
-     * Calculates if these coordinates are on the game board.
-     *
-     * @param row Row of the coordinates.
-     * @param col Column of the coordinates.
-     * @return Boolean value. True if these coordinates are on the game board.
-     */
-    static boolean isOnBoard(int row, int col) {
-        return (col <= 7) && (row <= 7) && (col >= 0) && (row >= 0);
     }
 
     /* Some simple getter and setter methods. */

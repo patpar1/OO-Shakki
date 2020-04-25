@@ -7,8 +7,8 @@ import java.io.Serializable;
 public class Square implements Serializable {
 
     private Piece piece;
-    private int col;
-    private int row;
+    private final int col;
+    private final int row;
 
     Square(int row, int col) {
         piece = null;

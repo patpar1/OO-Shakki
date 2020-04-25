@@ -7,13 +7,13 @@ import java.util.ArrayList;
 
 public class Game implements Serializable {
 
-    private Board board;
-    private ArrayList<Move> moves;
-    private boolean whiteTurn;
-    private Player whitePlayer;
-    private Player blackPlayer;
     private static Square enPassantTarget;
     private static Player enPassantTargetPlayer;
+    private final Board board;
+    private final ArrayList<Move> moves;
+    private boolean whiteTurn;
+    private final Player whitePlayer;
+    private final Player blackPlayer;
     private int moveIndex;
 
     /**
@@ -34,22 +34,6 @@ public class Game implements Serializable {
 
     /* Some simple getter and setter methods */
 
-    public Board getBoard() {
-        return board;
-    }
-
-    public ArrayList<Move> getMoves() {
-        return moves;
-    }
-
-    public boolean isWhiteTurn() {
-        return whiteTurn;
-    }
-
-    public Player getCurrentPlayer() {
-        return whiteTurn ? whitePlayer : blackPlayer;
-    }
-
     public static Square getEnPassantTarget() {
         return enPassantTarget;
     }
@@ -64,6 +48,22 @@ public class Game implements Serializable {
 
     static void setEnPassantTargetPlayer(Player enPassantTargetPlayer) {
         Game.enPassantTargetPlayer = enPassantTargetPlayer;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public ArrayList<Move> getMoves() {
+        return moves;
+    }
+
+    public boolean isWhiteTurn() {
+        return whiteTurn;
+    }
+
+    public Player getCurrentPlayer() {
+        return whiteTurn ? whitePlayer : blackPlayer;
     }
 
     public int getMoveIndex() {

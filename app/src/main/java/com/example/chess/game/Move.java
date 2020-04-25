@@ -6,10 +6,10 @@ import java.io.Serializable;
 
 public class Move implements Serializable {
 
-    private int colStart;
-    private int rowStart;
-    private int colEnd;
-    private int rowEnd;
+    private final int colStart;
+    private final int rowStart;
+    private final int colEnd;
+    private final int rowEnd;
 
     private Piece movingPiece;
     private Piece removedPiece;
@@ -74,12 +74,12 @@ public class Move implements Serializable {
         movingPiece = piece;
     }
 
-    void setRemovedPiece(Piece removedPiece) {
-        this.removedPiece = removedPiece;
-    }
-
     Piece getRemovedPiece() {
         return removedPiece;
+    }
+
+    void setRemovedPiece(Piece removedPiece) {
+        this.removedPiece = removedPiece;
     }
 
     /**
@@ -211,7 +211,7 @@ public class Move implements Serializable {
      */
     public static class CastlingMove extends Move {
 
-        private Move rookMove;
+        private final Move rookMove;
 
         private CastlingMove(int colStart,
                              int rowStart,

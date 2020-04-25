@@ -9,7 +9,7 @@ public class Board implements Serializable {
 
     private static final int BOARD_SIZE = 8;
 
-    private Square[][] squares;
+    private final Square[][] squares;
 
     /*  Board structure at the start:
 
@@ -77,7 +77,7 @@ public class Board implements Serializable {
         }
     }
 
-    public Board(Square[][] squares) {
+    private Board(Square[][] squares) {
         this.squares = squares;
     }
 

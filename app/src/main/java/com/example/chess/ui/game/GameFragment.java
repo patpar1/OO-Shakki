@@ -1,5 +1,6 @@
 package com.example.chess.ui.game;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
@@ -46,7 +47,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameFragment extends Fragment implements View.OnClickListener {
+class GameFragment extends Fragment implements View.OnClickListener {
 
     private GridLayout chessboard;
     private Map<ImageView, Square> drawableTiles;
@@ -167,6 +168,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
      *
      * @param v The view which was clicked.
      */
+    @SuppressWarnings("SuspiciousMethodCalls")
     @Override
     public void onClick(View v) {
         /* First onClick method searches the square in Game classes board that corresponds to the clicked
@@ -513,6 +515,12 @@ public class GameFragment extends Fragment implements View.OnClickListener {
      * can be shown on one ImageView.
      */
     private void drawGameBoard() {
+        Activity a = getActivity();
+
+        if (a == null) {
+            return;
+        }
+
         Square s;
         ImageView iv;
         LayerDrawable ld;
@@ -553,13 +561,13 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
             // If player has chosen a square, visualize the chosen square.
             if (s.equals(chosenSquare)) {
-                ld.addLayer(getResources().getDrawable(R.drawable.last_moved));
+                ld.addLayer(getResources().getDrawable(R.drawable.last_moved, a.getTheme()));
             }
 
             // Visualize the latest move made by the player.
             if (lastMove != null) {
                 if (moveSquares.contains(s)) {
-                    ld.addLayer(getResources().getDrawable(R.drawable.last_moved));
+                    ld.addLayer(getResources().getDrawable(R.drawable.last_moved, a.getTheme()));
                 }
             }
 
@@ -567,23 +575,23 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             if (moveHints != null && moveHints.contains(s)) {
                 // If the move is an attacking move, show it as red.
                 if (s.getPiece() != null || s.equals(Game.getEnPassantTarget())) {
-                    ld.addLayer(getResources().getDrawable(R.drawable.legal_attack_hint));
+                    ld.addLayer(getResources().getDrawable(R.drawable.legal_attack_hint, a.getTheme()));
                 }
 
                 // Otherwise show it as a black circle.
                 else {
-                    ld.addLayer(getResources().getDrawable(R.drawable.legal_move_hint));
+                    ld.addLayer(getResources().getDrawable(R.drawable.legal_move_hint, a.getTheme()));
                 }
             }
 
             // If there is check on the board, show it under the player king.
             if (isCheck && s.equals(kingSquare)) {
-                ld.addLayer(getResources().getDrawable(R.drawable.legal_attack_hint));
+                ld.addLayer(getResources().getDrawable(R.drawable.legal_attack_hint, a.getTheme()));
             }
 
             // If there is a piece on the square, get it's drawable resource.
             if (s.getPiece() != null) {
-                ld.addLayer(getResources().getDrawable(s.getPiece().getDrawable()));
+                ld.addLayer(getResources().getDrawable(s.getPiece().getDrawable(), a.getTheme()));
             }
 
             // Set the ImageView's drawable to the LayerDrawable.

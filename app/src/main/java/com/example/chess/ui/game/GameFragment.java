@@ -25,7 +25,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.chess.R;
-import com.example.chess.ai.AlphaBetaPlayer;
 import com.example.chess.game.Game;
 import com.example.chess.game.Move;
 import com.example.chess.game.Square;
@@ -76,12 +75,13 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                int moveIndex = Game.getMoveIndex();
+                int moveIndex = game.getMoveIndex();
+                System.out.println(moveIndex);
                 switch (item.getItemId()) {
                     case R.id.button_back:
                         // Undo move
                         if (moveIndex > 0) {
-                            doGameLoop(game.undoPreviousMove());
+                            checkGameState(game.undoPreviousMove());
                         } else {
                             Toast.makeText(getContext(), "First Move!", Toast.LENGTH_SHORT).show();
                         }
@@ -89,7 +89,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                     case R.id.button_forward:
                         // Redo move
                         if (moveIndex < game.getMoves().size()) {
-                            doGameLoop(game.makeNextMove());
+                            checkGameState(game.makeNextMove());
                         } else {
                             Toast.makeText(getContext(), "Last Move!", Toast.LENGTH_SHORT).show();
                         }
@@ -172,33 +172,61 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         /* First onClick method searches the square in Game classes board that corresponds to the clicked
          * square. After that the Game class handles the click event and makes the move on it's board.
          * Game class returns an integer which represents the game's state after the move is done. */
-        Square clickedSquare = drawableTiles.get(v);
-        doGameLoop(game.handleSquareClickEvent(clickedSquare));
-        if (game.getCurrentPlayer() instanceof AlphaBetaPlayer) {
-            doGameLoop(game.handleSquareClickEvent(clickedSquare));
+        game.handleSquareClickEvent(drawableTiles.get(v));
+        doGameLoop();
+    }
+
+    private void doGameLoop() {
+        // Get the latest made move for pawn promotion dialog.
+        Move currentMove = game.getCurrentPlayerMove();
+
+        // Handle pawn promotion.
+        if (currentMove != null
+                && currentMove.getMovingPiece() instanceof Pawn
+                && (currentMove.getRowEnd() == 7 || currentMove.getRowEnd() == 0)) {
+            // If the pawn is in first or last rank, promote the pawn.
+            pawnPromotionDialog(currentMove, true);
+        } else {
+            if (Game.canEndTurn()) {
+                endTurn();
+            } else {
+                drawGameBoard();
+            }
         }
     }
 
-    private void doGameLoop(int gameState) {
-        // If game does not continue, shows the game ending dialog.
-        if (gameState > 0) {
-            gameEndingDialog(gameState);
-        }
+    private void endTurn() {
+        // End the turn.
+        int gameState = game.endTurn();
 
         // Draw the game board to the UI after the move is done.
         drawGameBoard();
 
-        // Get the latest made move for pawn promotion dialog.
-        Move lastMove = null;
-        if (game.getMoves().size() > 0 && Game.getMoveIndex() > 0) {
-            lastMove = game.getMoves().get(Game.getMoveIndex() - 1);
+        // If game does not continue, shows the game ending dialog.
+        if (gameState > 0) {
+            gameEndingDialog(gameState);
+        }
+    }
+
+    private void checkGameState(int gameState) {
+        Move currentMove = null;
+        ArrayList<Move> moves = game.getMoves();
+
+        if (moves.size() > 0 && game.getMoveIndex() > 0) {
+            currentMove = game.getMoves().get(game.getMoveIndex() - 1);
         }
 
         // Handle pawn promotion.
-        if (lastMove != null
-                && game.getBoard().getSquare(lastMove.getRowEnd(), lastMove.getColEnd()).getPiece() instanceof Pawn
-                && (lastMove.getRowEnd() == 7 || lastMove.getRowEnd() == 0)) {
-            pawnPromotionDialog(lastMove.getRowEnd(), lastMove.getColEnd());
+        if (currentMove != null
+                && currentMove.getMovingPiece() instanceof Pawn
+                && (currentMove.getRowEnd() == 7 || currentMove.getRowEnd() == 0)) {
+            pawnPromotionDialog(currentMove, false);
+        }
+
+        drawGameBoard();
+
+        if (gameState > 0) {
+            gameEndingDialog(gameState);
         }
     }
 
@@ -391,10 +419,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
      * Creates a dialog for pawn promotion. User can choose the piece to promote to from a list
      * and the method replaces the pawn with the piece chosen by the user.
      *
-     * @param row Row of the promotable pawn.
-     * @param col Column of the promotable pawn.
      */
-    private void pawnPromotionDialog(final int row, final int col) {
+    private void pawnPromotionDialog(final Move currentMove, final boolean endTurn) {
         // Find the application context for the builder.
         final Context c;
         if ((c = getContext()) == null) {
@@ -409,7 +435,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Piece promotablePiece = null;
-                        boolean currentPlayer = !game.isWhiteTurn();
+                        boolean currentPlayer = game.isWhiteTurn();
 
                         // Choose the piece to promote the pawn to.
                         switch (which) {
@@ -429,10 +455,11 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
                         // Promote the pawn on game board.
                         if (promotablePiece != null) {
-                            game.promotePawn(row, col, promotablePiece);
+                            currentMove.setPromotion(promotablePiece);
                         }
-                        // Update the UI board.
-                        drawGameBoard();
+                        if (endTurn) {
+                            endTurn();
+                        }
                     }
                 });
 
@@ -481,8 +508,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         }
 
         // Get the latest move made for drawing the latest move.
-        if (moves.size() > 0 && Game.getMoveIndex() > 0) {
-            lastMove = moves.get(Game.getMoveIndex() - 1);
+        if (moves.size() > 0 && game.getMoveIndex() > 0) {
+            lastMove = moves.get(game.getMoveIndex() - 1);
         }
 
         // Add the squares of the latest move made to an ArrayList.

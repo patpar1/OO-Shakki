@@ -13,9 +13,14 @@ public class Player implements Serializable {
     private Square chosenSquare;
     private Square destinationSquare;
 
+    private Move currentMove;
+
     public Player(boolean isWhite) {
         this.isWhite = isWhite;
         this.isCheck = false;
+        chosenSquare = null;
+        destinationSquare = null;
+        currentMove = null;
     }
 
     /* Simple getter and setter methods */
@@ -34,6 +39,10 @@ public class Player implements Serializable {
 
     Square getChosenSquare() {
         return chosenSquare;
+    }
+
+    Move getCurrentMove() {
+        return currentMove;
     }
 
     /**
@@ -116,14 +125,13 @@ public class Player implements Serializable {
      * Handles the square click event on the player side.
      * @param game Current game instance.
      * @param sq Clicked square.
-     * @return integer value representing the current state of the game.
      */
-    public int handleSquareClickEvent(Game game, Square sq) {
+    public void handleSquareClickEvent(Game game, Square sq) {
         Board board = game.getBoard();
 
         // Make sure the given square is not null.
         if (sq == null) {
-            return -1;
+            return;
         }
 
         // If the player has not chosen square before, sets the given square to chosen square.
@@ -132,14 +140,14 @@ public class Player implements Serializable {
             if (sq.getPiece() == null) {
                 System.out.println("There is no piece on the square!");
                 resetMove();
-                return 0;
+                return;
             }
 
             // If the piece on the square is opposite color, reset the move.
             if (!board.getPlayerSquares(isWhite).contains(sq)) {
                 System.out.println("You can't move this piece!");
                 resetMove();
-                return 0;
+                return;
             }
 
             // Add the square to chosenSquare.
@@ -152,21 +160,20 @@ public class Player implements Serializable {
             // If the chosenSquare equals destinationSquare, reset the move.
             if (chosenSquare.equals(sq)) {
                 resetMove();
-                return 0;
+                return;
             }
 
             // If the destinationSquare contains another white piece, set the chosenSquare to the
             // sq value.
             if (board.getPlayerSquares(isWhite).contains(sq)) {
                 chosenSquare = sq;
-                return 0;
+                return;
             }
 
             // Set the destinationSquare and try to construct a move.
             destinationSquare = sq;
-            return constructMove(game, board);
+            constructMove(game, board);
         }
-        return 0;
     }
 
     /**
@@ -175,16 +182,15 @@ public class Player implements Serializable {
     private void resetMove() {
         chosenSquare = null;
         destinationSquare = null;
+        Game.setCanEndTurn(false);
     }
 
     /**
      * Method for constructing a move based on clicked squares of the player. Asks all legal moves
      * from player and determines the current move from it. If the move is legal, method makes it
      * on the game board and stores the move.
-     *
-     * @return integer value representing the current state of the game.
      */
-    private int constructMove(Game game, Board board) {
+    private void constructMove(Game game, Board board) {
         Move currentMove = null;
         ArrayList<Move> moves = game.getMoves();
 
@@ -204,25 +210,26 @@ public class Player implements Serializable {
         if (!legalSquares.contains(destinationSquare)) {
             System.out.println("Move is not legal!");
             resetMove();
-            return -1;
+            return;
         }
 
         // If current move couldn't be determined, reset the move.
         if (currentMove == null) {
             System.out.println("Current move was not found!");
             resetMove();
-            return -1;
+            return;
         }
 
         // If the user has undone moves and is not in the latest move made, delete the moves after
         // the game state shown to the user.
-        if (Game.getMoveIndex() < moves.size()) {
-            moves.subList(Game.getMoveIndex(), moves.size()).clear();
+        if (game.getMoveIndex() < moves.size()) {
+            moves.subList(game.getMoveIndex(), moves.size()).clear();
         }
 
-        // Make the move on the game board and check the game's current state.
+        // Add the move to the current move. Move is made after GameFragment calls endTurn method.
+        this.currentMove = currentMove;
         game.getMoves().add(currentMove);
-        return makeMove(game, board, currentMove);
+        Game.setCanEndTurn(true);
     }
 
     /**
@@ -234,7 +241,7 @@ public class Player implements Serializable {
     protected int makeMove(Game game, Board board, Move m) {
         // Make the final move on the game board.
         m.makeFinalMove(board);
-        Game.increaseMoveIndex();
+        game.increaseMoveIndex();
 
         // If the moved piece is a pawn and move is an en passant move, set the en passant.
         if (m.getMovingPiece() instanceof Pawn
@@ -278,7 +285,7 @@ public class Player implements Serializable {
         }
 
         // Give the turn to the other player
-        Game.switchPlayerTurn();
+        game.switchPlayerTurn();
 
         // Get the other player.
         Player opposingPlayer = game.getCurrentPlayer();
@@ -323,13 +330,13 @@ public class Player implements Serializable {
      */
     int undoMove(Game game, Board board, Move m) {
         m.undoMove(board);
-        Game.decreaseMoveIndex();
+        game.decreaseMoveIndex();
         ArrayList<Move> moves = game.getMoves();
 
         // Check if the move previous to the Move "m" was pawn double move. If it was, reset the
         // en passant.
         Move dp;
-        if (Game.getMoveIndex() > 0 && (dp = moves.get(Game.getMoveIndex() - 1)) instanceof Move.PawnDoubleMove) {
+        if (game.getMoveIndex() > 0 && (dp = moves.get(game.getMoveIndex() - 1)) instanceof Move.PawnDoubleMove) {
             if (dp.getMovingPiece().isWhite()) {
                 Game.setEnPassantTarget(board.getSquare(dp.getRowEnd() + 1, dp.getColEnd()));
                 Game.setEnPassantTargetPlayer(this);
@@ -356,5 +363,11 @@ public class Player implements Serializable {
             currentMoveSquares.add(board.getSquare(m.getRowEnd(), m.getColEnd()));
         }
         return currentMoveSquares;
+    }
+
+    int endTurn(Game game) {
+        int gamestate = makeMove(game, game.getBoard(), currentMove);
+        currentMove = null;
+        return gamestate;
     }
 }

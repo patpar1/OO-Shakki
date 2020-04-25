@@ -1,6 +1,5 @@
 package com.example.chess.game;
 
-import com.example.chess.ai.AlphaBetaPlayer;
 import com.example.chess.game.pieces.Piece;
 
 import java.io.Serializable;
@@ -10,12 +9,13 @@ public class Game implements Serializable {
 
     private Board board;
     private ArrayList<Move> moves;
-    private static boolean whiteTurn;
+    private boolean whiteTurn;
     private Player whitePlayer;
     private Player blackPlayer;
     private static Square enPassantTarget;
     private static Player enPassantTargetPlayer;
-    private static int moveIndex;
+    private int moveIndex;
+    private static boolean canEndTurn;
 
     /**
      * Main constructor for the Game class. This class tracks the Game Board, players, current
@@ -26,11 +26,12 @@ public class Game implements Serializable {
         moves = new ArrayList<>();
         whiteTurn = true;
         whitePlayer = new Player(true);
-        // blackPlayer = new Player(false);
-        blackPlayer = new AlphaBetaPlayer(false);
+        blackPlayer = new Player(false);
+        // blackPlayer = new AlphaBetaPlayer(false);
         enPassantTarget = null;
         enPassantTargetPlayer = null;
         moveIndex = 0;
+        canEndTurn = false;
     }
 
     /* Some simple getter and setter methods which I will not describe further */
@@ -63,6 +64,10 @@ public class Game implements Serializable {
         return getPlayer(whiteTurn);
     }
 
+    public Move getCurrentPlayerMove() {
+        return getCurrentPlayer().getCurrentMove();
+    }
+
     public static Square getEnPassantTarget() {
         return enPassantTarget;
     }
@@ -83,20 +88,28 @@ public class Game implements Serializable {
         return getCurrentPlayer().isCheck();
     }
 
-    public static int getMoveIndex() {
+    public int getMoveIndex() {
         return moveIndex;
     }
 
-    static void increaseMoveIndex() {
+    void increaseMoveIndex() {
         moveIndex++;
     }
 
-    static void decreaseMoveIndex() {
+    void decreaseMoveIndex() {
         moveIndex--;
     }
 
-    static void switchPlayerTurn() {
-        Game.whiteTurn = !whiteTurn;
+    void switchPlayerTurn() {
+        this.whiteTurn = !whiteTurn;
+    }
+
+    public static boolean canEndTurn() {
+        return canEndTurn;
+    }
+
+    static void setCanEndTurn(boolean b) {
+        Game.canEndTurn = b;
     }
 
     /**
@@ -112,10 +125,9 @@ public class Game implements Serializable {
      * 3 - Stalemate
      *
      * @param sq Square clicked by the user.
-     * @return integer value representing the current state of the game.
      */
-    public int handleSquareClickEvent(Square sq) {
-        return getCurrentPlayer().handleSquareClickEvent(this, sq);
+    public void handleSquareClickEvent(Square sq) {
+        getCurrentPlayer().handleSquareClickEvent(this, sq);
     }
 
     /**
@@ -154,5 +166,9 @@ public class Game implements Serializable {
      */
     public ArrayList<Square> getCurrentMoveSquares() {
         return getCurrentPlayer().getCurrentMoveSquares(board);
+    }
+
+    public int endTurn() {
+        return getCurrentPlayer().endTurn(this);
     }
 }

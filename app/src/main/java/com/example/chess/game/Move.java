@@ -16,13 +16,16 @@ public class Move implements Serializable {
 
     private boolean firstMove;
 
+    private Piece pieceBeforePromotion;
+
     private Move(int colStart,
                  int rowStart,
                  int colEnd,
                  int rowEnd,
                  Piece movingPiece,
                  Piece removedPiece,
-                 boolean firstMove) {
+                 boolean firstMove,
+                 Piece pieceBeforePromotion) {
         this.colStart = colStart;
         this.rowStart = rowStart;
         this.colEnd = colEnd;
@@ -30,6 +33,7 @@ public class Move implements Serializable {
         this.movingPiece = movingPiece;
         this.removedPiece = removedPiece;
         this.firstMove = firstMove;
+        this.pieceBeforePromotion = pieceBeforePromotion;
     }
 
     public Move(Square startingSquare, Square endingSquare) {
@@ -40,6 +44,7 @@ public class Move implements Serializable {
         rowEnd = endingSquare.getRow();
         removedPiece = endingSquare.getPiece();
         firstMove = false;
+        pieceBeforePromotion = null;
     }
 
     /* Basic getter and setter methods. */
@@ -60,8 +65,13 @@ public class Move implements Serializable {
         return rowStart;
     }
 
-    Piece getMovingPiece() {
+    public Piece getMovingPiece() {
         return movingPiece;
+    }
+
+    public void setPromotion(Piece piece) {
+        pieceBeforePromotion = movingPiece;
+        movingPiece = piece;
     }
 
     void setRemovedPiece(Piece removedPiece) {
@@ -78,7 +88,7 @@ public class Move implements Serializable {
      * @return A copy of this move.
      */
     Move copy() {
-        return new Move(colStart, rowStart, colEnd, rowEnd, movingPiece, removedPiece, firstMove);
+        return new Move(colStart, rowStart, colEnd, rowEnd, movingPiece, removedPiece, firstMove, pieceBeforePromotion);
     }
 
     /**
@@ -119,7 +129,11 @@ public class Move implements Serializable {
      * @param board Current state of the board.
      */
     void undoMove(Board board) {
-        board.getSquare(rowStart, colStart).setPiece(movingPiece);
+        if (pieceBeforePromotion != null) {
+            board.getSquare(rowStart, colStart).setPiece(pieceBeforePromotion);
+        } else {
+            board.getSquare(rowStart, colStart).setPiece(movingPiece);
+        }
         board.getSquare(rowEnd, colEnd).setPiece(removedPiece);
         if (firstMove) {
             movingPiece.setMoved(false);
@@ -194,8 +208,9 @@ public class Move implements Serializable {
                              Piece movingPiece,
                              Piece removedPiece,
                              boolean firstMove,
+                             Piece pieceBeforePromotion,
                              Move rookMove) {
-            super(colStart, rowStart, colEnd, rowEnd, movingPiece, removedPiece, firstMove);
+            super(colStart, rowStart, colEnd, rowEnd, movingPiece, removedPiece, firstMove, pieceBeforePromotion);
             this.rookMove = rookMove;
         }
 
@@ -234,6 +249,7 @@ public class Move implements Serializable {
                     super.movingPiece,
                     super.removedPiece,
                     super.firstMove,
+                    super.pieceBeforePromotion,
                     rookMove.copy());
         }
     }

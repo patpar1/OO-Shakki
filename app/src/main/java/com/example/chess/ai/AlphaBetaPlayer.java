@@ -15,7 +15,7 @@ public class AlphaBetaPlayer extends Player {
     }
 
     @Override
-    public int handleSquareClickEvent(Game game, Square sq) {
+    public void handleSquareClickEvent(Game game, Square sq) {
         Board b = game.getBoard();
         ArrayList<Square> squares = b.getPlayerSquares(this.isWhite());
         Move m;
@@ -25,7 +25,8 @@ public class AlphaBetaPlayer extends Player {
             if (moves.size() > 0) {
                 m = moves.get(new Random().nextInt(moves.size()));
                 game.getMoves().add(m);
-                return makeMove(game, b, m);
+                makeMove(game, b, m);
+                return;
             }
         }
     }

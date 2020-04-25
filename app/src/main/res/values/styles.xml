@@ -11,7 +11,6 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="background">#312e2b</item>
     </style>
 
     <style name="AppThemeMaterial" parent="Theme.MaterialComponents.Light.DarkActionBar">

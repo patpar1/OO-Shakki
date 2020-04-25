@@ -47,7 +47,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-class GameFragment extends Fragment implements View.OnClickListener {
+public class GameFragment extends Fragment implements View.OnClickListener {
 
     private GridLayout chessboard;
     private Map<ImageView, Square> drawableTiles;

@@ -7,6 +7,7 @@ import com.example.chess.game.Player;
 import com.example.chess.game.Square;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * An AI player that uses MiniMax-algorithm with Alpha-Beta pruning to calculate optimal move on
@@ -60,6 +61,8 @@ public class AlphaBetaPlayer extends Player {
             moves.addAll(getLegalMoves(board, s));
         }
 
+        Collections.shuffle(moves);
+
         Move bestMove = null;
         double bestScore = -9999;
 
@@ -101,6 +104,8 @@ public class AlphaBetaPlayer extends Player {
         for (Square s : squares) {
             moves.addAll(s.getPiece().legalMoves(board, s));
         }
+
+        Collections.shuffle(moves);
 
         // If the current player tries to maximize the board value, set the best move value to a
         // large negative value. Otherwise set it to a large positive value

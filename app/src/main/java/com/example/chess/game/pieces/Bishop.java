@@ -2,6 +2,7 @@ package com.example.chess.game.pieces;
 
 import com.example.chess.R;
 import com.example.chess.game.Board;
+import com.example.chess.game.BoardUtils;
 import com.example.chess.game.Move;
 
 import java.io.Serializable;
@@ -10,15 +11,27 @@ import java.util.ArrayList;
 public class Bishop extends Piece implements Serializable {
 
     private static final int ABSOLUTE_PIECE_VALUE = 30;
-    private static final int[][] moveVectors = {
+    private static final int[][] MOVE_VECTORS = {
             {-1, 1}, // Right Up
             {1, 1}, // Right Down
             {-1, -1}, // Left Up
             {1, -1} // Left Down
     };
+    private static final double[][] BOARD_POSITION_BIAS = {
+            { -2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0},
+            { -1.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -1.0},
+            { -1.0,  0.0,  0.5,  1.0,  1.0,  0.5,  0.0, -1.0},
+            { -1.0,  0.5,  0.5,  1.0,  1.0,  0.5,  0.5, -1.0},
+            { -1.0,  0.0,  1.0,  1.0,  1.0,  1.0,  0.0, -1.0},
+            { -1.0,  1.0,  1.0,  1.0,  1.0,  1.0,  1.0, -1.0},
+            { -1.0,  0.5,  0.0,  0.0,  0.0,  0.0,  0.5, -1.0},
+            { -2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0}
+    };
 
     public Bishop(boolean isWhite) {
-        super(isWhite, isWhite ? ABSOLUTE_PIECE_VALUE : -ABSOLUTE_PIECE_VALUE);
+        super(isWhite,
+                isWhite ? ABSOLUTE_PIECE_VALUE : -ABSOLUTE_PIECE_VALUE,
+                isWhite ? BOARD_POSITION_BIAS : BoardUtils.reverseArray(BOARD_POSITION_BIAS));
     }
 
     /**
@@ -33,7 +46,7 @@ public class Bishop extends Piece implements Serializable {
     @Override
     public ArrayList<Move> legalMoves(Board board, int row, int col) {
         ArrayList<Move> moveArray = new ArrayList<>();
-        for (int[] direction : moveVectors) {
+        for (int[] direction : MOVE_VECTORS) {
             int[] moveCandidate = {row, col};
             while (true) {
                 moveCandidate[0] += direction[0];

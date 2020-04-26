@@ -2,6 +2,7 @@ package com.example.chess.game.pieces;
 
 import com.example.chess.R;
 import com.example.chess.game.Board;
+import com.example.chess.game.BoardUtils;
 import com.example.chess.game.Move;
 
 import java.io.Serializable;
@@ -20,9 +21,21 @@ public class Knight extends Piece implements Serializable {
             {-1, 2}, // NEE
             {-2, 1} // NNE
     };
+    private static final double[][] BOARD_POSITION_BIAS = {
+            {-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0},
+            {-4.0, -2.0,  0.0,  0.0,  0.0,  0.0, -2.0, -4.0},
+            {-3.0,  0.0,  1.0,  1.5,  1.5,  1.0,  0.0, -3.0},
+            {-3.0,  0.5,  1.5,  2.0,  2.0,  1.5,  0.5, -3.0},
+            {-3.0,  0.0,  1.5,  2.0,  2.0,  1.5,  0.0, -3.0},
+            {-3.0,  0.5,  1.0,  1.5,  1.5,  1.0,  0.5, -3.0},
+            {-4.0, -2.0,  0.0,  0.5,  0.5,  0.0, -2.0, -4.0},
+            {-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0}
+    };
 
     public Knight(boolean isWhite) {
-        super(isWhite, isWhite ? ABSOLUTE_PIECE_VALUE : -ABSOLUTE_PIECE_VALUE);
+        super(isWhite,
+                isWhite ? ABSOLUTE_PIECE_VALUE : -ABSOLUTE_PIECE_VALUE,
+                isWhite ? BOARD_POSITION_BIAS : BoardUtils.reverseArray(BOARD_POSITION_BIAS));
     }
 
     /**
@@ -55,5 +68,4 @@ public class Knight extends Piece implements Serializable {
     public int getDrawable() {
         return isWhite() ? R.drawable.wn : R.drawable.bn;
     }
-
 }

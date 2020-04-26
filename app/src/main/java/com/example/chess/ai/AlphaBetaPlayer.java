@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class AlphaBetaPlayer extends Player {
 
     // How deep to search the minimax algorithm.
-    private static final int SEARCH_DEPTH = 3;
+    private static final int SEARCH_DEPTH = 4;
 
     public AlphaBetaPlayer(boolean isWhite) {
         super(isWhite);
@@ -61,7 +61,7 @@ public class AlphaBetaPlayer extends Player {
         }
 
         Move bestMove = null;
-        int bestScore = -9999;
+        double bestScore = -9999;
 
         // Iterate through each move
         for (Move m : moves) {
@@ -70,7 +70,7 @@ public class AlphaBetaPlayer extends Player {
             copyMove.makeMove(copyBoard);
 
             // Search the moves boardValue with MiniMax.
-            int boardValue = minimax(SEARCH_DEPTH - 1, copyBoard, false);
+            double boardValue = minimax(SEARCH_DEPTH - 1, copyBoard, -10000.0, 10000.0, false);
 
             // If the board value is larger than previous best score, this is current best move.
             if (boardValue > bestScore) {
@@ -89,7 +89,7 @@ public class AlphaBetaPlayer extends Player {
      * @param isMaxPlayer Boolean value representing, if current player is maximizing the board value.
      * @return Largest board value.
      */
-    private int minimax(int depth, Board board, boolean isMaxPlayer) {
+    private double minimax(int depth, Board board, double alpha, double beta, boolean isMaxPlayer) {
         // If this is lowest level of the search tree, evaluate the game board.
         if (depth == 0) {
             return -evaluateBoard(board);
@@ -99,13 +99,13 @@ public class AlphaBetaPlayer extends Player {
         ArrayList<Square> squares = board.getPlayerSquares(!isMaxPlayer);
         ArrayList<Move> moves = new ArrayList<>();
         for (Square s : squares) {
-            moves.addAll(getLegalMoves(board, s));
+            moves.addAll(s.getPiece().legalMoves(board, s));
         }
 
         // If the current player tries to maximize the board value, set the best move value to a
         // large negative value. Otherwise set it to a large positive value
         if (isMaxPlayer) {
-            int bestMove = -9999;
+            double bestMove = -9999.0;
             for (Move m : moves) {
                 // Make the move on the copy board.
                 Move copyMove = m.copy();
@@ -113,11 +113,15 @@ public class AlphaBetaPlayer extends Player {
                 copyMove.makeMove(copyBoard);
 
                 // Call this function recursively until depth is 0.
-                bestMove = Math.max(bestMove, minimax(depth - 1, copyBoard, false));
+                bestMove = Math.max(bestMove, minimax(depth - 1, copyBoard, alpha, beta, false));
+                alpha = Math.max(alpha, bestMove);
+                if (beta <= alpha) {
+                    return bestMove;
+                }
             }
             return bestMove;
         } else {
-            int bestMove = 9999;
+            double bestMove = 9999.0;
             for (Move m : moves) {
                 // Make the move on the copy board.
                 Move copyMove = m.copy();
@@ -125,7 +129,11 @@ public class AlphaBetaPlayer extends Player {
                 copyMove.makeMove(copyBoard);
 
                 // Call this function recursively until depth is 0.
-                bestMove = Math.min(bestMove, minimax(depth - 1, copyBoard, true));
+                bestMove = Math.min(bestMove, minimax(depth - 1, copyBoard, alpha, beta, true));
+                beta = Math.min(beta, bestMove);
+                if (beta <= alpha) {
+                    return bestMove;
+                }
             }
             return bestMove;
         }
@@ -137,12 +145,12 @@ public class AlphaBetaPlayer extends Player {
      * @param board Board object needed to be evaluated.
      * @return Board's value.
      */
-    private int evaluateBoard(Board board) {
-        int totalScore = 0;
+    private double evaluateBoard(Board board) {
+        double totalScore = 0;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (board.getSquare(i, j).getPiece() != null) {
-                    totalScore += board.getSquare(i, j).getPiece().getPieceValue();
+                    totalScore += board.getSquare(i, j).getPiece().getPieceValue(i, j);
                 }
             }
         }

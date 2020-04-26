@@ -2,6 +2,7 @@ package com.example.chess.game.pieces;
 
 import com.example.chess.R;
 import com.example.chess.game.Board;
+import com.example.chess.game.BoardUtils;
 import com.example.chess.game.Move;
 import com.example.chess.game.Square;
 
@@ -22,9 +23,22 @@ public class King extends Piece implements Serializable {
             {0, 1}, // Right
             {0, -1} // Left
     };
+    private static final double[][] BOARD_POSITION_BIAS = {
+            { -3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0},
+            { -3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0},
+            { -3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0},
+            { -3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0},
+            { -2.0, -3.0, -3.0, -4.0, -4.0, -3.0, -3.0, -2.0},
+            { -1.0, -2.0, -2.0, -2.0, -2.0, -2.0, -2.0, -1.0},
+            {  2.0,  2.0,  0.0,  0.0,  0.0,  0.0,  2.0,  2.0 },
+            {  2.0,  3.0,  1.0,  0.0,  0.0,  1.0,  3.0,  2.0 }
+    };
+
 
     public King(boolean isWhite) {
-        super(isWhite, isWhite ? ABSOLUTE_PIECE_VALUE : -ABSOLUTE_PIECE_VALUE);
+        super(isWhite,
+                isWhite ? ABSOLUTE_PIECE_VALUE : -ABSOLUTE_PIECE_VALUE,
+                isWhite ? BOARD_POSITION_BIAS : BoardUtils.reverseArray(BOARD_POSITION_BIAS));
     }
 
     /**

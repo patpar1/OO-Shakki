@@ -10,12 +10,14 @@ import java.util.ArrayList;
 public abstract class Piece implements Serializable {
     private final boolean isWhite;
     private boolean isMoved;
-    private final int pieceValue;
+    private final double pieceValue;
+    private final double[][] BOARD_POSITION_BIAS;
 
-    Piece(boolean isWhite, int pieceValue) {
+    Piece(boolean isWhite, double pieceValue, double[][] BOARD_POSITION_BIAS) {
         this.isWhite = isWhite;
         this.isMoved = false;
         this.pieceValue = pieceValue;
+        this.BOARD_POSITION_BIAS = BOARD_POSITION_BIAS;
     }
 
     /**
@@ -73,7 +75,11 @@ public abstract class Piece implements Serializable {
         isMoved = moved;
     }
 
-    public int getPieceValue() {
-        return pieceValue;
+    public double getPieceValue(int row, int col) {
+        return pieceValue + getBoardPositionBias(row, col);
+    }
+
+    private double getBoardPositionBias(int row, int col) {
+        return BOARD_POSITION_BIAS[row][col];
     }
 }

@@ -2,6 +2,7 @@ package com.example.chess.game.pieces;
 
 import com.example.chess.R;
 import com.example.chess.game.Board;
+import com.example.chess.game.BoardUtils;
 import com.example.chess.game.Move;
 
 import java.io.Serializable;
@@ -16,9 +17,21 @@ public class Rook extends Piece implements Serializable {
             {0, -1}, // Left
             {0, 1}, // Right
     };
+    private static final double[][] BOARD_POSITION_BIAS = {
+            {  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0},
+            {  0.5,  1.0,  1.0,  1.0,  1.0,  1.0,  1.0,  0.5},
+            { -0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5},
+            { -0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5},
+            { -0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5},
+            { -0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5},
+            { -0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5},
+            {  0.0,   0.0, 0.0,  0.5,  0.5,  0.0,  0.0,  0.0}
+    };
 
     public Rook(boolean isWhite) {
-        super(isWhite, isWhite ? ABSOLUTE_PIECE_VALUE : -ABSOLUTE_PIECE_VALUE);
+        super(isWhite,
+                isWhite ? ABSOLUTE_PIECE_VALUE : -ABSOLUTE_PIECE_VALUE,
+                isWhite ? BOARD_POSITION_BIAS : BoardUtils.reverseArray(BOARD_POSITION_BIAS));
     }
 
     /**

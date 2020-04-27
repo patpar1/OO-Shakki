@@ -7,19 +7,68 @@
 
     <fragment
         android:id="@+id/nav_main"
-        android:name="com.example.chess.ui.main.MainFragment"
+        android:name="com.example.chess.ui.HomeFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_main">
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_nav_main_to_nav_new_game"
+            app:destination="@id/nav_new_game"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_nav_main_to_nav_load_game"
+            app:destination="@id/nav_load_game"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/nav_load_game"
+        android:name="com.example.chess.ui.LoadGameFragment"
+        android:label="Load Game"
+        tools:layout="@layout/fragment_load_game">
+        <action
+            android:id="@+id/action_nav_load_game_to_nav_game"
+            app:destination="@id/nav_game"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_new_game"
+        android:name="com.example.chess.ui.NewGameFragment"
+        android:label="New Game"
+        tools:layout="@layout/fragment_new_game">
+        <action
+            android:id="@+id/action_nav_new_game_to_nav_game"
+            app:destination="@id/nav_game"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
         android:id="@+id/nav_game"
-        android:name="com.example.chess.ui.game.GameFragment"
+        android:name="com.example.chess.ui.GameFragment"
         android:label="Chess"
         tools:layout="@layout/fragment_game">
 
-    </fragment>
+        <argument
+            android:name="isHumanPlayer"
+            app:argType="boolean"
+            android:defaultValue="true" />
 
+        <argument
+            android:name="aiLevel"
+            app:argType="integer"
+            android:defaultValue="3" />
+    </fragment>
 
 </navigation>

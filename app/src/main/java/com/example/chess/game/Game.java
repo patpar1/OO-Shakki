@@ -20,13 +20,16 @@ public class Game implements Serializable {
      * Main constructor for the Game class. This class tracks the Game Board, players, current
      * turn etc. All classes under this class are Serializable for the saving functionality.
      */
-    public Game() {
+    public Game(boolean isHumanPlayer, int aiLevel) {
         board = new Board();
         moves = new ArrayList<>();
         whiteTurn = true;
         whitePlayer = new Player(true);
-        // blackPlayer = new Player(false);
-        blackPlayer = new AlphaBetaPlayer(false);
+        if (isHumanPlayer) {
+            blackPlayer = new Player(false);
+        } else {
+            blackPlayer = new AlphaBetaPlayer(false, aiLevel);
+        }
         enPassantTarget = null;
         enPassantTargetPlayer = null;
         moveIndex = 0;

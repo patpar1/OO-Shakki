@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="tile_size">50dp</dimen>
+
+    <dimen name="player_selected">120dp</dimen>
+    <dimen name="player_unselected">100dp</dimen>
 </resources>

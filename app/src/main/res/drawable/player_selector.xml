@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true"
+        android:width="18dp"
+        android:height="18dp"
+        android:drawable="@drawable/human_player">
+    </item>
+    <item android:state_selected="false"
+        android:width="9dp"
+        android:height="9dp"
+        android:drawable="@drawable/human_player">
+    </item>
+</selector>

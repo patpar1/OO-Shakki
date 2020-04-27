@@ -1,4 +1,4 @@
-package com.example.chess.ui.game;
+package com.example.chess.ui;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,9 +8,6 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -21,7 +18,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -36,7 +32,6 @@ import com.example.chess.game.pieces.Pawn;
 import com.example.chess.game.pieces.Piece;
 import com.example.chess.game.pieces.Queen;
 import com.example.chess.game.pieces.Rook;
-import com.google.android.material.bottomappbar.BottomAppBar;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -53,6 +48,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     private Map<ImageView, Square> drawableTiles;
     private Game game;
 
+    public GameFragment() {
+        // Required empty public constructor
+    }
+
     /**
      * Instantiates the GameFragment to the user interface view.
      *
@@ -68,42 +67,18 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_game, container, false);
 
-        // Setting for the options menu inflation
-        setHasOptionsMenu(true);
+        boolean isHumanPlayer = true;
+        int aiLevel = 3;
 
-        // Creates the bottom app bar for the undo and redo commands
-        BottomAppBar bottomAppBar = v.findViewById(R.id.bar);
-        bottomAppBar.replaceMenu(R.menu.bottom_navigation);
-        bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                int moveIndex = game.getMoveIndex();
-                switch (item.getItemId()) {
-                    case R.id.button_back:
-                        // Undo move
-                        if (moveIndex > 0) {
-                            checkGameState(game.undoPreviousMove());
-                        } else {
-                            Toast.makeText(getContext(), "First Move!", Toast.LENGTH_SHORT).show();
-                        }
-                        break;
-                    case R.id.button_forward:
-                        // Redo move
-                        if (moveIndex < game.getMoves().size()) {
-                            checkGameState(game.makeNextMove());
-                        } else {
-                            Toast.makeText(getContext(), "Last Move!", Toast.LENGTH_SHORT).show();
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                return true;
+        if (getArguments() != null) {
+            isHumanPlayer = getArguments().getBoolean("isHumanPlayer");
+            if (!isHumanPlayer) {
+                aiLevel = getArguments().getInt("aiLevel");
             }
-        });
+        }
 
         // Game class for the game logic
-        game = new Game();
+        game = new Game(isHumanPlayer, aiLevel);
 
         // Main chessboard view
         chessboard = v.findViewById(R.id.chessboard);
@@ -111,6 +86,52 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         // Initializes the map which maps all Squares of the Board to corresponding ImageViews
         drawableTiles = new HashMap<>();
         initializeDrawableTiles();
+
+        v.findViewById(R.id.new_game_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newGame();
+            }
+        });
+
+        v.findViewById(R.id.save_game_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveGameDialog();
+            }
+        });
+
+
+        v.findViewById(R.id.load_game_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadGameDialog();
+            }
+        });
+
+
+        v.findViewById(R.id.undo_move_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (game.getMoveIndex() > 0) {
+                    checkGameState(game.undoPreviousMove());
+                } else {
+                    Toast.makeText(getContext(), "First Move!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        v.findViewById(R.id.redo_move_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (game.getMoveIndex() < game.getMoves().size()) {
+                    checkGameState(game.makeNextMove());
+                } else {
+                    Toast.makeText(getContext(), "Last Move!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         return v;
     }
@@ -126,41 +147,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         drawGameBoard();
-    }
-
-    /**
-     * Inflates the options menu on the toolbar.
-     *
-     * @param menu     contains the options menu to be created.
-     * @param inflater Inflater object which inflates the menu XML.
-     */
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_game, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    /**
-     * Called when options item is selected.
-     *
-     * @param item Selected Menu item.
-     * @return boolean value to allow normal menu processing to proceed
-     */
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.new_game:
-                newGame();
-                return true;
-            case R.id.save_game:
-                saveGameDialog();
-                return true;
-            case R.id.load_game:
-                loadGameDialog();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     /**
@@ -424,7 +410,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                         } catch (ClassNotFoundException e) {
                             // If Game class was not found, return a new Game class
                             Toast.makeText(c, "Error occurred: " + e, Toast.LENGTH_SHORT).show();
-                            game = new Game();
+                            View v;
+                            if ((v = getView()) != null) {
+                                Navigation.findNavController(v).navigateUp();
+                            }
                         } catch (IOException e) {
                             // File was not found
                             Toast.makeText(c, "Error occurred: " + e, Toast.LENGTH_SHORT).show();

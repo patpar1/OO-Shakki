@@ -18,10 +18,11 @@ import java.util.Collections;
 public class AlphaBetaPlayer extends Player {
 
     // How deep to search the minimax algorithm.
-    private static final int SEARCH_DEPTH = 4;
+    private int searchDepth;
 
-    public AlphaBetaPlayer(boolean isWhite) {
+    public AlphaBetaPlayer(boolean isWhite, int aiLevel) {
         super(isWhite);
+        searchDepth = aiLevel;
     }
 
     /**
@@ -73,7 +74,7 @@ public class AlphaBetaPlayer extends Player {
             copyMove.makeMove(copyBoard);
 
             // Search the moves boardValue with MiniMax.
-            double boardValue = minimax(SEARCH_DEPTH - 1, copyBoard, -10000.0, 10000.0, false);
+            double boardValue = minimax(searchDepth - 1, copyBoard, -10000.0, 10000.0, false);
 
             // If the board value is larger than previous best score, this is current best move.
             if (boardValue > bestScore) {

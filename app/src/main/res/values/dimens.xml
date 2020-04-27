@@ -4,4 +4,6 @@
 
     <dimen name="player_selected">120dp</dimen>
     <dimen name="player_unselected">100dp</dimen>
+    <dimen name="player_selected_game">100dp</dimen>
+    <dimen name="player_unselected_game">80dp</dimen>
 </resources>

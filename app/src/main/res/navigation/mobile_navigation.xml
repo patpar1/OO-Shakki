@@ -10,6 +10,7 @@
         android:name="com.example.chess.ui.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home">
+
         <action
             android:id="@+id/action_nav_main_to_nav_new_game"
             app:destination="@id/nav_new_game"
@@ -17,6 +18,7 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+
         <action
             android:id="@+id/action_nav_main_to_nav_load_game"
             app:destination="@id/nav_load_game"
@@ -24,6 +26,7 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+
     </fragment>
 
     <fragment
@@ -31,6 +34,7 @@
         android:name="com.example.chess.ui.LoadGameFragment"
         android:label="Load Game"
         tools:layout="@layout/fragment_load_game">
+
         <action
             android:id="@+id/action_nav_load_game_to_nav_game"
             app:destination="@id/nav_game"
@@ -38,6 +42,7 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+
     </fragment>
 
     <fragment
@@ -45,6 +50,7 @@
         android:name="com.example.chess.ui.NewGameFragment"
         android:label="New Game"
         tools:layout="@layout/fragment_new_game">
+
         <action
             android:id="@+id/action_nav_new_game_to_nav_game"
             app:destination="@id/nav_game"
@@ -52,6 +58,7 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+
     </fragment>
 
     <fragment
@@ -62,13 +69,24 @@
 
         <argument
             android:name="isHumanPlayer"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
 
         <argument
             android:name="aiLevel"
-            app:argType="integer"
-            android:defaultValue="3" />
+            android:defaultValue="3"
+            app:argType="integer" />
+
+        <action
+            android:id="@+id/action_nav_game_to_nav_game_won"
+            app:destination="@id/nav_game_won" />
+
     </fragment>
+
+    <fragment
+        android:id="@+id/nav_game_won"
+        android:name="com.example.chess.ui.GameWonFragment"
+        android:label="Game Won!"
+        tools:layout="@layout/fragment_game_won" />
 
 </navigation>

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,6 +42,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class GameFragment extends Fragment implements View.OnClickListener {
@@ -47,6 +50,15 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     private GridLayout chessboard;
     private Map<ImageView, Square> drawableTiles;
     private Game game;
+
+    private long startTime;
+    private Handler timerHandler;
+    private Runnable timerRunnable;
+
+    private boolean humanSelected;
+    private ImageView player1;
+    private ImageView player2;
+    private TextView turnText;
 
     public GameFragment() {
         // Required empty public constructor
@@ -86,6 +98,15 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         // Initializes the map which maps all Squares of the Board to corresponding ImageViews
         drawableTiles = new HashMap<>();
         initializeDrawableTiles();
+
+        player1 = v.findViewById(R.id.image_human);
+        player2 = v.findViewById(R.id.image_bot);
+        if (isHumanPlayer) {
+            player2.setBackgroundResource(R.drawable.human_player);
+        }
+
+        humanSelected = true;
+        turnText = v.findViewById(R.id.turn_text);
 
         v.findViewById(R.id.new_game_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,7 +154,58 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             }
         });
 
+        final TextView timerTextView = v.findViewById(R.id.game_clock);
+
+        startTime = 0;
+        timerHandler = new Handler();
+        timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                long millis = System.currentTimeMillis() - startTime;
+                int seconds = (int) (millis/1000);
+                int minutes = seconds / 60;
+                seconds = seconds % 60;
+
+                timerTextView.setText(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
+                timerHandler.postDelayed(this, 500);
+            }
+        };
+
         return v;
+    }
+
+    private void switchSelected() {
+        if (!humanSelected) {
+            humanSelected = true;
+
+            ViewGroup.LayoutParams humanParams = player1.getLayoutParams();
+            ViewGroup.LayoutParams botParams = player2.getLayoutParams();
+
+            humanParams.height = getResources().getDimensionPixelSize(R.dimen.player_selected_game);
+            humanParams.width = getResources().getDimensionPixelSize(R.dimen.player_selected_game);
+            player1.setLayoutParams(humanParams);
+
+            botParams.height = getResources().getDimensionPixelSize(R.dimen.player_unselected_game);
+            botParams.width = getResources().getDimensionPixelSize(R.dimen.player_unselected_game);
+            player2.setLayoutParams(botParams);
+
+            turnText.setText("White's turn!");
+        } else {
+            humanSelected = false;
+
+            ViewGroup.LayoutParams humanParams = player1.getLayoutParams();
+            ViewGroup.LayoutParams botParams = player2.getLayoutParams();
+
+            humanParams.height = getResources().getDimensionPixelSize(R.dimen.player_unselected_game);
+            humanParams.width = getResources().getDimensionPixelSize(R.dimen.player_unselected_game);
+            player1.setLayoutParams(humanParams);
+
+            botParams.height = getResources().getDimensionPixelSize(R.dimen.player_selected_game);
+            botParams.width = getResources().getDimensionPixelSize(R.dimen.player_selected_game);
+            player2.setLayoutParams(botParams);
+
+            turnText.setText("Black's turn!");
+        }
     }
 
     /**
@@ -147,6 +219,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         drawGameBoard();
+        startTime = System.currentTimeMillis();
+        timerHandler.postDelayed(timerRunnable, 0);
     }
 
     /**
@@ -197,6 +271,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
         // Draw the game board to the UI after the move is done.
         drawGameBoard();
+        switchSelected();
 
         // If game does not continue, shows the game ending dialog.
         if (gameState > 0) {
@@ -231,6 +306,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         }
 
         drawGameBoard();
+        switchSelected();
 
         if (gameState > 0) {
             gameEndingDialog(gameState);

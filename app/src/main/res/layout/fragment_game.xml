@@ -36,50 +36,50 @@
         android:textColor="@android:color/background_light"
         android:textSize="24sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/chessboard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/game_title"
-        app:layout_constraintBottom_toTopOf="@id/chessboard"/>
+        app:layout_constraintTop_toBottomOf="@id/game_title" />
 
     <ImageView
         android:id="@+id/image_human"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="@drawable/human_player_2"
+        android:contentDescription="@string/human_image"
         app:layout_constraintBottom_toTopOf="@+id/chessboard"
         app:layout_constraintEnd_toStartOf="@+id/game_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/blue_frame"
-        android:contentDescription="@string/human_image" />
+        app:srcCompat="@drawable/blue_frame" />
 
     <ImageView
         android:id="@+id/image_bot"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:background="@mipmap/ic_launcher_round"
+        android:contentDescription="@string/bot_image"
         app:layout_constraintBottom_toTopOf="@+id/chessboard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/game_title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/blue_frame"
-        android:contentDescription="@string/bot_image" />
+        app:srcCompat="@drawable/blue_frame" />
 
     <GridLayout
         android:id="@+id/chessboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/shadow"
         android:columnCount="8"
         android:elevation="4dp"
         android:rowCount="8"
-        app:layout_constraintVertical_bias="0.65"
-        android:background="@drawable/shadow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.65">
 
         <ImageView
             android:layout_width="@dimen/tile_size"
@@ -503,16 +503,16 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.bottomappbar.BottomAppBar
             style="@style/Widget.MaterialComponents.BottomAppBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
-            android:theme="@style/AppThemeMaterial"
             android:paddingEnd="18dp"
+            android:theme="@style/AppThemeMaterial"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:ignore="RtlSymmetry">
 
@@ -524,56 +524,56 @@
 
                 <ImageView
                     android:id="@+id/new_game_button"
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
+                    android:contentDescription="@string/new_game_image"
                     android:padding="8dp"
-                    android:src="@drawable/ic_add_black_24dp"
-                    android:contentDescription="@string/new_game_image" />
+                    android:src="@drawable/ic_add_black_24dp" />
 
                 <ImageView
                     android:id="@+id/save_game_button"
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/new_game_button"
+                    android:contentDescription="@string/save_game_image"
                     android:padding="8dp"
-                    android:src="@drawable/ic_save_black_24dp"
-                    android:contentDescription="@string/save_game_image" />
+                    android:src="@drawable/ic_save_black_24dp" />
 
                 <ImageView
                     android:id="@+id/load_game_button"
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/save_game_button"
+                    android:contentDescription="@string/load_game_image"
                     android:padding="8dp"
-                    android:src="@drawable/ic_file_download_black_24dp"
-                    android:contentDescription="@string/load_game_image" />
+                    android:src="@drawable/ic_file_download_black_24dp" />
 
                 <TextView
                     android:id="@+id/game_clock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/time"
                     android:layout_centerInParent="true"
+                    android:text="@string/time"
                     tools:ignore="RelativeOverlap" />
 
                 <ImageView
                     android:id="@+id/undo_move_button"
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_toStartOf="@id/redo_move_button"
+                    android:contentDescription="@string/undo_move_image"
                     android:padding="8dp"
-                    android:src="@drawable/ic_arrow_back_black_24dp"
-                    android:contentDescription="@string/undo_move_image" />
+                    android:src="@drawable/ic_arrow_back_black_24dp" />
 
                 <ImageView
                     android:id="@+id/redo_move_button"
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:contentDescription="@string/redo_move_image"
                     android:padding="8dp"
-                    android:src="@drawable/ic_arrow_forward_black_24dp"
-                    android:contentDescription="@string/redo_move_image" />
+                    android:src="@drawable/ic_arrow_forward_black_24dp" />
 
             </RelativeLayout>
 

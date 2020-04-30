@@ -32,13 +32,13 @@
         android:layout_height="225dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/main_game_logo"
         android:scaleType="centerCrop"
         android:src="@drawable/chess_logo"
         app:layout_constraintBottom_toTopOf="@+id/play_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/game_title"
-        android:contentDescription="@string/main_game_logo" />
+        app:layout_constraintTop_toBottomOf="@+id/game_title" />
 
     <Button
         android:id="@+id/play_button"

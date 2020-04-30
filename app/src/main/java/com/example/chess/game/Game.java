@@ -16,6 +16,10 @@ public class Game implements Serializable {
     private final Player blackPlayer;
     private int moveIndex;
 
+    private boolean isFinished;
+
+    private GameInformation gameInformation;
+
     /**
      * Main constructor for the Game class. This class tracks the Game Board, players, current
      * turn etc. All classes under this class are Serializable for the saving functionality.
@@ -33,6 +37,8 @@ public class Game implements Serializable {
         enPassantTarget = null;
         enPassantTargetPlayer = null;
         moveIndex = 0;
+        isFinished = false;
+        gameInformation = new GameInformation();
     }
 
     /* Some simple getter and setter methods */
@@ -83,6 +89,22 @@ public class Game implements Serializable {
 
     void switchPlayerTurn() {
         this.whiteTurn = !whiteTurn;
+    }
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
+    }
+
+    public GameInformation getGameInformation() {
+        return gameInformation;
+    }
+
+    public void setGameInformation(GameInformation gameInformation) {
+        this.gameInformation = gameInformation;
     }
 
     /**

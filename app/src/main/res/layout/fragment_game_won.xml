@@ -11,7 +11,7 @@
 
 
     <TextView
-        android:id="@+id/game_title2"
+        android:id="@+id/player_won_title"
         android:gravity="center_horizontal"
         android:layout_width="368dp"
         android:layout_height="53dp"
@@ -24,14 +24,14 @@
         android:textColor="#35A571"
         android:textSize="36sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/title_image3"
+        app:layout_constraintBottom_toTopOf="@+id/trophy_picture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
-        android:id="@+id/play_btn2"
+        android:id="@+id/new_game_button"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="160dp"
         android:layout_height="48dp"
@@ -43,13 +43,31 @@
         android:textColor="#35A571"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/leaderboard_btn2"
+        app:layout_constraintBottom_toTopOf="@+id/save_game_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_image3" />
+        app:layout_constraintTop_toBottomOf="@+id/trophy_picture" />
 
     <Button
-        android:id="@+id/leaderboard_btn2"
+        android:id="@+id/save_game_button"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="160dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/win_button"
+        android:text="Save Game"
+        android:textColor="#35A571"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/main_menu_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_game_button" />
+
+    <Button
+        android:id="@+id/main_menu_button"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="42dp"
@@ -60,20 +78,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/play_btn2" />
+        app:layout_constraintTop_toBottomOf="@+id/save_game_button" />
 
     <ImageView
-        android:id="@+id/title_image3"
+        android:id="@+id/trophy_picture"
         android:layout_width="362dp"
         android:layout_height="279dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/play_btn2"
+        app:layout_constraintBottom_toTopOf="@+id/new_game_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/game_title2"
+        app:layout_constraintTop_toBottomOf="@+id/player_won_title"
         app:srcCompat="@drawable/trophy" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

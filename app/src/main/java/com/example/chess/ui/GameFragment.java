@@ -3,6 +3,7 @@ package com.example.chess.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -35,10 +37,8 @@ import com.example.chess.game.pieces.Piece;
 import com.example.chess.game.pieces.Queen;
 import com.example.chess.game.pieces.Rook;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,6 +64,38 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        final Activity a = requireActivity();
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Builder class for building the dialog.
+                new AlertDialog.Builder(a)
+                        .setTitle("Are you sure?")
+                        .setMessage("Unsaved progress will be lost!")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Navigation.findNavController(requireView()).popBackStack(R.id.nav_main, false);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            // Button for canceling the saving.
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .create()
+                        .show();
+
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+    }
+
     /**
      * Instantiates the GameFragment to the user interface view.
      *
@@ -79,21 +111,28 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_game, container, false);
 
-        boolean isHumanPlayer = true;
+        boolean isHumanPlayer = false;
         int aiLevel = 3;
 
         if (getArguments() != null) {
-            isHumanPlayer = getArguments().getBoolean("isHumanPlayer");
-            if (!isHumanPlayer) {
-                aiLevel = getArguments().getInt("aiLevel");
+            if (getArguments().getSerializable("game") != null) {
+                // Load game
+                game = (Game) getArguments().getSerializable("game");
+                Toast.makeText(v.getContext(), "Game loaded successfully!", Toast.LENGTH_SHORT).show();
+            } else {
+                // New game
+                isHumanPlayer = getArguments().getBoolean("isHumanPlayer");
+                if (!isHumanPlayer) {
+                    aiLevel = getArguments().getInt("aiLevel");
+                }
+                // Game class for the game logic
+                game = new Game(isHumanPlayer, aiLevel);
             }
         }
 
-        // Game class for the game logic
-        game = new Game(isHumanPlayer, aiLevel);
-
         // Main chessboard view
         chessboard = v.findViewById(R.id.chessboard);
+        chessboard.setDrawingCacheEnabled(true);
 
         // Initializes the map which maps all Squares of the Board to corresponding ImageViews
         drawableTiles = new HashMap<>();
@@ -111,7 +150,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         v.findViewById(R.id.new_game_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newGame();
+                makeSureDialog(R.id.nav_new_game);
             }
         });
 
@@ -126,7 +165,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         v.findViewById(R.id.load_game_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadGameDialog();
+                makeSureDialog(R.id.nav_load_game);
             }
         });
 
@@ -135,7 +174,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 if (game.getMoveIndex() > 0) {
-                    checkGameState(game.undoPreviousMove());
+                    game.undoPreviousMove();
+                    checkGameState();
                 } else {
                     Toast.makeText(getContext(), "First Move!", Toast.LENGTH_SHORT).show();
                 }
@@ -147,7 +187,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 if (game.getMoveIndex() < game.getMoves().size()) {
-                    checkGameState(game.makeNextMove());
+                    game.makeNextMove();
+                    checkGameState();
                 } else {
                     Toast.makeText(getContext(), "Last Move!", Toast.LENGTH_SHORT).show();
                 }
@@ -234,8 +275,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         /* First onClick method searches the square in Game classes board that corresponds to the clicked
          * square. After that the Game class handles the click event and makes the move on it's board.
          * Game class returns an integer which represents the game's state after the move is done. */
-        game.handleSquareClickEvent(drawableTiles.get(v));
-        checkPawnPromotionDialog();
+        if (!game.isFinished()) {
+            game.handleSquareClickEvent(drawableTiles.get(v));
+            checkPawnPromotionDialog();
+        }
     }
 
     /**
@@ -251,6 +294,9 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 && currentMove.getMovingPiece() instanceof Pawn
                 && (currentMove.getRowEnd() == 7 || currentMove.getRowEnd() == 0)) {
             // If the pawn is in first or last rank, promote the pawn.
+            if (game.getCurrentPlayer() instanceof AlphaBetaPlayer) {
+                currentMove.setPromotion(new Queen(game.getCurrentPlayer().isWhite()));
+            }
             pawnPromotionDialog(currentMove, true);
         } else {
             if (game.getCurrentPlayer().canEndTurn()) {
@@ -275,7 +321,12 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
         // If game does not continue, shows the game ending dialog.
         if (gameState > 0) {
-            gameEndingDialog(gameState);
+            game.setFinished(true);
+            updateGameImage(game);
+            Bundle bundle = new Bundle();
+            bundle.putInt("gameState", gameState);
+            bundle.putSerializable("game", game);
+            Navigation.findNavController(requireView()).navigate(R.id.action_nav_game_to_nav_game_won, bundle);
             return;
         }
 
@@ -287,10 +338,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     /**
      * Method for checking the game state, after user has manually undone or redone moves.
-     *
-     * @param gameState integer value representing the current state of the game.
      */
-    private void checkGameState(int gameState) {
+    private void checkGameState() {
         Move currentMove = null;
         ArrayList<Move> moves = game.getMoves();
 
@@ -307,94 +356,38 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
         drawGameBoard();
         switchSelected();
-
-        if (gameState > 0) {
-            gameEndingDialog(gameState);
-        }
     }
 
-    /**
-     * Method for instantiating a new game. Pops the current fragment and creates a new instance
-     * of it.
-     */
-    private void newGame() {
-        View v;
-        if ((v = getView()) != null) {
-            Navigation.findNavController(v).popBackStack();
-            Navigation.findNavController(v).navigate(R.id.nav_game);
-        }
-    }
-
-    /**
-     * Creates a dialog for game ending. User can either start a new game, save the ended game or
-     * return to the main menu.
-     *
-     * @param gameState integer representing the game ending state.
-     */
-    private void gameEndingDialog(final int gameState) {
-        // Find the application context for the dialog builder.
-        // If context isn't found, return to the upper method.
+    private void makeSureDialog(final int destination) {
         final Context c;
         if ((c = getContext()) == null) {
             return;
         }
 
-        // Builder class for building the dialog.
-        AlertDialog.Builder builder = new AlertDialog.Builder(c);
-
-        // Determine the dialogs title based on game ending state.
-        switch (gameState) {
-            case 1:
-                // White won
-                builder.setTitle("White player won!")
-                        .setMessage("White player has won the game!");
-                break;
-            case 2:
-                // Black won
-                builder.setTitle("Black player won!")
-                        .setMessage("Black player has won the game!");
-                break;
-            case 3:
-                // Stalemate
-                builder.setTitle("Stalemate!")
-                        .setMessage("Player has no legal moves!");
-                break;
-            default:
-                // Error
-                builder.setTitle("Error occurred!")
-                        .setMessage("An error has occurred!");
-                break;
+        final View v;
+        if ((v = getView()) == null) {
+            return;
         }
 
-        // Set button for starting a new game.
-        builder.setPositiveButton("New Game", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                newGame();
-            }
-        });
-
-        // Set button for saving the game.
-        builder.setNeutralButton("Save Game", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                saveGameDialog();
-            }
-        });
-
-        // Set button for returning to the main menu.
-        builder.setNegativeButton("Main Menu", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                View v;
-                if ((v = getView()) != null) {
-                    Navigation.findNavController(v).navigateUp();
-                }
-            }
-        });
-
-        // Show the dialog.
-        builder.create().show();
+        // Builder class for building the dialog.
+        new AlertDialog.Builder(c)
+                .setTitle("Are you sure?")
+                .setMessage("Unsaved progress will be lost!")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Navigation.findNavController(v).navigate(destination);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    // Button for canceling the saving.
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .create()
+                .show();
     }
 
     /**
@@ -424,17 +417,26 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         fileOutput = input.getText().toString();
-                        try {
-                            FileOutputStream fos = c.openFileOutput(fileOutput, Context.MODE_PRIVATE);
-                            ObjectOutputStream oos = new ObjectOutputStream(fos);
-                            oos.writeObject(game);
-                            fos.close();
-                            oos.close();
-                            Toast.makeText(c, "Game Saved!", Toast.LENGTH_SHORT).show();
-                        } catch (IOException e) {
-                            // File was not found.
-                            Toast.makeText(c, "Error occurred: " + e, Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
+                        if (fileOutput.contains(".")) {
+                            Toast.makeText(c, "Name can't contain '.' !", Toast.LENGTH_SHORT).show();
+                            input.setText("");
+                            fileOutput = "";
+                        } else {
+                            try {
+                                FileOutputStream fos = c.openFileOutput(fileOutput + ".txt", Context.MODE_PRIVATE);
+                                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                                updateGameImage(game);
+                                game.getGameInformation().setGameInformation(fileOutput, game.isFinished());
+                                game.getGameInformation().updateTimeStamp();
+                                oos.writeObject(game);
+                                fos.close();
+                                oos.close();
+                                Toast.makeText(c, "Game Saved!", Toast.LENGTH_SHORT).show();
+                            } catch (IOException e) {
+                                // File was not found.
+                                Toast.makeText(c, "Error occurred: " + e, Toast.LENGTH_SHORT).show();
+                                e.printStackTrace();
+                            }
                         }
                     }
                 })
@@ -448,59 +450,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 .create()
                 .show();
     }
-
-    /**
-     * Creates a dialog for loading a game. User can choose a save file from a list and the method
-     * loads the game which user chose to the UI.
-     */
-    private void loadGameDialog() {
-        // Find the application context for the builder.
-        final Context c;
-        if ((c = getContext()) == null) {
-            return;
-        }
-
-        // Find files saved to the system memory
-        final String[] fileList = c.fileList();
-
-        // Builder class for building the dialog.
-        new AlertDialog.Builder(c)
-                .setTitle("Pick a game to load")
-                .setItems(fileList, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String filePath = fileList[which];
-                        try {
-                            FileInputStream fis = c.openFileInput(filePath);
-                            ObjectInputStream ois = new ObjectInputStream(fis);
-                            game = (Game) ois.readObject();
-                            ois.close();
-                            fis.close();
-
-                            // After the game has been loaded the UI views has to be reinitialized
-                            // and the board has to be drawn.
-                            initializeDrawableTiles();
-                            drawGameBoard();
-
-                            Toast.makeText(c, "Game successfully loaded!", Toast.LENGTH_SHORT).show();
-                        } catch (ClassNotFoundException e) {
-                            // If Game class was not found, return a new Game class
-                            Toast.makeText(c, "Error occurred: " + e, Toast.LENGTH_SHORT).show();
-                            View v;
-                            if ((v = getView()) != null) {
-                                Navigation.findNavController(v).navigateUp();
-                            }
-                        } catch (IOException e) {
-                            // File was not found
-                            Toast.makeText(c, "Error occurred: " + e, Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
-                        }
-                    }
-                })
-                .create()
-                .show();
-    }
-
 
     /**
      * Creates a dialog for pawn promotion. User can choose the piece to promote to from a list and
@@ -573,6 +522,12 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 }
             }
         }
+    }
+
+    private void updateGameImage(Game game) {
+        chessboard.buildDrawingCache();
+        Bitmap bitmap = chessboard.getDrawingCache();
+        game.getGameInformation().setImageByteArray(bitmap);
     }
 
     /**

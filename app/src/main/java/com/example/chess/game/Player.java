@@ -33,7 +33,7 @@ public class Player implements Serializable {
         this.isCheck = isCheck;
     }
 
-    protected boolean isWhite() {
+    public boolean isWhite() {
         return isWhite;
     }
 

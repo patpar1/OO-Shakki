@@ -18,7 +18,7 @@ public class Game implements Serializable {
 
     private boolean isFinished;
 
-    private GameInformation gameInformation;
+    private final GameInformation gameInformation;
 
     /**
      * Main constructor for the Game class. This class tracks the Game Board, players, current
@@ -103,10 +103,6 @@ public class Game implements Serializable {
         return gameInformation;
     }
 
-    public void setGameInformation(GameInformation gameInformation) {
-        this.gameInformation = gameInformation;
-    }
-
     /**
      * Handles the square click event sent by GameFragment. Determines if player has clicked a
      * square before and if true, makes the move on the game board. This method does not calculate
@@ -128,19 +124,17 @@ public class Game implements Serializable {
     /**
      * Makes the last move on the moves array.
      *
-     * @return integer value representing the current state of the game.
      */
-    public int makeNextMove() {
-        return getCurrentPlayer().makeMove(this, board, moves.get(moveIndex));
+    public void makeNextMove() {
+        getCurrentPlayer().makeMove(this, board, moves.get(moveIndex));
     }
 
     /**
      * Undoes the previous move made.
      *
-     * @return integer value representing the current state of the game.
      */
-    public int undoPreviousMove() {
-        return getCurrentPlayer().undoMove(this, board, moves.get(moveIndex - 1));
+    public void undoPreviousMove() {
+        getCurrentPlayer().undoMove(this, board, moves.get(moveIndex - 1));
     }
 
     /**

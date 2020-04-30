@@ -64,15 +64,22 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         // Required empty public constructor
     }
 
+    /**
+     * Creates an instance of this fragment.
+     *
+     * @param savedInstanceState Previous state of this fragment.
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final Activity a = requireActivity();
+
+        // Override the default functionality on back press. Pop up a dialog for making sure user's
+        // intention and return to main menu.
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 // Builder class for building the dialog.
-                new AlertDialog.Builder(a)
+                new AlertDialog.Builder(requireActivity())
                         .setTitle("Are you sure?")
                         .setMessage("Unsaved progress will be lost!")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -138,15 +145,20 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         drawableTiles = new HashMap<>();
         initializeDrawableTiles();
 
+        // Player images
         player1 = v.findViewById(R.id.image_human);
         player2 = v.findViewById(R.id.image_bot);
         if (isHumanPlayer) {
             player2.setBackgroundResource(R.drawable.human_player);
         }
-
         humanSelected = true;
+
+        // Text which shows whose turn it is currently.
         turnText = v.findViewById(R.id.turn_text);
 
+        // Bottom app bar buttons
+
+        // New game
         v.findViewById(R.id.new_game_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,6 +166,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             }
         });
 
+        // Save game
         v.findViewById(R.id.save_game_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,7 +174,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-
+        // Load game
         v.findViewById(R.id.load_game_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,7 +182,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-
+        // Undo move
         v.findViewById(R.id.undo_move_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,7 +195,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-
+        // Redo move
         v.findViewById(R.id.redo_move_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -195,15 +208,15 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             }
         });
 
+        // Timer text on the bottom app bar
         final TextView timerTextView = v.findViewById(R.id.game_clock);
-
         startTime = 0;
         timerHandler = new Handler();
         timerRunnable = new Runnable() {
             @Override
             public void run() {
                 long millis = System.currentTimeMillis() - startTime;
-                int seconds = (int) (millis/1000);
+                int seconds = (int) (millis / 1000);
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
 
@@ -215,38 +228,29 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         return v;
     }
 
+    /**
+     * Method for switching player currently in turn visually on the UI.
+     */
     private void switchSelected() {
+        ViewGroup.LayoutParams humanParams = player1.getLayoutParams();
+        ViewGroup.LayoutParams botParams = player2.getLayoutParams();
         if (!humanSelected) {
             humanSelected = true;
-
-            ViewGroup.LayoutParams humanParams = player1.getLayoutParams();
-            ViewGroup.LayoutParams botParams = player2.getLayoutParams();
-
             humanParams.height = getResources().getDimensionPixelSize(R.dimen.player_selected_game);
             humanParams.width = getResources().getDimensionPixelSize(R.dimen.player_selected_game);
-            player1.setLayoutParams(humanParams);
-
             botParams.height = getResources().getDimensionPixelSize(R.dimen.player_unselected_game);
             botParams.width = getResources().getDimensionPixelSize(R.dimen.player_unselected_game);
-            player2.setLayoutParams(botParams);
-
-            turnText.setText("White's turn!");
+            turnText.setText(R.string.turn_white);
         } else {
             humanSelected = false;
-
-            ViewGroup.LayoutParams humanParams = player1.getLayoutParams();
-            ViewGroup.LayoutParams botParams = player2.getLayoutParams();
-
             humanParams.height = getResources().getDimensionPixelSize(R.dimen.player_unselected_game);
             humanParams.width = getResources().getDimensionPixelSize(R.dimen.player_unselected_game);
-            player1.setLayoutParams(humanParams);
-
             botParams.height = getResources().getDimensionPixelSize(R.dimen.player_selected_game);
             botParams.width = getResources().getDimensionPixelSize(R.dimen.player_selected_game);
-            player2.setLayoutParams(botParams);
-
-            turnText.setText("Black's turn!");
+            turnText.setText(R.string.turn_black);
         }
+        player1.setLayoutParams(humanParams);
+        player2.setLayoutParams(botParams);
     }
 
     /**
@@ -295,6 +299,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 && (currentMove.getRowEnd() == 7 || currentMove.getRowEnd() == 0)) {
             // If the pawn is in first or last rank, promote the pawn.
             if (game.getCurrentPlayer() instanceof AlphaBetaPlayer) {
+                // If bot promotes a piece, it chooses always queen.
                 currentMove.setPromotion(new Queen(game.getCurrentPlayer().isWhite()));
             }
             pawnPromotionDialog(currentMove, true);
@@ -330,6 +335,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             return;
         }
 
+        // If opposing player is a bot, tell him to make a turn.
         if (game.getCurrentPlayer() instanceof AlphaBetaPlayer) {
             ((AlphaBetaPlayer) game.getCurrentPlayer()).calculateMove(game);
             checkPawnPromotionDialog();
@@ -342,7 +348,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     private void checkGameState() {
         Move currentMove = null;
         ArrayList<Move> moves = game.getMoves();
-
         if (moves.size() > 0 && game.getMoveIndex() > 0) {
             currentMove = game.getMoves().get(game.getMoveIndex() - 1);
         }
@@ -354,29 +359,25 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             pawnPromotionDialog(currentMove, false);
         }
 
+        // Update game board.
         drawGameBoard();
         switchSelected();
     }
 
+    /**
+     * Method for asking a user, if he is sure for his intentions.
+     *
+     * @param destination Resource ID of the destination.
+     */
     private void makeSureDialog(final int destination) {
-        final Context c;
-        if ((c = getContext()) == null) {
-            return;
-        }
-
-        final View v;
-        if ((v = getView()) == null) {
-            return;
-        }
-
         // Builder class for building the dialog.
-        new AlertDialog.Builder(c)
+        new AlertDialog.Builder(requireContext())
                 .setTitle("Are you sure?")
                 .setMessage("Unsaved progress will be lost!")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Navigation.findNavController(v).navigate(destination);
+                        Navigation.findNavController(requireView()).navigate(destination);
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -396,10 +397,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
      */
     private void saveGameDialog() {
         // Find the application context for the builder.
-        final Context c;
-        if ((c = getContext()) == null) {
-            return;
-        }
+        final Context c = requireContext();
 
         // Prepare text input fields for the builder.
         final EditText input = new EditText(c);
@@ -459,14 +457,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
      * @param endTurn     Boolean value, true if this is at the end of turn.
      */
     private void pawnPromotionDialog(final Move currentMove, final boolean endTurn) {
-        // Find the application context for the builder.
-        final Context c;
-        if ((c = getContext()) == null) {
-            return;
-        }
-
         // Builder class for building the dialog.
-        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
 
         builder.setTitle("Pick a piece to promote:")
                 .setItems(R.array.promotablePieces, new DialogInterface.OnClickListener() {
@@ -524,6 +516,11 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Saves the board snapshot image on the GameInformation object.
+     *
+     * @param game Current game.
+     */
     private void updateGameImage(Game game) {
         chessboard.buildDrawingCache();
         Bitmap bitmap = chessboard.getDrawingCache();
@@ -535,12 +532,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
      * can be shown on one ImageView.
      */
     private void drawGameBoard() {
-        Activity a = getActivity();
-
-        if (a == null) {
-            return;
-        }
-
+        Activity a = requireActivity();
         Square s;
         ImageView iv;
         LayerDrawable ld;

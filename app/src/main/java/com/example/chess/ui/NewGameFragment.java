@@ -23,17 +23,31 @@ public class NewGameFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Instantiates the NewGameFragment to the user interface view.
+     *
+     * @param inflater           Inflater object which can inflate any views in the fragment.
+     * @param container          Parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState Previous state of this fragment.
+     * @return the View for the fragment's UI.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflate the layout for this fragment.
         View v = inflater.inflate(R.layout.fragment_new_game, container, false);
 
+        // Switch for selecting opposing player.
         final ImageView humanButton = v.findViewById(R.id.image_human);
         final ImageView botButton = v.findViewById(R.id.image_bot);
 
+        final ViewGroup.LayoutParams humanParams = humanButton.getLayoutParams();
+        final ViewGroup.LayoutParams botParams = botButton.getLayoutParams();
+
+        // TextView for showing the AI level.
         final TextView aiText = v.findViewById(R.id.ai_text);
 
+        // SeekBar for choosing the AI level.
         final SeekBar aiLevel = v.findViewById(R.id.ai_level);
         aiLevel.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -50,6 +64,7 @@ public class NewGameFragment extends Fragment {
             }
         });
 
+        // Button for starting a game.
         v.findViewById(R.id.game_start_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,46 +77,36 @@ public class NewGameFragment extends Fragment {
             }
         });
 
+        // Button for selecting human player.
         humanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isHumanSelected()) {
                     humanSelected = true;
-
-                    ViewGroup.LayoutParams humanParams = humanButton.getLayoutParams();
-                    ViewGroup.LayoutParams botParams = botButton.getLayoutParams();
-
                     humanParams.height = getResources().getDimensionPixelSize(R.dimen.player_selected);
                     humanParams.width = getResources().getDimensionPixelSize(R.dimen.player_selected);
                     humanButton.setLayoutParams(humanParams);
-
                     botParams.height = getResources().getDimensionPixelSize(R.dimen.player_unselected);
                     botParams.width = getResources().getDimensionPixelSize(R.dimen.player_unselected);
                     botButton.setLayoutParams(botParams);
-
                     aiText.setVisibility(View.INVISIBLE);
                     aiLevel.setVisibility(View.INVISIBLE);
                 }
             }
         });
 
+        // Button for selecting bot player.
         botButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isHumanSelected()) {
                     humanSelected = false;
-
-                    ViewGroup.LayoutParams humanParams = humanButton.getLayoutParams();
-                    ViewGroup.LayoutParams botParams = botButton.getLayoutParams();
-
                     humanParams.height = getResources().getDimensionPixelSize(R.dimen.player_unselected);
                     humanParams.width = getResources().getDimensionPixelSize(R.dimen.player_unselected);
                     humanButton.setLayoutParams(humanParams);
-
                     botParams.height = getResources().getDimensionPixelSize(R.dimen.player_selected);
                     botParams.width = getResources().getDimensionPixelSize(R.dimen.player_selected);
                     botButton.setLayoutParams(botParams);
-
                     aiText.setVisibility(View.VISIBLE);
                     aiLevel.setVisibility(View.VISIBLE);
                 }

@@ -13,7 +13,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:gravity="center_horizontal"
-        android:text="Chess!"
+        android:text="@string/chess"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
@@ -37,7 +37,8 @@
         app:layout_constraintBottom_toTopOf="@+id/play_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/game_title" />
+        app:layout_constraintTop_toBottomOf="@+id/game_title"
+        android:contentDescription="@string/main_game_logo" />
 
     <Button
         android:id="@+id/play_button"
@@ -48,7 +49,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/rounded_button"
-        android:text="New game"
+        android:text="@string/new_game"
         android:textColor="@color/colorAccent"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -66,7 +67,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/rounded_button"
-        android:text="Load game"
+        android:text="@string/load_game"
         android:textColor="@color/colorAccent"
         android:textSize="16sp"
         android:textStyle="bold"

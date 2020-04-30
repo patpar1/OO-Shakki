@@ -16,14 +16,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@mipmap/ic_launcher"/>
+        android:src="@mipmap/ic_launcher"
+        android:contentDescription="@string/snapshot_image" />
 
     <TextView
         android:id="@+id/file_name_text"
         android:layout_width="228dp"
         android:layout_height="28dp"
         android:layout_marginStart="10dp"
-        android:text="File Name"
+        android:text="@string/file_name_placeholder"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         android:textSize="22sp"
         app:layout_constraintBottom_toTopOf="@+id/game_status"
@@ -35,7 +36,7 @@
         android:layout_width="228dp"
         android:layout_height="21dp"
         android:layout_marginStart="10dp"
-        android:text="Finished"
+        android:text="@string/finished_placeholder"
         app:layout_constraintBottom_toTopOf="@id/game_date"
         app:layout_constraintStart_toEndOf="@id/game_image"
         app:layout_constraintTop_toBottomOf="@+id/file_name_text" />
@@ -46,7 +47,7 @@
         android:layout_height="21dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
-        android:text="23/9/2020 13:37"
+        android:text="@string/time_placeholder"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/game_image"

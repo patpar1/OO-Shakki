@@ -22,10 +22,11 @@ public class GameInformation implements Serializable {
         this.isFinished = isFinished;
     }
 
-    public void setFinished(boolean finished) {
-        this.isFinished = finished;
-    }
-
+    /**
+     * Converts the game board bitmap to byte array. Used to make this class Serializable.
+     *
+     * @param bitmap Bitmap of the game board.
+     */
     public void setImageByteArray(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -48,6 +49,10 @@ public class GameInformation implements Serializable {
         return date;
     }
 
+    /**
+     * Decodes the byte array and returns a bitmap of the game board.
+     * @return A bitmap image of the game board.
+     */
     public Bitmap getBitmap() {
         return BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
     }

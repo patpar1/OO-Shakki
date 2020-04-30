@@ -20,19 +20,23 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class LoadGameFragment extends Fragment {
 
-    private ArrayList<Game> games = new ArrayList<>();
-    private ArrayList<GameInformation> gameInformation = new ArrayList<>();
+    private final ArrayList<Game> games = new ArrayList<>();
+    private final ArrayList<GameInformation> gameInformation = new ArrayList<>();
 
     public LoadGameFragment() {
         // Required empty public constructor
     }
 
-
+    /**
+     * Instantiates the LoadGameFragment to the user interface view.
+     *
+     * @param inflater           Inflater object which can inflate any views in the fragment.
+     * @param container          Parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState Previous state of this fragment.
+     * @return the View for the fragment's UI.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -53,11 +57,11 @@ public class LoadGameFragment extends Fragment {
         return v;
     }
 
+    /**
+     * Method for getting game information in system file path.
+     */
     private void getGameInformation() {
-        Context c;
-        if ((c = getContext()) == null) {
-            return;
-        }
+        Context c = requireContext();
         String[] fileList = c.fileList();
         for (String fileName : fileList) {
             try {

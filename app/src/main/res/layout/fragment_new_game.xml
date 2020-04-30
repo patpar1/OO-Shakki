@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#444444"
@@ -13,7 +12,7 @@
         android:layout_width="368dp"
         android:layout_height="81dp"
         android:gravity="center_horizontal"
-        android:text="Opponent:"
+        android:text="@string/opponent"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
@@ -33,7 +32,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/white_outline"
-        android:text="Start"
+        android:text="@string/start"
         android:textColor="@android:color/background_light"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -52,7 +51,8 @@
         app:layout_constraintTop_toBottomOf="@+id/game_title"
         app:layout_constraintBottom_toTopOf="@id/ai_level"
         app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/dark_frame" />
+        app:srcCompat="@drawable/dark_frame"
+        android:contentDescription="@string/human_image" />
 
     <ImageView
         android:id="@+id/image_bot"
@@ -64,7 +64,8 @@
         app:layout_constraintTop_toBottomOf="@+id/game_title"
         app:layout_constraintBottom_toTopOf="@id/ai_level"
         app:srcCompat="@drawable/dark_frame"
-        tools:src="@drawable/dark_frame" />
+        tools:src="@drawable/dark_frame"
+        android:contentDescription="@string/bot_image" />
 
     <TextView
         android:id="@+id/text_or"
@@ -73,7 +74,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:gravity="center_horizontal"
-        android:text="OR"
+        android:text="@string/or"
         android:textAlignment="center"
         android:textColor="@android:color/background_light"
         android:textSize="36sp"
@@ -88,7 +89,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="AI Level: 4"
+        android:text="@string/ai_level_4"
         android:textColor="@android:color/background_light"
         android:textSize="16sp"
         android:visibility="invisible"

@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/profiler_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#B7F8C9"
@@ -17,7 +16,7 @@
         android:layout_height="53dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Player # Won!"
+        android:text="@string/player_won_placeholder"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
@@ -39,7 +38,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/win_button"
-        android:text="New Game"
+        android:text="@string/new_game"
         android:textColor="#35A571"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -57,7 +56,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/win_button"
-        android:text="Save Game"
+        android:text="@string/save_game"
         android:textColor="#35A571"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -73,7 +72,7 @@
         android:layout_height="42dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Main menu"
+        android:text="@string/main_menu"
         android:textColor="#35A571"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -92,6 +91,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/player_won_title"
-        app:srcCompat="@drawable/trophy" />
+        app:srcCompat="@drawable/trophy"
+        android:contentDescription="@string/trophy_image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

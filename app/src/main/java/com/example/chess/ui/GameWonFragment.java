@@ -23,42 +23,47 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class GameWonFragment extends Fragment {
 
     public GameWonFragment() {
         // Required empty public constructor
     }
 
-
+    /**
+     * Instantiates the GameWonFragment to the user interface view.
+     *
+     * @param inflater           Inflater object which can inflate any views in the fragment.
+     * @param container          Parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState Previous state of this fragment.
+     * @return the View for the fragment's UI.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_game_won, container, false);
 
+        // Set the title text to match the game outcome.
         TextView gameWonText = v.findViewById(R.id.player_won_title);
         if (getArguments() != null) {
             int gameState = getArguments().getInt("gameState");
             switch (gameState) {
                 case 1:
                     // White won
-                    gameWonText.setText("White player won!");
+                    gameWonText.setText(R.string.won_white);
                     break;
                 case 2:
                     // Black won
-                    gameWonText.setText("Black player won!");
+                    gameWonText.setText(R.string.won_black);
                     break;
                 case 3:
                     // Stalemate
-                    gameWonText.setText("Stalemate!");
+                    gameWonText.setText(R.string.won_stalemate);
                     break;
             }
         }
 
+        // Button for starting a new game.
         Button newGameButton = v.findViewById(R.id.new_game_button);
         newGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +72,7 @@ public class GameWonFragment extends Fragment {
             }
         });
 
+        // Button for saving the ended game.
         Button saveGameButton = v.findViewById(R.id.save_game_button);
         saveGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,17 +86,23 @@ public class GameWonFragment extends Fragment {
             }
         });
 
+        // Button for returning to main menu.
         Button mainMenuButton = v.findViewById(R.id.main_menu_button);
         mainMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.nav_main);
+                Navigation.findNavController(v).popBackStack(R.id.nav_main, false);
             }
         });
 
         return v;
     }
 
+    /**
+     * Dialog for asking the user file name.
+     *
+     * @param game Current game object.
+     */
     private void saveGameDialog(final Game game) {
         // Find the application context for the builder.
         final Context c;

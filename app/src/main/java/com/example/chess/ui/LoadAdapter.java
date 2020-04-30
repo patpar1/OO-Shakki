@@ -20,14 +20,17 @@ import com.example.chess.game.GameInformation;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * Class for showing the saved games on RecyclerView.
+ */
 public class LoadAdapter extends RecyclerView.Adapter<LoadAdapter.LoadViewHolder> {
 
-    private ArrayList<String> fileName = new ArrayList<>();
-    private ArrayList<Boolean> isFinished = new ArrayList<>();
-    private ArrayList<Date> dates = new ArrayList<>();
-    private ArrayList<Bitmap> images = new ArrayList<>();
+    private final ArrayList<String> fileName = new ArrayList<>();
+    private final ArrayList<Boolean> isFinished = new ArrayList<>();
+    private final ArrayList<Date> dates = new ArrayList<>();
+    private final ArrayList<Bitmap> images = new ArrayList<>();
 
-    private ArrayList<Game> games;
+    private final ArrayList<Game> games;
 
     LoadAdapter(ArrayList<Game> games, ArrayList<GameInformation> gameInformationList) {
         this.games = games;
@@ -70,11 +73,11 @@ public class LoadAdapter extends RecyclerView.Adapter<LoadAdapter.LoadViewHolder
 
     static class LoadViewHolder extends RecyclerView.ViewHolder {
 
-        TextView fileName;
-        TextView isFinished;
-        TextView date;
-        ImageView picture;
-        ConstraintLayout parentPanel;
+        final TextView fileName;
+        final TextView isFinished;
+        final TextView date;
+        final ImageView picture;
+        final ConstraintLayout parentPanel;
 
         LoadViewHolder(View itemView) {
             super(itemView);

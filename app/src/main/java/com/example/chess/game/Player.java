@@ -335,9 +335,8 @@ public class Player implements Serializable {
      * sets the pawn en passant, if the move previous to move needed to undo was pawn double move.
      *
      * @param m Move needed to be undone on the game board.
-     * @return integer value representing the current state of the game.
      */
-    int undoMove(Game game, Board board, Move m) {
+    void undoMove(Game game, Board board, Move m) {
         m.undoMove(board);
         game.decreaseMoveIndex();
         ArrayList<Move> moves = game.getMoves();
@@ -357,7 +356,7 @@ public class Player implements Serializable {
             resetEnPassant();
         }
         resetMove();
-        return checkGameState(game, board);
+        checkGameState(game, board);
     }
 
     /**

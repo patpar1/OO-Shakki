@@ -2,5 +2,34 @@
     <string name="app_name">Chess</string>
     <string name="board_tile">Board tile</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="turn_black">Black\'s turn!</string>
+    <string name="turn_white">White\'s turn!</string>
+    <string name="won_white">White player won!</string>
+    <string name="won_black">Black player won!</string>
+    <string name="won_stalemate">Stalemate!</string>
+    <string name="human_image">Human Image</string>
+    <string name="bot_image">Bot image</string>
+    <string name="new_game_image">New game image</string>
+    <string name="save_game_image">Save game image</string>
+    <string name="load_game_image">Load game image</string>
+    <string name="time">00:00</string>
+    <string name="undo_move_image">Undo move image</string>
+    <string name="redo_move_image">Redo move image</string>
+    <string name="trophy_image">Trophy image</string>
+    <string name="main_game_logo">Main game logo</string>
+    <string name="file_name_placeholder">File Name</string>
+    <string name="finished_placeholder">Finished</string>
+    <string name="time_placeholder">23/9/2020 13:37</string>
+    <string name="snapshot_image">Snapshot image</string>
+    <string name="chess">Chess!</string>
+    <string name="white">White\'s turn!</string>
+    <string name="player_won_placeholder">Player # Won!</string>
+    <string name="new_game">New Game</string>
+    <string name="save_game">Save Game</string>
+    <string name="main_menu">Main menu</string>
+    <string name="load_game">Load game</string>
+    <string name="opponent">Opponent:</string>
+    <string name="start">Start</string>
+    <string name="or">OR</string>
+    <string name="ai_level_4">AI Level: 4</string>
 </resources>

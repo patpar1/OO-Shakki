@@ -4,28 +4,9 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
 
-
     // Board colors
     <color name="tileLight">#efe5fd</color>
     <color name="tileDark">#b794f6</color>
-
-
-    // Variant 1
-    <color name="tileLight1">#efe5fd</color>
-    <color name="tileDark1">#b794f6</color>
-
-    // Variant 2
-    <color name="tileLight2">#f2fde4</color>
-    <color name="tileDark2">#c6f68d</color>
-
-    // Variant 3
-    <color name="tileLight3">#fbe2f0</color>
-    <color name="tileDark3">#f186c0</color>
-
-    // Variant 4
-    <color name="tileLight4">#fff2df</color>
-    <color name="tileDark4">#ffc77d</color>
-
 
     <color name="move_hint">#33000000</color>
 

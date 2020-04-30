@@ -18,7 +18,7 @@ import java.util.Collections;
 public class AlphaBetaPlayer extends Player {
 
     // How deep to search the minimax algorithm.
-    private int searchDepth;
+    private final int searchDepth;
 
     public AlphaBetaPlayer(boolean isWhite, int aiLevel) {
         super(isWhite);
@@ -62,6 +62,8 @@ public class AlphaBetaPlayer extends Player {
             moves.addAll(getLegalMoves(board, s));
         }
 
+        // Randomize move order. Otherwise the engine chooses always to move the top-left piece with
+        // highest score.
         Collections.shuffle(moves);
 
         Move bestMove = null;
@@ -106,6 +108,7 @@ public class AlphaBetaPlayer extends Player {
             moves.addAll(s.getPiece().legalMoves(board, s));
         }
 
+        // Randomize move order.
         Collections.shuffle(moves);
 
         // If the current player tries to maximize the board value, set the best move value to a
